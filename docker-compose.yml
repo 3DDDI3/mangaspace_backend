@@ -28,7 +28,7 @@ services:
       - ./src:/var/www/laravel
     networks:
       - backend
-
+      
   php:
     container_name: php
     build:
@@ -76,6 +76,24 @@ services:
     ports:
       - 6379:6379
       - 8002:8001
+    networks:
+      - backend
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.10-management-alpine
+    hostname: rabbit
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
+    ports:
+      - "5672:5672"
+      # - "15672:15672"
+    extra_hosts:
+      - host.docker.internal:127.0.0.1
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq
     networks:
       - backend
 
