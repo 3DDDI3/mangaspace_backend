@@ -47,10 +47,10 @@ class PublishParseMessage extends Command
 
         echo " [x] Sent 'Hello World!'\n";
 
-        $user = new User(json_decode($this->argument('user'), true));
+        // $user = new User(json_decode($this->argument('user'), true));
 
-        $jobid = $this->argument('job_id');
+        // $jobid = $this->argument('job_id');
 
-        broadcast(new ParseEvent($user, "message sended $jobid"));
+        // broadcast(new ParseEvent($user, "message sended $jobid"));
     }
 }

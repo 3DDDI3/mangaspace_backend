@@ -4,8 +4,11 @@ namespace App\Console\Commands\Rabbitmq\Scraper;
 
 use App\Events\WS\Scraper\ParseEvent;
 use App\Models\User;
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 
 class ConsumeParseMessage extends Command
 {
@@ -14,7 +17,7 @@ class ConsumeParseMessage extends Command
      *
      * @var string
      */
-    protected $signature = 'rmq:scraper-consume-message {user} {job_id?}';
+    protected $signature = 'rmq:scraper-consume-message {user} {job_id?} {--time=*}';
 
     /**
      * The console command description.
@@ -36,36 +39,48 @@ class ConsumeParseMessage extends Command
         );
         $channel = $connection->channel();
 
+        // Объявление очереди
         $channel->queue_declare('bye', false, false, false, false);
 
         $isListening = true;
+        $jobid = "";
 
-        $callback = function ($msg) use (&$isListening, $channel) {
+        // Callback функция обработки сообщений
+        $callback = function ($msg) use (&$isListening, $channel, &$jobid) {
             echo ' [x] Received ', $msg->body, "\n";
 
             $headers = $msg->get('application_headers');
 
-            foreach ($headers as $key => $value) {
-                if ($key == "job_id") $jobid = $value[1];
+            if ($headers) {
+                foreach ($headers as $key => $value) {
+                    if ($key == "job_id") $jobid = $value[1];
+                }
             }
 
             $user = new User(json_decode($this->argument('user'), true));
 
             $isListening = false;
 
-            $channel->basic_cancel('');
-
             broadcast(new ParseEvent($user, "message received $jobid"));
+
+            $channel->basic_cancel('');
         };
 
+        // Подписка на очередь
         $channel->basic_consume('bye', '', false, true, false, false, $callback);
+
+        $time = $this->option('time')[0] - 5;
 
         try {
             while ($isListening) {
-                $channel->wait();
+                $channel->wait(null, false, $time);
             }
-        } catch (\Throwable $exception) {
-            echo $exception->getMessage();
+        } catch (AMQPTimeoutException $e) {
+            Log::error("Job не успел завершиться за" . $time . " cек.");
+        } finally {
+            // Закрытие канала и соединения
+            $channel->close();
+            $connection->close();
         }
     }
 }
