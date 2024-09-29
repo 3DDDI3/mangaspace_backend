@@ -16,6 +16,8 @@ window.Echo = new Echo({
     authorizer: (channel, options) => {
         return {
             authorize: (socketId, callback) => {
+                axios.defaults.withCredential = true;
+                axios.defaults.withXSRFToken = true;
                 axios.post('/api/broadcasting/auth', {
                     socket_id: socketId,
                     channel_name: channel.name

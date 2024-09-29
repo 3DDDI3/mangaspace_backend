@@ -1,35 +1,41 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\WS\Scraper;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Process;
 
-class TestEvent implements ShouldBroadcast
+class ParseEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     *
+     * @var \App\Models\User
+     */
+    public $user;
+
+    /**
+     *
+     * @var string
+     */
     public $message;
 
     /**
-     * Create a new event instance.
+     *
+     * @param \App\Models\User $user
+     * @param string $message
      */
-    public function __construct($message)
+    public function __construct($user, $message)
     {
         $this->message = $message;
+        $this->user = $user;
     }
-
-    // public function broadcastWith(): array
-    // {
-    //     return ['asdasd'];
-    // }
 
     /**
      * Get the channels the event should broadcast on.
@@ -39,7 +45,7 @@ class TestEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("chat.1"),
+            new PrivateChannel('chat.' . $this->user->id),
         ];
     }
 }

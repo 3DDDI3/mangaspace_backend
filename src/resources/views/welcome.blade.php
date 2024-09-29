@@ -7,18 +7,12 @@
 
     <title>Laravel</title>
 
-
-
-    {{-- <script type="module">
-        window.Echo.channel('test_channel').listen("TestEvent", (event) => {
-            console.log(event);
-        });
-    </script> --}}
-
     <input type="button" name="login" value="Войти">
     <input type="button" name="logout" value="Выйти">
     @csrf
-    <input type="text" name="name" placeholder="название тайтла">
+
+    <input type="button" name="parse" value="Начать парсинг">
+
     @vite(['resources/js/jquery-3.7.1.js', 'resources/js/app.js'])
 
 </head>

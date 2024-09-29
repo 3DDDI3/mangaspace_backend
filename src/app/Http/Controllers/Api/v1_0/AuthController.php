@@ -12,27 +12,40 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 class AuthController extends Controller
 {
-    public function signin()
+    public function signin(Request $request)
     {
-        $user = User::create(request()->input());
+        $user = User::create($request->only(['name', 'password']));
     }
-    public function login()
+
+    public function login(Request $request)
     {
-        if (!Auth::attempt(request()->only('name', 'password'))) return;
-        session()->regenerate();
-        $user = User::where(request()->only('name'))->first();
+        $request->validate([
+            'name' => 'required',
+            'password' => 'required'
+        ]);
+
+        $user = User::query()
+            ->where(['name' => $request->name])
+            ->first();
+
+        if (!Hash::check($request->password, $user->password))
+            return response()->json(['message' => 'Неверное имя и/или пароль'], 401);
+
+        Auth::login($user);
+
         $token = $user->createToken('MyApp')->plainTextToken;
-        $cookie = Cookie::make('_t', $token, 120, "/", "mangaspace.ru", false, false, false, false);
-        return response()->json(['token' => $token], 200)->cookie($cookie);
+
+        return response()->json(['token' => $token], 200);
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'user token successfuly deleted'], 200);
+
+        return response();
     }
 
-    public function check()
+    public function check(Request $request)
     {
         return response()->json(['user' => request()->user()], 200);
     }
