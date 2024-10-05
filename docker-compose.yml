@@ -6,9 +6,9 @@ services:
     container_name: nginx
     image: "nginx:stable-alpine"
     ports:
-      - 80:80
+      - 83:80
     environment:
-      - VIRTUAL_HOST=api.localhost
+      - VIRTUAL_HOST=api.mangaspace.ru
     volumes:
       - ./configs/nginx.conf/:/etc/nginx/conf.d/default.conf:ro
       - ./src:/var/www/laravel
@@ -78,6 +78,7 @@ services:
       - 8002:8001
     networks:
       - backend
+      - shared
 
   rabbitmq:
     container_name: rabbitmq
