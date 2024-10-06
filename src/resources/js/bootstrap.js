@@ -18,7 +18,7 @@ import './echo';
 
 // });
 
-let domain = "http://localhost";
+let domain = "http://api.mangaspace.ru:83";
 
 $("input[name='login']").on("click", function (e) {
     e.preventDefault();

@@ -28,7 +28,7 @@ services:
       - ./src:/var/www/laravel
     networks:
       - backend
-      
+
   php:
     container_name: php
     build:

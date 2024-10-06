@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1_0;
 
+use App\Events\NewEvent;
 use App\Http\Controllers\Controller;
 use App\Jobs\TestJob;
 use App\Models\User;

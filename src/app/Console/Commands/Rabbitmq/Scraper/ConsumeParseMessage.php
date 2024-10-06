@@ -76,7 +76,7 @@ class ConsumeParseMessage extends Command
                 $channel->wait(null, false, $time);
             }
         } catch (AMQPTimeoutException $e) {
-            Log::error("Job не успел завершиться за" . $time . " cек.");
+            Log::error("Job не успел завершиться за " . $time . " cек.");
         } finally {
             // Закрытие канала и соединения
             $channel->close();
