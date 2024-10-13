@@ -30,9 +30,10 @@ return new class extends Migration
             $table->string('browser_version')->nullable();
             $table->string('operation_system', 255)->nullable();
             $table->string('operation_version', 50)->nullable();
-            $table->string('country', 255);
-            $table->string('city', 255);
+            $table->string('country', 255)->nullable();
+            $table->string('city', 255)->nullable();
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate();
         });
     }
 

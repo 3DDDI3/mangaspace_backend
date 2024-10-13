@@ -3,23 +3,38 @@
 namespace App\Http\Controllers\Api\v1_0;
 
 use App\Http\Controllers\Controller;
-use App\Models\DeviceToken;
 use App\Models\User;
+use App\Services\UserDeviceInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
-use Jenssegers\Agent\Facades\Agent;
-use Stevebauman\Location\Facades\Location;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 class AuthController extends Controller
 {
+    private $userDevice;
+
+    public function __construct()
+    {
+        $this->userDevice = new UserDeviceInformation();
+    }
+
+    /**
+     * Регистрация пользователя
+     *
+     * @param Request $request
+     * @return void
+     */
     public function signin(Request $request)
     {
         $user = User::create($request->only(['name', 'password']));
     }
 
+    /**
+     * Авторизация пользователя
+     *
+     * @param Request $request
+     * @return void
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -38,29 +53,17 @@ class AuthController extends Controller
 
         $token = $user->createToken('MyApp');
 
-        $agent = new Agent();
+        $this->userDevice->getDeviceInformation($request, $token->accessToken);
 
-        $position = Location::get('176.59.2.222');
-
-        // $device = $agent->device();
-        // $platform = $agent->platform();
-        // $browser = $agent->browser();
-        // $isMobile = $agent->isMobile();
-        // $isTablet = $agent->isTablet();
-        // $isDesktop = $agent->isDesktop();
-
-        DeviceToken::create([
-            'personal_access_token_id',
-            'client',
-            'name',
-            'operation_system',
-            'country',
-            'city'
-        ]);
-
-        return response()->json(['token' => $token], 200);
+        return response(['token' => $token->plainTextToken], 201);
     }
 
+    /**
+     * Выход из акаунта
+     *
+     * @param Request $request
+     * @return void
+     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -68,8 +71,8 @@ class AuthController extends Controller
         return response();
     }
 
-    public function check(Request $request)
+    public function check()
     {
-        return response()->json(['user' => request()->user()], 200);
+        return response(['message' => 'ok'], 200);
     }
 }

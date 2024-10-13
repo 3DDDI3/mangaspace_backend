@@ -1,6 +1,7 @@
 <?php
 
 use App\Jobs\TestJob;
+use App\Models\DeviceType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Jenssegers\Agent\Agent;
@@ -20,6 +21,10 @@ Route::get('test', function () {
     // Artisan::call("rmq:send-message --user=$user");
     // broadcast(new ParseEvent($user, 'message sended'));
 
+    $browser_info = new Parser(request()->header('User-Agent'));
+    $location = Location::get('176.59.3.107');
+
+    dd($location, $browser_info);
 });
 
 Route::get('check', function (Request $request) {

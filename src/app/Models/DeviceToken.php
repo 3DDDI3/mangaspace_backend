@@ -9,12 +9,17 @@ class DeviceToken extends Model
 {
     use HasFactory;
 
-    protected $table = "divice_token";
+    protected $table = "device_token";
 
     protected $fillable = [
         'personal_access_token_id',
+        'device_type_id',
         'client',
-        'name',
+        'operation_system',
+        'ip_address',
+        'model',
+        'browser',
+        'browser_version',
         'operation_system',
         'country',
         'city',
