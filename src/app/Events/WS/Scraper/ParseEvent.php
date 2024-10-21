@@ -46,7 +46,7 @@ class ParseEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('chat.' . $this->user->id),
+            new PrivateChannel('admin.scraper.' . 1),
         ];
     }
 }

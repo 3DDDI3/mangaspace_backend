@@ -17,7 +17,7 @@ class ConsumeParseMessage extends Command
      *
      * @var string
      */
-    protected $signature = 'rmq:scraper-consume-message {user} {job_id?} {--time=*}';
+    protected $signature = 'rmq:scraper-consume-message';
 
     /**
      * The console command description.
@@ -43,7 +43,6 @@ class ConsumeParseMessage extends Command
         $channel->queue_declare('bye', false, false, false, false);
 
         $isListening = true;
-        $jobid = "";
 
         // Callback функция обработки сообщений
         $callback = function ($msg) use (&$isListening, $channel, &$jobid) {
@@ -57,11 +56,11 @@ class ConsumeParseMessage extends Command
                 }
             }
 
-            $user = new User(json_decode($this->argument('user'), true));
+            // $user = new User(json_decode($this->argument('user'), true));
 
             $isListening = false;
 
-            broadcast(new ParseEvent($user, "message received $jobid"));
+            broadcast(new ParseEvent(1, "message received"));
 
             $channel->basic_cancel('');
         };
@@ -69,7 +68,7 @@ class ConsumeParseMessage extends Command
         // Подписка на очередь
         $channel->basic_consume('bye', '', false, true, false, false, $callback);
 
-        $time = $this->option('time')[0] - 5;
+        $time = 5;
 
         try {
             while ($isListening) {

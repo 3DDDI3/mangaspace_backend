@@ -53,7 +53,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('MyApp');
 
-        $this->userDevice->getDeviceInformation($request, $token->accessToken);
+        // $this->userDevice->getDeviceInformation($request, $token->accessToken);
 
         return response(['token' => $token->plainTextToken], 201);
     }

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::channel('chat.{user}', function ($user, $id) {
+Broadcast::channel('admin.scraper.1', function () {
     // dd($user->id == $id);
-    return $user->id == $id;
+    return true;
 });

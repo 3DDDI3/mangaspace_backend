@@ -35,7 +35,7 @@ class TestJob implements ShouldQueue
     {
         Artisan::call('rmq:scraper-publish-message ' . addslashes($this->user->toJson()) . " " . $this->job->uuid());
 
-        Artisan::call('rmq:scraper-consume-message ' . addslashes($this->user->toJson()) . " " . $this->job->uuid() . " --time=$this->timeout");
+        // Artisan::call('rmq:scraper-consume-message ' . addslashes($this->user->toJson()) . " " . $this->job->uuid() . " --time=$this->timeout");
     }
 
     public function failed(Throwable $e): void
