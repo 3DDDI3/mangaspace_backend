@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\UserDeviceInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -74,5 +75,8 @@ class AuthController extends Controller
     public function check()
     {
         return response(['message' => 'ok'], 200);
+        // $response = Gate::inspect('view', request()->user());
+        // if (!$response->allowed())
+        //     abort(404);
     }
 }
