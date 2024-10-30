@@ -1,11 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\v1_0\AuthController;
-use App\Http\Controllers\Api\v1_0\PostController;
 use App\Http\Controllers\Api\v1_0\ScraperController;
 use Illuminate\Support\Facades\Route;
-
-Route::apiResource('post', PostController::class);
 
 Route::prefix('auth')
     ->controller(AuthController::class)
@@ -20,7 +17,6 @@ Route::prefix('scraper')
     ->controller(ScraperController::class)
     ->middleware('auth:sanctum')
     ->group(function () {
-        Route::get('parse', 'parse');
+        Route::post('parse', 'parse');
+        Route::post('get-chapters', 'getChapters');
     });
-
-

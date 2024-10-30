@@ -17,25 +17,18 @@ class ParseEvent implements ShouldBroadcastNow
 
     /**
      *
-     * @var \App\Models\User
-     */
-    public $user;
-
-    /**
-     *
      * @var string
      */
-    public $message;
+    public string $message;
 
     /**
      *
      * @param \App\Models\User $user
      * @param string $message
      */
-    public function __construct($user, $message)
+    public function __construct(string $message)
     {
         $this->message = $message;
-        $this->user = $user;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\DTO\RequestDTO;
 use App\Events\WS\Scraper\ParseEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,16 +17,16 @@ class TestJob implements ShouldQueue
 {
     use Queueable;
 
-    private $user;
-
     public $timeout = 120;
+
+    private string $message;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($user)
+    public function __construct(RequestDTO $requestDTO)
     {
-        $this->user = $user;
+        $this->message = json_encode($requestDTO);
     }
 
     /**
@@ -33,13 +34,7 @@ class TestJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Artisan::call('rmq:scraper-publish-message ' . addslashes($this->user->toJson()) . " " . $this->job->uuid());
-
-        // Artisan::call('rmq:scraper-consume-message ' . addslashes($this->user->toJson()) . " " . $this->job->uuid() . " --time=$this->timeout");
-    }
-
-    public function failed(Throwable $e): void
-    {
-        Log::error($e->getMessage());
+        Artisan::call("rmq:scraper-publish-message " . $this->message);
+        // Artisan::call('rmq:scraper-consume-message');
     }
 }

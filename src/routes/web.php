@@ -1,5 +1,7 @@
 <?php
 
+use App\DTO\RequestDTO;
+use App\DTO\TitleDTO;
 use App\Jobs\TestJob;
 use App\Models\DeviceType;
 use Illuminate\Http\Request;
@@ -15,16 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('test', function () {
-    // // Redis::set('name', 'taylor');
-    // $user = (new User())->fill(['name' => 'asd', 'email' => 'asd', 'password' => 'asd'])->toJson();
-    // // dd($user);
-    // Artisan::call("rmq:send-message --user=$user");
-    // broadcast(new ParseEvent($user, 'message sended'));
-
-    $browser_info = new Parser(request()->header('User-Agent'));
-    $location = Location::get('176.59.3.107');
-
-    dd($location, $browser_info);
+    dd(new RequestDTO('asd', new TitleDTO('123', '321')));
 });
 
 Route::get('check', function (Request $request) {

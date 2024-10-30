@@ -39,36 +39,23 @@ class ConsumeParseMessage extends Command
         );
         $channel = $connection->channel();
 
-        // Объявление очереди
-        $channel->queue_declare('bye', false, false, false, false);
-
         $isListening = true;
 
         // Callback функция обработки сообщений
-        $callback = function ($msg) use (&$isListening, $channel, &$jobid) {
+        $callback = function ($msg) use (&$isListening, $channel) {
             echo ' [x] Received ', $msg->body, "\n";
-
-            $headers = $msg->get('application_headers');
-
-            if ($headers) {
-                foreach ($headers as $key => $value) {
-                    if ($key == "job_id") $jobid = $value[1];
-                }
-            }
-
-            // $user = new User(json_decode($this->argument('user'), true));
 
             $isListening = false;
 
-            broadcast(new ParseEvent(1, "message received"));
+            broadcast(new ParseEvent("message received {$msg->body}"));
 
             $channel->basic_cancel('');
         };
 
         // Подписка на очередь
-        $channel->basic_consume('bye', '', false, true, false, false, $callback);
+        $channel->basic_consume('request', '', false, true, false, false, $callback);
 
-        $time = 5;
+        $time = 60;
 
         try {
             while ($isListening) {
