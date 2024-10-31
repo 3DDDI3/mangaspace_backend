@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('test', function () {
-    dd(new RequestDTO('asd', new TitleDTO('123', '321')));
+
 });
 
 Route::get('check', function (Request $request) {

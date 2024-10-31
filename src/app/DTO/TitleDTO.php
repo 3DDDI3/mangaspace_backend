@@ -11,7 +11,7 @@ class TitleDTO
      * TitleDTO
      *
      * @param string $url
-     * @param string $chapters
+     * @param array $chapters
      */
-    public function __construct(public string $url, public string $chapters) {}
+    public function __construct(public string $url, public array $chapters) {}
 }

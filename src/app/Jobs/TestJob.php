@@ -24,9 +24,9 @@ class TestJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(RequestDTO $requestDTO)
+    public function __construct(string $requestDTO)
     {
-        $this->message = json_encode($requestDTO);
+        $this->message = $requestDTO;
     }
 
     /**
@@ -34,7 +34,7 @@ class TestJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Artisan::call("rmq:scraper-publish-message " . $this->message);
+        Artisan::call("rmq:scraper-publish-message " . addslashes($this->message));
         // Artisan::call('rmq:scraper-consume-message');
     }
 }

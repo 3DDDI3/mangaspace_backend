@@ -38,6 +38,9 @@ class PublishParseMessage extends Command
         $channel = $connection->channel();
 
         $msg = new AMQPMessage($this->argument('message'));
+
+        echo $this->argument('message');
+
         $channel->basic_publish($msg, 'scraper', 'request');
 
         broadcast(new ParseEvent("message {$this->argument('message')} sended"));

@@ -8,6 +8,7 @@ use App\Events\NewEvent;
 use App\Http\Controllers\Controller;
 use App\Jobs\TestJob;
 use App\Models\User;
+use App\Services\RequestStringService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Bus;
@@ -19,9 +20,12 @@ class ScraperController extends Controller
 {
     public function parse(Request $request)
     {
-        $requestDTO = new RequestDTO($request->pages, new TitleDTO('123', '321'));
+        $requestDTO = new RequestDTO(
+            (new RequestStringService())->parseString($request->pages),
+            new TitleDTO('123', [1, 2])
+        );
 
-        TestJob::dispatch($requestDTO)->onQueue('scraper');
+        TestJob::dispatch(json_encode($requestDTO))->onQueue('scraper');
 
         return response()->json(['message' => 'ok'], 200);
     }
