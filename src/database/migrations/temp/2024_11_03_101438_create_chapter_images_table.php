@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Chapter;
+use App\Models\Person;
+use App\Models\Title;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +16,18 @@ return new class extends Migration
     {
         Schema::connection('temp')->create('chapter_images', function (Blueprint $table) {
             $table->id();
+            $table->text('path');
+            $table->text('extensions')->comment('расширения картинок (*.jpeg|*.jpg|*.webp|*.png)');
             $table->foreignIdFor(Chapter::class)
                 ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignIdFor(Title::class)
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignIdFor(Person::class)
+                ->constrained('persons')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->timestamps();
@@ -29,6 +41,8 @@ return new class extends Migration
     {
         Schema::connection('temp')->table('chapter_images', function (Blueprint $table) {
             $table->dropForeignIdFor(Chapter::class);
+            $table->dropForeignIdFor(Title::class);
+            $table->dropForeignIdFor(Person::class);
         });
         Schema::connection('temp')->dropIfExists('chapter_images');
     }

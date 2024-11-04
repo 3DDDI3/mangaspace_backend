@@ -12,4 +12,8 @@ class Category extends Model
     protected $connection = "temp";
 
     protected $table = "categories";
+
+    protected $fillable = [
+        'category',
+    ];
 }

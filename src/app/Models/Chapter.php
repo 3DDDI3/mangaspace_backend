@@ -12,4 +12,12 @@ class Chapter extends Model
     protected $connection = "temp";
 
     protected $table = "chapters";
+
+    protected $fillable = [
+        'path',
+        'volume',
+        'number',
+        'name',
+        'title_id',
+    ];
 }

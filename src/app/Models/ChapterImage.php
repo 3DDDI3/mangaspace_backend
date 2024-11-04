@@ -12,4 +12,12 @@ class ChapterImage extends Model
     protected $connection = "temp";
 
     protected $table = "title_chapters";
+
+    protected $fillable = [
+        'path',
+        'extensions',
+        'chapter_id',
+        'title_id',
+        'person_id',
+    ];
 }

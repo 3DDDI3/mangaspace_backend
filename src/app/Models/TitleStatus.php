@@ -12,4 +12,8 @@ class TitleStatus extends Model
     protected $connection = "temp";
 
     protected $table = "title_statuses";
+
+    protected $fillable = [
+        'status',
+    ];
 }

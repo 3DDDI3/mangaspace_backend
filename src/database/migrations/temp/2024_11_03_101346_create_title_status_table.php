@@ -13,20 +13,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('temp')->create('title_status', function (Blueprint $table) {
+        Schema::connection('temp')->create('title_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('statuses', 50);
+            $table->string('status', 50);
             $table->timestamps();
         });
 
         DB::connection('temp')->table('title_statuses')->insert([
-            ['id' => TitleStatus::continues, 'type' => 'Продолжается'],
-            ['id' => TitleStatus::announcement, 'type' => 'Продолжается'],
-            ['id' => TitleStatus::finished, 'type' => 'Продолжается'],
-            ['id' => TitleStatus::suspended, 'type' => 'Продолжается'],
-            ['id' => TitleStatus::terminated, 'type' => 'Продолжается'],
-            ['id' => TitleStatus::licensed, 'type' => 'Продолжается'],
-            ['id' => TitleStatus::noTranslator, 'type' => 'Продолжается'],
+            ['id' => TitleStatus::continues, 'status' => 'Продолжается'],
+            ['id' => TitleStatus::announcement, 'status' => 'Продолжается'],
+            ['id' => TitleStatus::finished, 'status' => 'Продолжается'],
+            ['id' => TitleStatus::suspended, 'status' => 'Продолжается'],
+            ['id' => TitleStatus::terminated, 'status' => 'Продолжается'],
+            ['id' => TitleStatus::licensed, 'status' => 'Продолжается'],
+            ['id' => TitleStatus::noTranslator, 'status' => 'Продолжается'],
         ]);
     }
 

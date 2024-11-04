@@ -12,4 +12,9 @@ class TitleCover extends Model
     protected $connection = "temp";
 
     protected $table = "title_covers";
+
+    protected $fillable = [
+        'path',
+        'title_id',
+    ];
 }

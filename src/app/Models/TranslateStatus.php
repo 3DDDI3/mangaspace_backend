@@ -12,4 +12,8 @@ class TranslateStatus extends Model
     protected $connection = "temp";
 
     protected $table = "translate_statuses";
+
+    protected $fillable = [
+        'status',
+    ];
 }

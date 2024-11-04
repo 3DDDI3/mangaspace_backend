@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::connection('temp')->create('persons', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
+            $table->string('alt_name', 255)->nullable();
             $table->text('description')->nullable();
             $table->foreignIdFor(PersonType::class)
                 ->constrained()

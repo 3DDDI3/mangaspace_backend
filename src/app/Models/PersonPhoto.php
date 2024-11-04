@@ -12,4 +12,9 @@ class PersonPhoto extends Model
     protected $connection = "temp";
 
     protected $table = "person_photos";
+
+    protected $fillable = [
+        'path',
+        'person_id',
+    ];
 }

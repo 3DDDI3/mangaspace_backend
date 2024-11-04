@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Person extends Model
+class TitlePerson extends Model
 {
     use HasFactory;
 
     protected $connection = "temp";
 
-    protected $table = "persons";
+    protected $table = "title_persons";
 
     protected $fillable = [
-        'name',
-        'description',
-        'person_type_id',
+        'title_id',
+        'person_id'
     ];
 }

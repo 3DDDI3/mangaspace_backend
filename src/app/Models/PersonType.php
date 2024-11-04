@@ -12,4 +12,8 @@ class PersonType extends Model
     protected $connection = 'temp';
 
     protected $table = "person_types";
+
+    protected $fillable = [
+        'type',
+    ];
 }

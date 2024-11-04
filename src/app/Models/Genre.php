@@ -12,4 +12,8 @@ class Genre extends Model
     protected $connection = "temp";
 
     protected $table = "genres";
+
+    protected $fillable = [
+        'genre',
+    ];
 }

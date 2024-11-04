@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Person;
 use App\Models\Title;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,14 +13,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('temp')->create('chapters', function (Blueprint $table) {
+        Schema::connection('temp')->create('title_persons', function (Blueprint $table) {
             $table->id();
-            $table->string('path');
-            $table->integer('volume')->nullable();
-            $table->integer('number');
-            $table->string('name', 1024)->nullable();
             $table->foreignIdFor(Title::class)
                 ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignIdFor(Person::class)
+                ->constrained('title_persons')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->timestamps();
@@ -31,9 +32,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('temp')->table('chapters', function (Blueprint $table) {
+        Schema::connection('temp')->table('title_persons', function (Blueprint $table) {
             $table->dropForeignIdFor(Title::class);
+            $table->dropForeignIdFor(Person::class);
         });
-        Schema::connection('temp')->dropIfExists('chapters');
+        Schema::connection('temp')->dropIfExists('title_persons');
     }
 };

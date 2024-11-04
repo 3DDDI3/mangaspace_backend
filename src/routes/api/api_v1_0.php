@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\v1_0\AuthController;
 use App\Http\Controllers\Api\v1_0\ScraperController;
+use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\TitleController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')
@@ -20,3 +22,6 @@ Route::prefix('scraper')
         Route::post('parse', 'parse');
         Route::post('get-chapters', 'getChapters');
     });
+
+Route::apiResource('chapters', ChapterController::class);
+Route::apiResource('titles', TitleController::class);
