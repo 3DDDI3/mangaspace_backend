@@ -19,17 +19,20 @@ class RequestStringService
         $pages = null;
 
         for ($i = 0; $i < count($substr); $i++) {
-            preg_match("/(\d+)\.{2}(\d+)/", $substr[$i], $matches);
+            if (preg_match("/(\d+)\.{2}(\d+)/", $substr[$i], $matches)) {
+                for ($j = $matches[1]; $j <= $matches[2]; $j++) {
+                    if ($j == $matches[2])
+                        $pages .= $j;
+                    else
+                        $pages .= $j . ",";
+                }
 
-            for ($j = $matches[1]; $j <= $matches[2]; $j++) {
-                if ($j == $matches[2])
-                    $pages .= $j;
-                else
-                    $pages .= $j . ",";
+                if ($i != count($substr) - 1)
+                    $pages .= ",";
+            } else {
+                if ($i != count($substr) - 1) $pages .= $substr[$i] . ",";
+                else $pages .= $substr[$i];
             }
-
-            if ($i != count($substr) - 1)
-                $pages .= ",";
         }
 
         return $pages;

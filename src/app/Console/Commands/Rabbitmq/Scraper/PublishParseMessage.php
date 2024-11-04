@@ -6,6 +6,7 @@ use App\Events\WS\Scraper\ParseEvent;
 use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Wire\AMQPTable;
 
 class PublishParseMessage extends Command
 {
@@ -14,7 +15,7 @@ class PublishParseMessage extends Command
      *
      * @var string
      */
-    protected $signature = 'rmq:scraper-publish-message {message}';
+    protected $signature = 'rmq:scraper-publish-message {id} {message}';
 
     /**
      * The console command description.
@@ -37,7 +38,10 @@ class PublishParseMessage extends Command
 
         $channel = $connection->channel();
 
-        $msg = new AMQPMessage($this->argument('message'));
+        $msg = new AMQPMessage(
+            $this->argument('message'),
+            ['application_headers' => new AMQPTable(['id' => $this->argument('id')])]
+        );
 
         echo $this->argument('message');
 

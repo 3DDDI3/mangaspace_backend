@@ -19,22 +19,18 @@ class TestJob implements ShouldQueue
 
     public $timeout = 120;
 
-    private string $message;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(string $requestDTO)
-    {
-        $this->message = $requestDTO;
-    }
+    public function __construct(private string $requestDTO) {}
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        Artisan::call("rmq:scraper-publish-message " . addslashes($this->message));
+        $message = addslashes($this->requestDTO);
+        Artisan::call("rmq:scraper-publish-message {$this->job->uuid()} {$message}");
         // Artisan::call('rmq:scraper-consume-message');
     }
 }

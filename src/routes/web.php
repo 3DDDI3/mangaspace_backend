@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('test', function () {
-
+   
 });
 
 Route::get('check', function (Request $request) {
