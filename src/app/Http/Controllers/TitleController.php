@@ -6,7 +6,8 @@ use App\Enums\AgeLimiter;
 use App\Enums\PersonType;
 use App\Enums\TitleStatus as EnumsTitleStatus;
 use App\Enums\TranslateStatus as EnumsTranslateStatus;
-use App\Http\Requests\TitleRequest;
+use App\Http\Requests\Title\StoreTitleRequest;
+use App\Http\Requests\Title\UpdateTitleRequest;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Person;
@@ -28,7 +29,7 @@ class TitleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TitleRequest $request)
+    public function store(StoreTitleRequest $request)
     {
         $json = $request->json()->all();
         dd($json);
@@ -44,20 +45,6 @@ class TitleController extends Controller
 
         if (TranslateStatus::query()->where(['status' => EnumsTranslateStatus::from($json->translateStatus)])->count() == 0);
         TranslateStatus::query()->create(['status' => EnumsTranslateStatus::from($json->translateStatus)]);
-
-        foreach ($json->genres as $genre) {
-            if (Genre::query()->where(['genre' => $genre])->count() == 0)
-                Genre::create(['genre' => $genre]);
-        }
-
-        foreach ($json->persons as $person) {
-            if (Person::query()->where(['name' => $person->name])->count() == 0)
-                Person::query()->create([
-                    'name' => $person->name,
-                    'description' => $person->description,
-                    'person_type_id' => PersonType::from($person->type),
-                ]);
-        }
 
         if (Title::query()->where(['ru_name' => $json->name, 'eng_name' => $json->altName])->count() == 0)
             Title::query()->create([
@@ -87,9 +74,9 @@ class TitleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateTitleRequest $request, string $id)
     {
-        //
+        dd($request->validated());
     }
 
     /**

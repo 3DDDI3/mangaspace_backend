@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Genre;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TitleRequest extends FormRequest
+class StoreGenreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     protected function prepareForValidation()
@@ -27,16 +27,8 @@ class TitleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'altName' => ['nullable', 'string'],
-            'cover' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
-            'type' => ['nullable', 'string'],
             'genres' => ['required', 'array'],
-            'titleStatus' => ['nullable', 'integer', 'between:1,6'],
-            'translateStatus' => ['nullable', 'integer', 'between:1,6'],
-            'releaseFormat'=>['nullable','string'],
-            'releaseYear' => ['nullable', '']
+            'genres.*' => ['required', 'string'],
         ];
     }
 }

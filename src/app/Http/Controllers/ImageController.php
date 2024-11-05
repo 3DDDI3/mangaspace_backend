@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class PersonController extends Controller
+class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +19,7 @@ class PersonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd(1);
     }
 
     /**

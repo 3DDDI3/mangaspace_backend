@@ -3,6 +3,9 @@
 use App\Http\Controllers\Api\v1_0\AuthController;
 use App\Http\Controllers\Api\v1_0\ScraperController;
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\PersonController;
 use App\Http\Controllers\TitleController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +26,8 @@ Route::prefix('scraper')
         Route::post('get-chapters', 'getChapters');
     });
 
-Route::apiResource('chapters', ChapterController::class);
-Route::apiResource('titles', TitleController::class);
+Route::apiResource('titles', TitleController::class)->middleware('auth:sanctum');
+Route::apiResource('titles.persons', PersonController::class);
+Route::apiResource('titles.genres', GenreController::class);
+Route::apiResource('titles.chapters', ChapterController::class);
+Route::apiResource('titles.chapters.images', ImageController::class);
