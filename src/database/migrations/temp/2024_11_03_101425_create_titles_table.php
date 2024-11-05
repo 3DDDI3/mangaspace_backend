@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use App\Models\ReleaseFormat;
 use App\Models\TitleStatus;
 use App\Models\TranslateStatus;
 use Illuminate\Database\Migrations\Migration;
@@ -22,7 +23,11 @@ return new class extends Migration
                 ->cascadeOnUpdate();
             $table->string('ru_name', 255)->nullable();
             $table->string('eng_name', 255)->nullable();
-            $table->string('other_names', 255);
+            $table->text('other_names');
+            $table->foreignIdFor(ReleaseFormat::class)
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->longText('description')->nullable();
             $table->foreignIdFor(TitleStatus::class)
                 ->constrained()
@@ -34,7 +39,8 @@ return new class extends Migration
                 ->cascadeOnUpdate();
             $table->year('release_year')->nullable();
             $table->string('country', 255)->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate();
         });
     }
 

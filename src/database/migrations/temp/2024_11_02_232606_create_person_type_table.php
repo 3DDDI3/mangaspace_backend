@@ -17,15 +17,16 @@ return new class extends Migration
         Schema::connection('temp')->create('person_types', function (Blueprint $table) {
             $table->id();
             $table->string('type', 30);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate();
         });
 
         DB::connection('temp')->table('person_types')->insert([
-            ['id' => PersonType::Translator, 'type' => 'Переводчик'],
-            ['id' => PersonType::Author, 'type' => 'Автор'],
-            ['id' => PersonType::Painter, 'type' => 'Художник'],
-            ['id' => PersonType::Publisher, 'type' => 'Издатель'],
-            ['id' => PersonType::Magazine, 'type' => 'Журнал'],
+            ['id' => PersonType::Translator, 'type' => 'Переводчик', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => PersonType::Author, 'type' => 'Автор', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => PersonType::Painter, 'type' => 'Художник', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => PersonType::Publisher, 'type' => 'Издатель', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => PersonType::Magazine, 'type' => 'Журнал', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 

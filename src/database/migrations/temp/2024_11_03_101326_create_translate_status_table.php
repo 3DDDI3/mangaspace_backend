@@ -16,16 +16,17 @@ return new class extends Migration
         Schema::connection('temp')->create('translate_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('status', 50);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate();
         });
 
         DB::connection('temp')->table('translate_statuses')->insert([
-            ['id' => TranslateStatus::continues, 'status' => 'Продолжается'],
-            ['id' => TranslateStatus::finished, 'status' => 'Завершен'],
-            ['id' => TranslateStatus::freezed, 'status' => 'Заморожен'],
-            ['id' => TranslateStatus::terminated, 'status' => 'Прекращен'],
-            ['id' => TranslateStatus::licensed, 'status' => 'Лицензировано'],
-            ['id' => TranslateStatus::noTranslator, 'status' => 'Нет переводчика'],
+            ['id' => TranslateStatus::continues, 'status' => 'Продолжается', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => TranslateStatus::finished, 'status' => 'Завершен', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => TranslateStatus::freezed, 'status' => 'Заморожен', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => TranslateStatus::terminated, 'status' => 'Прекращен', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => TranslateStatus::licensed, 'status' => 'Лицензировано', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => TranslateStatus::noTranslator, 'status' => 'Нет переводчика', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 

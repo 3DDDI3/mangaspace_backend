@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Title;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('temp')->create('title_covers', function (Blueprint $table) {
+        Schema::create('release_formats', function (Blueprint $table) {
             $table->id();
-            $table->text('path');
-            $table->foreignIdFor(Title::class)
-                ->constrained()
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            $table->string('format', 255);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
         });
@@ -29,9 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('temp')->table('title_covers', function (Blueprint $table) {
-            $table->dropForeignIdFor(Title::class);
-        });
-        Schema::connection('temp')->dropIfExists('title_covers');
+        Schema::dropIfExists('release_formats');
     }
 };

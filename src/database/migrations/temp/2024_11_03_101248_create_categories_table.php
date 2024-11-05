@@ -15,7 +15,8 @@ return new class extends Migration
         Schema::connection('temp')->create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('category', 30);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate();
         });
     }
 
