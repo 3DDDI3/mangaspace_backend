@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('eng_name', 255)->nullable();
             $table->text('other_names');
             $table->foreignIdFor(ReleaseFormat::class)
+                ->nullable()
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();

@@ -26,8 +26,10 @@ Route::prefix('scraper')
         Route::post('get-chapters', 'getChapters');
     });
 
-Route::apiResource('titles', TitleController::class)->middleware('auth:sanctum');
-Route::apiResource('titles.persons', PersonController::class);
-Route::apiResource('titles.genres', GenreController::class);
-Route::apiResource('titles.chapters', ChapterController::class);
-Route::apiResource('titles.chapters.images', ImageController::class);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('titles', TitleController::class);
+    Route::apiResource('titles.persons', PersonController::class);
+    Route::apiResource('titles.genres', GenreController::class);
+    Route::apiResource('titles.chapters', ChapterController::class);
+    Route::apiResource('titles.chapters.images', ImageController::class);
+});

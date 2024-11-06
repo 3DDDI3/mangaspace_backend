@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('release_formats', function (Blueprint $table) {
+        Schema::connection('temp')->create('release_formats', function (Blueprint $table) {
             $table->id();
             $table->string('format', 255);
             $table->timestamp('created_at')->useCurrent();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('release_formats');
+        Schema::connection('temp')->dropIfExists('release_formats');
     }
 };

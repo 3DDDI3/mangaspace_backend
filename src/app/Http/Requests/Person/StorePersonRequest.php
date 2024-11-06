@@ -2,16 +2,19 @@
 
 namespace App\Http\Requests\Person;
 
+use App\Enums\PersonType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StorePersonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(Request $request): bool
     {
-        return false;
+        return $request->user() != null ? true : false;
     }
 
     protected function prepareForValidation()

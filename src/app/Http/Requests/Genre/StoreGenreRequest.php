@@ -3,15 +3,16 @@
 namespace App\Http\Requests\Genre;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class StoreGenreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(Request $request): bool
     {
-        return false;
+        return $request->user() == null ? false : true;
     }
 
     protected function prepareForValidation()

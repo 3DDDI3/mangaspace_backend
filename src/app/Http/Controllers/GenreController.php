@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Genre\StoreGenreRequest;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 
 class GenreController extends Controller
@@ -17,9 +19,14 @@ class GenreController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreGenreRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        foreach ($data['genres'] as $item) {
+            if (Genre::query()->where(['genre' => $item])->count() == 0)
+                Genre::query()->create(['genre' => $item]);
+        }
     }
 
     /**
