@@ -15,6 +15,8 @@ class Person extends Model
 
     protected $fillable = [
         'name',
+        'alt_name',
+        'slug',
         'description',
         'person_type_id',
     ];

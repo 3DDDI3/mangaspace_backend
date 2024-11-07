@@ -4,6 +4,7 @@ use App\DTO\RequestDTO;
 use App\DTO\TitleDTO;
 use App\Jobs\TestJob;
 use App\Models\DeviceType;
+use App\Models\Title;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Jenssegers\Agent\Agent;
@@ -14,11 +15,10 @@ use WhichBrowser\Parser;
 use function Symfony\Component\String\b;
 
 Route::get('/', function () {
-    return view('welcome');
+    $tile = Title::find(1)->persons;
+    return view('welcome', $tile);
 });
-Route::get('test', function () {
-   
-});
+Route::get('test', function () {});
 
 Route::get('check', function (Request $request) {
     TestJob::dispatchSync($request->user());

@@ -8,6 +8,7 @@ use App\Enums\TranslateStatus as EnumsTranslateStatus;
 use App\Http\Requests\Genre\StoreGenreRequest;
 use App\Http\Requests\Title\StoreTitleRequest;
 use App\Http\Requests\Title\UpdateTitleRequest;
+use App\Http\Resources\TitleResource;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Person;
@@ -28,7 +29,9 @@ class TitleController extends Controller
      */
     public function index()
     {
-        dd(1);
+        return Title::find(1)->persons;
+        dd();
+        return new TitleResource(Title::find(1));
     }
 
     /**

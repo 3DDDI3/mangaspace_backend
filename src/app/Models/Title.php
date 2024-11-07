@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Title extends Model
 {
@@ -24,4 +25,14 @@ class Title extends Model
         'release_year',
         'slug',
     ];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function persons()
+    {
+        return $this->belongsToMany(Person::class, TitlePerson::class);
+    }
 }
