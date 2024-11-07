@@ -21,7 +21,10 @@ class GenreController extends Controller
      */
     public function store(StoreGenreRequest $request)
     {
+        // dd($request);
         $data = $request->validated();
+
+        dd($data);
 
         foreach ($data['genres'] as $item) {
             if (Genre::query()->where(['genre' => $item])->count() == 0)

@@ -22,5 +22,6 @@ class Title extends Model
         'title_status_id',
         'translate_status_id',
         'release_year',
+        'slug',
     ];
 }

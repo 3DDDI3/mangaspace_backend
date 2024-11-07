@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests\Title;
 
+use App\Enums\AgeLimiter;
+use App\Enums\TitleStatus;
+use App\Enums\TranslateStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateTitleRequest extends FormRequest
 {
@@ -14,6 +18,11 @@ class UpdateTitleRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge($this->json()->all());
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,6 +32,17 @@ class UpdateTitleRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
+            'altName' => ['nullable', 'string'],
+            'cover' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
+            'type' => ['nullable', 'string'],
+            'titleStatus' => ['nullable', 'integer', Rule::enum(TitleStatus::class)],
+            'translateStatus' => ['nullable', 'integer', Rule::enum(TranslateStatus::class)],
+            'releaseFormat' => ['nullable', 'string'],
+            'releaseYear' => ['nullable', 'integer', 'digits:4', 'between:1900,' . date('Y')],
+            'ageLimiter' => ['nullable', 'integer', Rule::enum(AgeLimiter::class)],
+            'otherNames' => ['nullable', 'string'],
+            'country' => ['nullable', 'string'],
         ];
     }
 }

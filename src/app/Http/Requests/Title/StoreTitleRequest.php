@@ -45,8 +45,7 @@ class StoreTitleRequest extends FormRequest
             'ageLimiter' => ['nullable', 'integer', Rule::enum(AgeLimiter::class)],
             'otherNames' => ['nullable', 'string'],
             'contacts' => ['nullable', 'array'],
-            'contacts.*' => ['nullable', 'string'],
-            'country' => ['nullable', 'string']
+            'country' => ['nullable', 'string'],
         ];
     }
 }

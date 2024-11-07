@@ -17,13 +17,14 @@ return new class extends Migration
     {
         Schema::connection('temp')->create('titles', function (Blueprint $table) {
             $table->id();
+            $table->string('ru_name', 255)->nullable();
+            $table->string('eng_name', 255)->nullable();
+            $table->string('slug', 255);
+            $table->text('other_names');
             $table->foreignIdFor(Category::class)
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('ru_name', 255)->nullable();
-            $table->string('eng_name', 255)->nullable();
-            $table->text('other_names');
             $table->foreignIdFor(ReleaseFormat::class)
                 ->nullable()
                 ->constrained()
