@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Title extends Model
 {
@@ -26,13 +27,33 @@ class Title extends Model
         'slug',
     ];
 
+    /**
+     * Категория
+     *
+     * @return BelongsTo
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function persons()
+    /**
+     * Персоны
+     *
+     * @return BelongsToMany
+     */
+    public function persons(): BelongsToMany
     {
         return $this->belongsToMany(Person::class, TitlePerson::class);
+    }
+
+    /**
+     * Жанры
+     *
+     * @return BelongsToMany
+     */
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(Genre::class, TitleGenre::class);
     }
 }

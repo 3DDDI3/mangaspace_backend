@@ -3,10 +3,10 @@
 use App\Http\Controllers\Api\v1_0\AuthController;
 use App\Http\Controllers\Api\v1_0\ScraperController;
 use App\Http\Controllers\ChapterController;
-use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\TitleController;
+use App\Http\Controllers\TitleGenreController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')
@@ -29,7 +29,7 @@ Route::prefix('scraper')
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('titles', TitleController::class);
     Route::apiResource('titles.persons', PersonController::class);
-    Route::apiResource('titles.genres', GenreController::class);
+    Route::apiResource('titles.genres', TitleGenreController::class);
     Route::apiResource('titles.chapters', ChapterController::class);
     Route::apiResource('titles.chapters.images', ImageController::class);
 });

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TitlePerson extends Model
 {
@@ -17,4 +18,14 @@ class TitlePerson extends Model
         'title_id',
         'person_id'
     ];
+
+    public function title(): BelongsTo
+    {
+        return $this->belongsTo(Title::class);
+    }
+
+    public function person(): BelongsTo
+    {
+        return $this->belongsTo(Person::class);
+    }
 }

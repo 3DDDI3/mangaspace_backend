@@ -15,5 +15,6 @@ class Genre extends Model
 
     protected $fillable = [
         'genre',
+        'slug'
     ];
 }

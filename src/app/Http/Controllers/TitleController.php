@@ -88,7 +88,7 @@ class TitleController extends Controller
         $title = Title::query()->where(['slug', $slug])->first();
 
         if (empty($title))
-            return response()->json(['error' => 'Не удалось найти тайтл']);
+            return response()->json(['error' => 'Не удалось найти тайтл'], 400);
 
         if (Category::query()->where(['category' => $data['type']])->count() == 0)
             Category::create(['category' => $data['type']]);
@@ -96,8 +96,8 @@ class TitleController extends Controller
         if (TitleStatus::query()->where(['status' => EnumsTitleStatus::from($data['titleStatus'])])->count() == 0)
             TitleStatus::query()->create(['status' => EnumsTitleStatus::from($data['titleStatus'])]);
 
-        if (TranslateStatus::query()->where(['status' => EnumsTranslateStatus::from($data['translateStatus'])])->count() == 0);
-        TranslateStatus::query()->create(['status' => EnumsTranslateStatus::from($data['translateStatus'])]);
+        if (TranslateStatus::query()->where(['status' => EnumsTranslateStatus::from($data['translateStatus'])])->count() == 0)
+            TranslateStatus::query()->create(['status' => EnumsTranslateStatus::from($data['translateStatus'])]);
 
         $title->query()->fill([
             'category_id' => Category::query()->where(['category' => $data['type']])->first('id')->id,

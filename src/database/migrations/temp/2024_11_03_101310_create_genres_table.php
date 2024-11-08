@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::connection('temp')->create('genres', function (Blueprint $table) {
             $table->id();
             $table->string('genre', 100);
+            $table->string('slug', 100);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
         });
