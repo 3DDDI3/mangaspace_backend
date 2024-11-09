@@ -30,7 +30,12 @@ class UpdatePersonRequest extends FormRequest
     {
         return [
             'persons' => ['nullable', 'array'],
-            'persons.*.name' => ['required', 'string'],
+            'persons.*.slug' => ['required', 'string'],
+            'persons.*.name' => [
+                'required',
+                'string',
+                // 'unique:temp.persons,name'
+            ],
             'persons.*.type' => ['required', 'integer', Rule::enum(PersonType::class)],
             'persons.*.description' => ['nullable', 'string'],
             'persons.*.image' => ['nullable', 'array'],

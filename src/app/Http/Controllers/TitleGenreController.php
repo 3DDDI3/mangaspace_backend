@@ -97,6 +97,8 @@ class TitleGenreController extends Controller
     {
         $request->validated();
 
+        dd(Genre::query()->where(['slug' => $genre_slug])->first()->title()->sync([1 => ['title_id' => 1, 'genre_id' => 1, 'updated_at' => now()]]));
+
         $title_id = Title::query()->where(['slug' => $title_slug])?->value('id');
 
         if (empty($title_id))
@@ -120,27 +122,15 @@ class TitleGenreController extends Controller
      */
     public function destroy(string $title_slug, string $genre_slug)
     {
-        $title_id = Title::query()
-            ->where(['slug' => $title_slug])
-            ->value('id');
+        if (Genre::query()->where(['slug' => $genre_slug])->count == 0)
+            return response(['error' => 'Запись не найдена'], 400);
 
-        if (empty($title_id))
-            return response()->json(['error' => 'Тайтл не найден'], 400);
-
-        $genre_id = Genre::query()
+        Genre::query()
             ->where(['slug' => $genre_slug])
-            ->value('id');
+            ->first()
+            ->title()
+            ->detach();
 
-        if (empty($genre_id))
-            return response()->json(['error' => 'Жанр не найден'], 400);
-
-        DB::transaction(function () use ($genre_id, $title_id) {
-            TitleGenre::query()
-                ->where(['title_id' => $title_id, 'genre_id' => $genre_id])
-                ->first()
-                ->delete();
-
-            response(null, 201);
-        });
+        response(null, 201);
     }
 }

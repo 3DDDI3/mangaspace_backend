@@ -38,6 +38,36 @@ class Title extends Model
     }
 
     /**
+     * Статус тайтла
+     *
+     * @return BelongsTo
+     */
+    public function titleStatus(): BelongsTo
+    {
+        return $this->belongsTo(TitleStatus::class);
+    }
+
+    /**
+     * Формат релиза
+     *
+     * @return BelongsTo
+     */
+    public function releaseFormat(): BelongsTo
+    {
+        return $this->belongsTo(ReleaseFormat::class);
+    }
+
+    /**
+     * Статус перевода
+     *
+     * @return BelongsTo
+     */
+    public function translateStatus(): BelongsTo
+    {
+        return $this->belongsTo(TranslateStatus::class);
+    }
+
+    /**
      * Персоны
      *
      * @return BelongsToMany

@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Person extends Model
 {
@@ -23,14 +23,9 @@ class Person extends Model
         'person_type_id',
     ];
 
-    /**
-     * Тип пользователя
-     *
-     * @return BelongsTo
-     */
-    public function type(): BelongsTo
+    public function type()
     {
-        return $this->belongsTo(PersonType::class);
+        return $this->belongsTo(PersonType::class, 'person_type_id');
     }
 
     /**
@@ -41,5 +36,10 @@ class Person extends Model
     public function title(): BelongsToMany
     {
         return $this->belongsToMany(Title::class, TitlePerson::class);
+    }
+
+    public function photos(): HasMany
+    {
+        return $this->hasMany(PersonPhoto::class);
     }
 }

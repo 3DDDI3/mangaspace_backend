@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Genre extends Model
 {
     use HasFactory;
+    use \Znck\Eloquent\Traits\BelongsToThrough;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
     protected $connection = "temp";
 
@@ -17,4 +20,9 @@ class Genre extends Model
         'genre',
         'slug'
     ];
+
+    public function title(): BelongsToMany
+    {
+        return $this->belongsToMany(Title::class, TitleGenre::class);
+    }
 }

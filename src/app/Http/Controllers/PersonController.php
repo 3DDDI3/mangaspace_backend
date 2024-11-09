@@ -6,13 +6,11 @@ use App\Enums\PersonType;
 use Illuminate\Support\Str;
 use App\Http\Requests\Person\StorePersonRequest;
 use App\Http\Requests\Person\UpdatePersonRequest;
+use App\Http\Resources\PersonResource;
 use App\Models\Person;
 use App\Models\Title;
 use App\Models\TitlePerson;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
-use function PHPSTORM_META\type;
 
 class PersonController extends Controller
 {
@@ -22,7 +20,11 @@ class PersonController extends Controller
     public function index() {}
 
     /**
-     * Store a newly created resource in storage.
+     * Создание персоны
+     *
+     * @param StorePersonRequest $request
+     * @param string $slug
+     * @return void
      */
     public function store(StorePersonRequest $request, string $slug)
     {
@@ -65,56 +67,70 @@ class PersonController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Возврат конкретной персоны
+     *
+     * @param string $title_slug
+     * @param string $person_slug
+     * @return void
      */
-    public function show(string $id)
+    public function show(string $title_slug, string $person_slug)
     {
-        //
+        $person = Person::query()
+            ->where(['slug' => $person_slug])
+            ->first();
+
+        return new PersonResource($person);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Обновление персоны
+     *
+     * @param UpdatePersonRequest $request
+     * @param string $title_slug
+     * @param string $person_slug
+     * @return void
      */
     public function update(UpdatePersonRequest $request, string $title_slug, string $person_slug)
     {
-        $data = $request->validated()['person'];
+        $persons = $request->validated()['persons'];
 
-        dd(TitlePerson::query()->find(1)->person);
+        foreach ($persons as $person) {
+            if (Person::query()->where(['slug' => $person['slug']])->count() == 0)
+                return response()->json(['error' => 'Person not found'], 400);
 
-        $title_id = Title::query()->where(['slug' => $title_slug])->value('id');
-
-        $person_id = Person::query()->where(['slug' => $person_slug])->value('id');
-
-        if (TitlePerson::query()->where(['title_id' => $title_id, 'person_id' => $person_id])->count() == 0)
-            return response()->json(['error' => 'Личность не найдена'], 400);
-
-        TitlePerson::query()->where(['title_id' => $title_id, 'person_id' => $person_id])->first()->title()->fill([
-            'name' => $data['name'],
-            'slug' => $data['name'],
-            'alt_name' => $data['altName'],
-        ]);
-
-        /**
-         * @todo Дописать обновление
-         */
+            DB::transaction(function () use ($person) {
+                Person::query()
+                    ->where(['slug' => $person['slug']])
+                    ->first()
+                    ->fill([
+                        'name' => $person['name'],
+                        'slug' => Str::slug($person['slug']),
+                        'type' => $person['type'],
+                        'alt_ame' => $person['altName'],
+                        'description' => $person['description'],
+                    ])
+                    ->save();
+            });
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Удаление персоны
+     *
+     * @param string $title_slug
+     * @param string $person_slug
+     * @return void
      */
     public function destroy(string $title_slug, string $person_slug)
     {
-        $title_id = Title::query()
-            ->where(['slug' => $title_slug])
-            ->value('id');
+        if (Person::query()->where(['slug' => $person_slug])->count() == 0)
+            return response()->json(['error' => 'Запись не найдена'], 400);
 
-        $person_id = Person::query()
+        Person::query()
             ->where(['slug' => $person_slug])
-            ->value('id');
-
-        TitlePerson::query()
-            ->where(['title_id' => $title_id, 'person_id' => $person_id])
-            ->delete();
+            ->first()
+            ->title()
+            ->detach();
 
         return response(null, 204);
     }

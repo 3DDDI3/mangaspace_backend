@@ -29,9 +29,7 @@ class TitleController extends Controller
      */
     public function index()
     {
-        return Title::find(1)->persons;
-        dd();
-        return new TitleResource(Title::find(1));
+        return TitleResource::collection(Title::all());
     }
 
     /**
@@ -73,9 +71,9 @@ class TitleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        dd($id);
+        return new TitleResource(Title::query()->where(['slug' => $slug])->first());
     }
 
     /**
