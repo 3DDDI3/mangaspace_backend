@@ -1,26 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1_0;
 
 use Illuminate\Support\Str;
 use App\Enums\TitleStatus as EnumsTitleStatus;
 use App\Enums\TranslateStatus as EnumsTranslateStatus;
-use App\Http\Requests\Genre\StoreGenreRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Title\StoreTitleRequest;
 use App\Http\Requests\Title\UpdateTitleRequest;
 use App\Http\Resources\TitleResource;
 use App\Models\Category;
-use App\Models\Genre;
-use App\Models\Person;
 use App\Models\Title;
 use App\Models\TitleStatus;
 use App\Models\TranslateStatus;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-
-use function React\Promise\all;
 
 class TitleController extends Controller
 {
@@ -97,18 +90,19 @@ class TitleController extends Controller
         if (TranslateStatus::query()->where(['status' => EnumsTranslateStatus::from($data['translateStatus'])])->count() == 0)
             TranslateStatus::query()->create(['status' => EnumsTranslateStatus::from($data['translateStatus'])]);
 
-        $title->query()->fill([
-            'category_id' => Category::query()->where(['category' => $data['type']])->first('id')->id,
-            'ru_name' => $data['name'],
-            'slug' => empty($data['altName']) ? Str::slug($data['name']) : Str::slug($data['altName']),
-            'eng_name' => $data['altName'],
-            'other_names'  => $data['otherNames'],
-            'description' => $data['description'],
-            'title_status_id' => EnumsTitleStatus::from($data['titleStatus']),
-            'translate_status_id' => EnumsTranslateStatus::from($data['translateStatus']),
-            'release_year' => $data['releaseYear'],
-            'country' => $data['country'],
-        ])->save();
+        $title->query()
+            ->fill([
+                'category_id' => Category::query()->where(['category' => $data['type']])->first('id')->id,
+                'ru_name' => $data['name'],
+                'slug' => empty($data['altName']) ? Str::slug($data['name']) : Str::slug($data['altName']),
+                'eng_name' => $data['altName'],
+                'other_names'  => $data['otherNames'],
+                'description' => $data['description'],
+                'title_status_id' => EnumsTitleStatus::from($data['titleStatus']),
+                'translate_status_id' => EnumsTranslateStatus::from($data['translateStatus']),
+                'release_year' => $data['releaseYear'],
+                'country' => $data['country'],
+            ])->save();
     }
 
     /**

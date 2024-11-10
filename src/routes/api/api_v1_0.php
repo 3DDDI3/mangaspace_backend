@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\v1_0\AuthController;
+use App\Http\Controllers\Api\v1_0\ChapterImageController;
 use App\Http\Controllers\Api\v1_0\ScraperController;
-use App\Http\Controllers\ChapterController;
-use App\Http\Controllers\ImageController;
-use App\Http\Controllers\PersonController;
-use App\Http\Controllers\TitleController;
-use App\Http\Controllers\TitleGenreController;
+use App\Http\Controllers\Api\v1_0\TitleChapterController;
+use App\Http\Controllers\Api\v1_0\TitleController;
+use App\Http\Controllers\Api\v1_0\TitleGenreController;
+use App\Http\Controllers\Api\v1_0\TitlePersonController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')
@@ -28,8 +28,8 @@ Route::prefix('scraper')
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('titles', TitleController::class);
-    Route::apiResource('titles.persons', PersonController::class);
+    Route::apiResource('titles.persons', TitlePersonController::class);
     Route::apiResource('titles.genres', TitleGenreController::class);
-    Route::apiResource('titles.chapters', ChapterController::class);
-    Route::apiResource('titles.chapters.images', ImageController::class);
+    Route::apiResource('titles.chapters', TitleChapterController::class);
+    Route::apiResource('titles.chapters.images', ChapterImageController::class);
 });

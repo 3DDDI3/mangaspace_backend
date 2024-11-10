@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1_0;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ChapterController extends Controller
+class PersonController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return 1;
+        //
     }
 
     /**
@@ -19,7 +20,7 @@ class ChapterController extends Controller
      */
     public function store(Request $request)
     {
-        dd(json_decode($request->input('name')));
+        //
     }
 
     /**
@@ -31,9 +32,9 @@ class ChapterController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified resource in storage.
      */
-    public function edit(string $id)
+    public function update(Request $request, string $id)
     {
         //
     }
