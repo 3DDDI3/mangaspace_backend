@@ -7,6 +7,7 @@ use App\Http\Requests\Genre\UpdateGenreRequest;
 use App\Models\Genre;
 use App\Models\Title;
 use App\Models\TitleGenre;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -53,7 +54,7 @@ class TitleGenreController extends Controller
 
                     return response(null, 201);
                 } else {
-                    $genre_id = TitleGenre::query()
+                    $genre_id = Genre::query()
                         ->where(['genre' => $item])
                         ->value('id');
 
@@ -93,11 +94,16 @@ class TitleGenreController extends Controller
      * @param string $genre_slug
      * @return void
      */
-    public function update(UpdateGenreRequest $request, string $title_slug, string $genre_slug)
+    public function update(Request $request, string $title_slug, string $genre_slug)
     {
-        $request->validated();
+        $title_id = Title::query()->where(['slug' => $title_slug])->value('id');
+        $genre = Genre::query()->where(['slug' => $genre_slug])->first();
 
-        dd(Genre::query()->where(['slug' => $genre_slug])->first()->title()->sync([1 => ['title_id' => 1, 'genre_id' => 1, 'updated_at' => now()]]));
+        dd($genre->title()->sync([$title_id => ['genre_id' => 2, 'updated_at' => now()]]));
+
+        dd(Title::query()->where(['slug' => $title_slug])->first()
+            ->genres()
+            ->sync([$title_id => ['title_id' => 2, 'updated_at' => now()]]));
 
         $title_id = Title::query()->where(['slug' => $title_slug])?->value('id');
 

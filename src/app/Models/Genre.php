@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Genre extends Model
 {
     use HasFactory;
-    use \Znck\Eloquent\Traits\BelongsToThrough;
-    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
     protected $connection = "temp";
 
