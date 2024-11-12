@@ -3,47 +3,74 @@
 namespace App\Http\Controllers\Api\v1_0;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\TitleChapter\TitleChapterStoreRequest;
+use App\Http\Requests\TitleChapter\TitleChapterUpdateRequest;
+use App\Http\Resources\ChapterResource;
+use App\Models\Title;
 
 class TitleChapterController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $title_slug)
     {
-        return 1;
+        return ChapterResource::collection(Title::query()->where(['slug' => $title_slug])->first()->chapters);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TitleChapterStoreRequest $request, string $title_slug)
     {
-        dd(json_decode($request->input('name')));
+        $chapter = $request->validated();
+        $title = Title::query()
+            ->where(['slug' => $title_slug])
+            ->first();
+
+        $title->chapters()
+            ->create([
+                'path' => $chapter['url'],
+                'number' => $chapter['number'],
+                'volume' => $chapter['volume'],
+                'name' => $chapter['name'],
+            ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $title_slug, string $chapter_number)
     {
-        //
+        return new ChapterResource(Title::query()->where(['slug' => $title_slug])->first()->chapters()->where(['number' => $chapter_number])->first());
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function update(TitleChapterUpdateRequest $request, string $title_slug, string $chapter_number)
     {
-        //
+        $chapter = $request->validated();
+
+        Title::query()
+            ->where(['slug' => $title_slug])
+            ->first()
+            ->where(['number' => $chapter_number])
+            ->first()
+            ->fill([
+                'path' => $chapter['url'],
+                'volume' => $chapter['volume'],
+                'number' => $chapter['number'],
+                'name' => $chapter['name'],
+            ])
+            ->save();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $title_slug, string $chapter_number)
     {
-        //
+        
     }
 }

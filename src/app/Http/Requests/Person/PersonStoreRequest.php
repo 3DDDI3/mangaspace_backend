@@ -4,16 +4,17 @@ namespace App\Http\Requests\Person;
 
 use App\Enums\PersonType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class UpdatePersonRequest extends FormRequest
+class PersonStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(Request $request): bool
     {
-        return true;
+        return $request->user() != null ? true : false;
     }
 
     protected function prepareForValidation()
@@ -30,12 +31,7 @@ class UpdatePersonRequest extends FormRequest
     {
         return [
             'persons' => ['nullable', 'array'],
-            'persons.*.slug' => ['required', 'string'],
-            'persons.*.name' => [
-                'required',
-                'string',
-                // 'unique:temp.persons,name'
-            ],
+            'persons.*.name' => ['required', 'string', 'unique:temp.persons,name'],
             'persons.*.type' => ['required', 'integer', Rule::enum(PersonType::class)],
             'persons.*.description' => ['nullable', 'string'],
             'persons.*.image' => ['nullable', 'array'],

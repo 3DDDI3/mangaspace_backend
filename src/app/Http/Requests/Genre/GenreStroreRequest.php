@@ -5,7 +5,7 @@ namespace App\Http\Requests\Genre;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
-class StoreGenreRequest extends FormRequest
+class GenreStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,7 @@ class StoreGenreRequest extends FormRequest
     {
         return [
             'genres' => ['required', 'array'],
-            'genres.*' => ['required', 'string'],
+            'genres.*' => ['required', 'string', 'unique:temp.genres,genre'],
         ];
     }
 }

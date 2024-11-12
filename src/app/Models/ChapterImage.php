@@ -17,7 +17,6 @@ class ChapterImage extends Model
         'path',
         'extensions',
         'chapter_id',
-        'title_id',
         'person_id',
     ];
 }

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\v1_0\AuthController;
 use App\Http\Controllers\Api\v1_0\ChapterImageController;
+use App\Http\Controllers\Api\v1_0\PersonController;
+use App\Http\Controllers\Api\v1_0\PersonImageController;
 use App\Http\Controllers\Api\v1_0\ScraperController;
 use App\Http\Controllers\Api\v1_0\TitleChapterController;
 use App\Http\Controllers\Api\v1_0\TitleController;
@@ -32,4 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('titles.genres', TitleGenreController::class);
     Route::apiResource('titles.chapters', TitleChapterController::class);
     Route::apiResource('titles.chapters.images', ChapterImageController::class);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('persons', PersonController::class);
+    Route::apiResource('persons.images', PersonImageController::class);
 });

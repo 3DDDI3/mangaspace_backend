@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Api\v1_0;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ChapterImage\ChapterImageStoreRequest;
-use App\Models\ChapterImage;
 use Illuminate\Http\Request;
 
-class ChapterImageController extends Controller
+class PersonImageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,12 +18,7 @@ class ChapterImageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ChapterImageStoreRequest $request)
-    {
-        $chapter_images = $request->validated();
-
-        ChapterImage::query();
-    }
+    public function store(Request $request, string $person_slug) {}
 
     /**
      * Display the specified resource.

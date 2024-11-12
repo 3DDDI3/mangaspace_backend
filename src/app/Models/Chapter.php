@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Chapter extends Model
 {
@@ -18,6 +20,10 @@ class Chapter extends Model
         'volume',
         'number',
         'name',
-        'title_id',
     ];
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(ChapterImage::class);
+    }
 }
