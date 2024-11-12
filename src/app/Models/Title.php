@@ -88,8 +88,8 @@ class Title extends Model
      *
      * @return BelongsToMany
      */
-    public function genres(): HasMany
+    public function genres(): BelongsToMany
     {
-        return $this->hasMany(Chapter::class);
+        return $this->belongsToMany(Genre::class, TitleGenre::class);
     }
 }

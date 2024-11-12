@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\v1_0;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Genre\StoreGenreRequest;
 use App\Http\Requests\Genre\UpdateGenreRequest;
-use App\Http\Requests\TitleGenre\TitleGenreRequest;
 use App\Http\Requests\TitleGenre\TitleGenreStoreRequest;
 use App\Http\Resources\GenreResource;
 use App\Models\Genre;
@@ -32,24 +31,25 @@ class TitleGenreController extends Controller
      * @param string $title_slug
      * @return void
      */
-    public function store(TitleGenreStoreRequest $request, string $title_slug): void
+    public function store(TitleGenreStoreRequest $request, string $title_slug)
     {
         $genres = $request->validated()['genres'];
 
-        foreach ($genres as $genre) {
-            DB::transaction(function () use ($genre, $title_slug) {
+        DB::transaction(function () use ($genres, $title_slug) {
+            foreach ($genres as $genre) {
                 $genre_id = Genre::query()->where(['genre' => $genre])?->value('id');
 
                 if (empty($genre_id))
                     return response()->json(['error' => 'Запись не найдена', 400]);
 
-                Title::query()
+                $title =  Title::query()
                     ->where(['slug' => $title_slug])
-                    ->first()
-                    ->genres()
-                    ->attach($genre_id, ['updated_at' => now()]);
-            });
-        }
+                    ->first();
+
+                if ($title->genres()->where(['title_id' => $title->id, 'genre_id' => $genre_id])->count() == 0)
+                    $title->genres()->attach($title->id, ['genre_id' => $genre_id, 'updated_at' => now()]);
+            }
+        });
     }
 
     /**
@@ -76,12 +76,11 @@ class TitleGenreController extends Controller
      * @param string $genre_slug
      * @return void
      */
-    public function update(TitleGenreRequest $request, string $title_slug, string $genre_slug)
+    public function update(TitleGenreStoreRequest $request, string $title_slug, string $genre_slug)
     {
         $genre = $request->validated()['genre'];
 
         $title_id = Title::query()->where(['slug' => $title_slug])?->value('id');
-        $genre = Genre::query()->where(['slug' => $genre_slug])?->first();
         $genre_id = Genre::query()->where(['genre' => $genre])?->value('id');
 
         if (empty($title_id) || empty($genre) || empty($genre_id))

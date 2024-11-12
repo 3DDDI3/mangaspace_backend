@@ -20,9 +20,10 @@ class ChapterImageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ChapterImageStoreRequest $request)
+    public function store(ChapterImageStoreRequest $request, string $title_slug, string $chapter_number)
     {
         $chapter_images = $request->validated();
+        dd($chapter_images, $title_slug, $chapter_number);
 
         ChapterImage::query();
     }

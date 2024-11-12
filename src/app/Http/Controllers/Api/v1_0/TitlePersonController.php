@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\v1_0;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Person\PersonUpdateRequest;
 use Illuminate\Support\Str;
 use App\Http\Requests\Person\StorePersonRequest;
-use App\Http\Requests\Person\UpdatePersonRequest;
 use App\Http\Requests\TitlePerson\TitlePersonStoreRequest;
 use App\Http\Resources\PersonResource;
 use App\Models\Person;
@@ -36,14 +36,17 @@ class TitlePersonController extends Controller
     {
         $persons = $request->validated()["persons"];
 
-        foreach ($persons as $person) {
-            DB::transaction(function () use ($person, $title_slug) {
+
+        DB::transaction(function () use ($persons, $title_slug) {
+            foreach ($persons as $person) {
                 $person_id = Person::query()->where(['slug' => $person])->value('id');
+                if (empty($person_id)) continue;
                 $title = Title::query()->where(['slug' => $title_slug])->first();
 
-                $title->persons()->attach($title->id, ['person_id' => $person_id, 'updaetd_at' => now()]);
-            });
-        }
+                $title->persons()->attach($title->id, ['person_id' => $person_id, 'updated_at' => now()]);
+            }
+        });
+
 
         return response(null, 204);
     }
@@ -69,7 +72,7 @@ class TitlePersonController extends Controller
      * @param string $person_slug
      * @return void
      */
-    public function update(UpdatePersonRequest $request, string $title_slug, string $person_slug)
+    public function update(PersonUpdateRequest $request, string $title_slug, string $person_slug)
     {
         $persons = $request->validated()['persons'];
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\ChapterImage;
 
+use App\Enums\PersonType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ChapterImageStoreRequest extends FormRequest
 {
@@ -27,9 +29,10 @@ class ChapterImageStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images.*' => ['required', 'array'],
-            'images.*.path' => ['required', 'string'],
-            'images.*.extension' => ['required', 'string'],
+            '*.translator.name' => ['required', 'string'],
+            '*.translator.type' => ['required', Rule::enum(PersonType::class)],
+            '*.translator.desciption' => ['nullable', 'string'],
+            '*.extensions' => ['nullable', 'string'],
         ];
     }
 }

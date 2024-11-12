@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\TitlePerson;
 
+use App\Enums\PersonType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TitlePersonStoreRequest extends FormRequest
 {
@@ -26,8 +28,16 @@ class TitlePersonStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'persons' => ['required', 'array'],
-            'persons.*' => ['required', 'string', 'exists:temp.persons,person'],
+            'persons.*' => ['required', 'array'],
+            'persons.*.name' => [
+                'required',
+                'string',
+                // 'exists:temp.persons,person'
+            ],
+            'persons.*.type' => [Rule::enum(PersonType::class)],
+            'persons.*.description' => ['nullable', 'string'],
+            'persons.*.url' => ['nullable', 'string'],
+            'persons.*.altName' => ['nullable', 'string'],
         ];
     }
 }
