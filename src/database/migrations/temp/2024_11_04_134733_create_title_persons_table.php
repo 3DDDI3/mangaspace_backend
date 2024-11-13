@@ -20,7 +20,7 @@ return new class extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->foreignIdFor(Person::class)
-                ->constrained('title_persons')
+                ->constrained('persons')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->timestamp('created_at')->useCurrent();

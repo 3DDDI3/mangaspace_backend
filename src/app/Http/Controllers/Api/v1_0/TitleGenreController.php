@@ -9,6 +9,7 @@ use App\Http\Requests\TitleGenre\TitleGenreStoreRequest;
 use App\Http\Resources\GenreResource;
 use App\Models\Genre;
 use App\Models\Title;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class TitleGenreController extends Controller
@@ -39,15 +40,22 @@ class TitleGenreController extends Controller
             foreach ($genres as $genre) {
                 $genre_id = Genre::query()->where(['genre' => $genre])?->value('id');
 
-                if (empty($genre_id))
-                    return response()->json(['error' => 'Запись не найдена', 400]);
+                if (empty($genre_id)) {
+                    $genre_id = Genre::query()
+                        ->create([
+                            'genre' => $genre,
+                            'slug' => Str::slug($genre),
+                        ])
+                        ->id;
+                }
 
                 $title =  Title::query()
                     ->where(['slug' => $title_slug])
                     ->first();
 
                 if ($title->genres()->where(['title_id' => $title->id, 'genre_id' => $genre_id])->count() == 0)
-                    $title->genres()->attach($title->id, ['genre_id' => $genre_id, 'updated_at' => now()]);
+                    $title->genres()
+                        ->attach($title->id, ['genre_id' => $genre_id, 'updated_at' => now()]);
             }
         });
     }

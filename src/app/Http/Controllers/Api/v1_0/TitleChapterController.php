@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1_0;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TitleChapter\TitleChapterStoreRequest;
 use App\Http\Requests\TitleChapter\TitleChapterUpdateRequest;
+use App\Http\Resources\ChapterImageResource;
 use App\Http\Resources\ChapterResource;
 use App\Models\Title;
 
@@ -15,7 +16,7 @@ class TitleChapterController extends Controller
      */
     public function index(string $title_slug)
     {
-        return ChapterResource::collection(Title::query()->where(['slug' => $title_slug])->first()->chapters);
+        return ChapterImageResource::collection(Title::query()->where(['slug' => $title_slug])->first()->chapters()->first()->images);
     }
 
     /**
@@ -69,8 +70,5 @@ class TitleChapterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $title_slug, string $chapter_number)
-    {
-        
-    }
+    public function destroy(string $title_slug, string $chapter_number) {}
 }

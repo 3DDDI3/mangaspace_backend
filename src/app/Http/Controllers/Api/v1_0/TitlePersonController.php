@@ -36,14 +36,29 @@ class TitlePersonController extends Controller
     {
         $persons = $request->validated()["persons"];
 
-
         DB::transaction(function () use ($persons, $title_slug) {
             foreach ($persons as $person) {
-                $person_id = Person::query()->where(['slug' => $person])->value('id');
-                if (empty($person_id)) continue;
-                $title = Title::query()->where(['slug' => $title_slug])->first();
+                $person_id = Person::query()
+                    ->where(['slug' => $person])
+                    ->value('id');
 
-                $title->persons()->attach($title->id, ['person_id' => $person_id, 'updated_at' => now()]);
+                if (empty($person_id))
+                    $person_id = Person::query()
+                        ->create([
+                            'name' => $person['name'],
+                            'slug' => Str::slug($person['name']),
+                            'alt_name' => $person['altName'],
+                            'description' => $person['description'],
+                            'person_type_id' => $person['type'],
+                        ])
+                        ->id;
+
+                $title = Title::query()
+                    ->where(['slug' => $title_slug])
+                    ->first();
+
+                $title->persons()
+                    ->attach($title->id, ['person_id' => $person_id, 'updated_at' => now()]);
             }
         });
 

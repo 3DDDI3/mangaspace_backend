@@ -29,10 +29,12 @@ class ChapterImageStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.translator.name' => ['required', 'string'],
-            '*.translator.type' => ['required', Rule::enum(PersonType::class)],
-            '*.translator.desciption' => ['nullable', 'string'],
-            '*.extensions' => ['nullable', 'string'],
+            'translator.name' => ['nullable', 'string'],
+            'translator.type' => ['required', Rule::enum(PersonType::class)],
+            'translator.description' => ['nullable', 'string'],
+            'translator.image' => ['nullable', 'string'],
+            'transaltor.altName' => ['nullable', 'string'],
+            'extensions' => ['nullable', 'string'],
         ];
     }
 }

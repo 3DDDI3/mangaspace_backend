@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ChapterImage extends Model
 {
@@ -11,7 +12,7 @@ class ChapterImage extends Model
 
     protected $connection = "temp";
 
-    protected $table = "title_chapters";
+    protected $table = "chapter_images";
 
     protected $fillable = [
         'path',
@@ -19,4 +20,9 @@ class ChapterImage extends Model
         'chapter_id',
         'person_id',
     ];
+
+    public function chapter(): BelongsTo
+    {
+        return $this->belongsTo(Chapter::class);
+    }
 }
