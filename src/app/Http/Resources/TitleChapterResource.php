@@ -14,6 +14,14 @@ class TitleChapterResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'volume' => $this->volume,
+            'name' => $this->name,
+            'path' => $this->path,
+            'number' => $this->number,
+            'created_at' => $this->created_at->format('h:i d.m.Y'),
+            'updated_at' => $this->updated_at->format('h:i d.m.Y'),
+            'transaltor_branch' => ChapterImageResource::collection($this->images),
+        ];
     }
 }

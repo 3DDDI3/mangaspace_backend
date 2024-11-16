@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('titles.persons', TitlePersonController::class);
     Route::apiResource('titles.genres', TitleGenreController::class);
     Route::apiResource('titles.chapters', TitleChapterController::class);
-    Route::apiResource('titles.chapters.images', ChapterImageController::class);
+    Route::apiResource('titles.chapters.images', ChapterImageController::class)->except(['show', 'index']);
 });
 
 Route::middleware('auth:sanctum')->apiResource('genres', GenreController::class);

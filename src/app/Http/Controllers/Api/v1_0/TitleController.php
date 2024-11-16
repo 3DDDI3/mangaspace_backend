@@ -8,11 +8,13 @@ use App\Enums\TranslateStatus as EnumsTranslateStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Title\StoreTitleRequest;
 use App\Http\Requests\Title\UpdateTitleRequest;
+use App\Http\Requests\TitleShowRequest;
 use App\Http\Resources\TitleResource;
 use App\Models\Category;
 use App\Models\Title;
 use App\Models\TitleStatus;
 use App\Models\TranslateStatus;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TitleController extends Controller
@@ -20,8 +22,17 @@ class TitleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TitleShowRequest $request)
     {
+        $where = [];
+        foreach ($request->validated() as $key => $value) {
+            if (empty($value)) continue;
+            $where[$key] = $value;
+        }
+
+        if (!empty($where))
+            return new TitleResource(Title::query()->where($where)->first());
+
         return TitleResource::collection(Title::all());
     }
 

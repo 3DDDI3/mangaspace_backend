@@ -27,10 +27,14 @@ class TitleChapterStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['nullable', 'string'],
-            'volume' => ['nullable', 'integer'],
-            'number' => ['required', 'string', 'unique:temp.chapters,number'],
-            'url' => ['required', 'string'],
+            '*.name' => ['nullable', 'string'],
+            '*.volume' => ['nullable', 'integer'],
+            '*.number' => [
+                'required',
+                'string',
+                // 'unique:temp.chapters,number'
+            ],
+            '*.url' => ['required', 'string'],
         ];
     }
 }

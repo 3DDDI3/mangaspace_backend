@@ -26,7 +26,7 @@ class PersonController extends Controller
      */
     public function store(PersonStoreRequest $request)
     {
-        $persons = $request->validated()['persons'];
+        $persons = $request->validated();
 
         foreach ($persons as $person) {
             Person::query()

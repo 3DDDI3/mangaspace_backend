@@ -48,14 +48,8 @@ class ChapterImageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name' => $this->chapter_id,
-            'volume' => $this->chapter->volume,
-            'name' => $this->chapter->name,
-            'path' => $this->chapter->path,
-            'number' => $this->chapter->number,
-            'created_at' => $this->created_at->format('h:i d.m.Y'),
-            'updated_at' => $this->updated_at->format('h:i d.m.Y'),
-            'extensions' => $this->parseImages($this->extensions),
+            'translator' => $this->person_id,
+            'images' => $this->parseImages($this->extensions),
         ];
     }
 }

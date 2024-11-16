@@ -34,7 +34,7 @@ class TitlePersonController extends Controller
      */
     public function store(TitlePersonStoreRequest $request, string $title_slug)
     {
-        $persons = $request->validated()["persons"];
+        $persons = $request->validated();
 
         DB::transaction(function () use ($persons, $title_slug) {
             foreach ($persons as $person) {

@@ -28,16 +28,16 @@ class TitlePersonStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'persons.*' => ['required', 'array'],
-            'persons.*.name' => [
+            '*.name' => ['required', 'array'],
+            '*.name' => [
                 'required',
                 'string',
                 // 'exists:temp.persons,person'
             ],
-            'persons.*.type' => [Rule::enum(PersonType::class)],
-            'persons.*.description' => ['nullable', 'string'],
-            'persons.*.url' => ['nullable', 'string'],
-            'persons.*.altName' => ['nullable', 'string'],
+            '*.type' => [Rule::enum(PersonType::class)],
+            '*.description' => ['nullable', 'string'],
+            '*.url' => ['nullable', 'string'],
+            '*.altName' => ['nullable', 'string'],
         ];
     }
 }

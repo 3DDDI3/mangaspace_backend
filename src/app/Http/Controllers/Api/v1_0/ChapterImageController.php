@@ -14,14 +14,6 @@ use Illuminate\Http\Request;
 class ChapterImageController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index(string $title_slug)
-    {
-        return new ChapterImageResource(Chapter::query()->find(1)->images()->first());
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(ChapterImageStoreRequest $request, string $title_slug, string $chapter_number)
@@ -41,14 +33,6 @@ class ChapterImageController extends Controller
                 ]);
 
         return response(null, 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**
