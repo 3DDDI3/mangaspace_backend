@@ -15,19 +15,17 @@ class TitleResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'ru_name' => $this->ru_name,
-            'eng_name' => $this->eng_name,
-            'category_id' => $this->category->category,
-            'release_format' => $this->releaseFormat?->format,
-            'translate_status' => $this->translateStatus?->status,
-            'title_stasus' => $this->titleStatus?->status,
-            'description' => $this->description,
+            'name' => $this->ru_name,
+            'altName' => $this->eng_name,
+            'slug' => $this->slug,
             'country' => $this->country,
-            'release_year' => $this->release_year,
-            'other_names' => $this->other_names,
-            'genres' => GenreResource::collection($this->genres),
-            'persons' => PersonResource::collection($this->persons),
+            'description' => $this->description,
+            'otherNames' => $this->otherNames,
+            'releaseYear' => $this->release_year,
+            'titleStatus' => $this->title_status_id,
+            'translateStatus' => $this->translate_status_id,
+            'type' => $this->category->category,
+            'releaseFormat' => $this->release_format_id,
         ];
     }
 }

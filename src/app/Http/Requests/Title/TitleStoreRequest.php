@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class StoreTitleRequest extends FormRequest
+class TitleStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,7 +33,7 @@ class StoreTitleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
+            'name' => ['required', 'string', 'unique:temp.titles,ru_name'],
             'altName' => ['nullable', 'string'],
             'cover' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],

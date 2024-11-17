@@ -15,17 +15,6 @@ use Illuminate\Support\Facades\DB;
 class TitlePersonController extends Controller
 {
     /**
-     * Получение всех персон
-     *
-     * @param string $title_slug
-     * @return void
-     */
-    public function index(string $title_slug)
-    {
-        return PersonResource::collection(Title::query()->where(['slug' => $title_slug])->first()->persons);
-    }
-
-    /**
      * Создание персоны
      *
      * @param StorePersonRequest $request
@@ -64,19 +53,6 @@ class TitlePersonController extends Controller
 
 
         return response(null, 204);
-    }
-
-    /**
-     * Возврат конкретной персоны
-     *
-     * @param string $title_slug
-     * @param string $person_slug
-     * @return void
-     */
-    public function show(string $title_slug, string $person_slug)
-    {
-        $person_id = Person::query()->where(['slug' => $person_slug])->value('id');
-        return new PersonResource(Title::query()->where(['slug' => $title_slug])->first()->persons()->wherePivot('person_id', '=', $person_id)->first());
     }
 
     /**

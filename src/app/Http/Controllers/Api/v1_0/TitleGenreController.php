@@ -15,17 +15,6 @@ use Illuminate\Support\Facades\DB;
 class TitleGenreController extends Controller
 {
     /**
-     * Получение всех жанров тайтла
-     *
-     * @param string $title_slug
-     * @return void
-     */
-    public function index(string $title_slug)
-    {
-        return GenreResource::collection(Title::query()->where(['slug' => $title_slug])->first()->genres);
-    }
-
-    /**
      * Добавление жанров
      *
      * @param StoreGenreRequest $request
@@ -58,22 +47,6 @@ class TitleGenreController extends Controller
                         ->attach($title->id, ['genre_id' => $genre_id, 'updated_at' => now()]);
             }
         });
-    }
-
-    /**
-     * Получение конкретного жанра тайтла
-     *
-     * @param string $title_slug
-     * @param string $genre_slug
-     * @return void
-     */
-    public function show(string $title_slug, string $genre_slug)
-    {
-        $genre_id = Genre::query()
-            ->where(['slug' => $genre_slug])
-            ->value('id');
-
-        return new GenreResource(Title::query()->where(['slug' => $title_slug])->first()->genres()->where(['genre_id' => $genre_id])->first());
     }
 
     /**

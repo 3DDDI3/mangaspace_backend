@@ -23,7 +23,8 @@ class TitleShowRequest extends FormRequest
     {
         return [
             'id' => ['nullable', 'integer'],
-            'name' => ['nullable', 'string'],
+            'ru_name' => ['nullable', 'exists:temp.titles,ru_name'],
+            'eng_name' => ['nullable', 'exists:temp.titles,eng_name'],
             'slug' => ['nullable', 'string'],
         ];
     }

@@ -6,15 +6,13 @@ use Illuminate\Support\Str;
 use App\Enums\TitleStatus as EnumsTitleStatus;
 use App\Enums\TranslateStatus as EnumsTranslateStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Title\StoreTitleRequest;
+use App\Http\Requests\Title\TitleStoreRequest;
+use App\Http\Requests\Title\TitleUpdateRequest;
 use App\Http\Requests\Title\UpdateTitleRequest;
 use App\Http\Requests\TitleShowRequest;
 use App\Http\Resources\TitleResource;
 use App\Models\Category;
 use App\Models\Title;
-use App\Models\TitleStatus;
-use App\Models\TranslateStatus;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TitleController extends Controller
@@ -39,23 +37,13 @@ class TitleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTitleRequest $request)
+    public function store(TitleStoreRequest $request)
     {
         $data = $request->validated();
 
         DB::transaction(function () use ($data) {
-
-            if (Category::query()->where(['category' => $data['type']])->count() == 0)
-                Category::create(['category' => $data['type']]);
-
-            if (TitleStatus::query()->where(['status' => EnumsTitleStatus::from($data['titleStatus'])])->count() == 0)
-                TitleStatus::query()->create(['status' => EnumsTitleStatus::from($data['titleStatus'])]);
-
-            if (TranslateStatus::query()->where(['status' => EnumsTranslateStatus::from($data['translateStatus'])])->count() == 0);
-            TranslateStatus::query()->create(['status' => EnumsTranslateStatus::from($data['translateStatus'])]);
-
-            if (Title::query()->where(['ru_name' => $data['name'], 'eng_name' => $data['altName']])->count() == 0)
-                Title::query()->create([
+            Title::query()
+                ->create([
                     'category_id' => Category::query()->where(['category' => $data['type']])->first('id')->id,
                     'ru_name' => $data['name'],
                     'slug' => empty($data['altName']) ? Str::slug($data['name']) : Str::slug($data['altName']),
@@ -67,8 +55,7 @@ class TitleController extends Controller
                     'release_year' => $data['releaseYear'],
                     'country' => $data['country'],
                 ]);
-
-            return response()->json(['message' => 'succesfull'], 200);
+            return response(null, 201);
         });
     }
 
@@ -83,23 +70,11 @@ class TitleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTitleRequest $request, string $slug)
+    public function update(TitleUpdateRequest $request, string $slug)
     {
         $data = $request->validated();
 
         $title = Title::query()->where(['slug', $slug])->first();
-
-        if (empty($title))
-            return response()->json(['error' => 'Не удалось найти тайтл'], 400);
-
-        if (Category::query()->where(['category' => $data['type']])->count() == 0)
-            Category::create(['category' => $data['type']]);
-
-        if (TitleStatus::query()->where(['status' => EnumsTitleStatus::from($data['titleStatus'])])->count() == 0)
-            TitleStatus::query()->create(['status' => EnumsTitleStatus::from($data['titleStatus'])]);
-
-        if (TranslateStatus::query()->where(['status' => EnumsTranslateStatus::from($data['translateStatus'])])->count() == 0)
-            TranslateStatus::query()->create(['status' => EnumsTranslateStatus::from($data['translateStatus'])]);
 
         $title->query()
             ->fill([
@@ -114,6 +89,8 @@ class TitleController extends Controller
                 'release_year' => $data['releaseYear'],
                 'country' => $data['country'],
             ])->save();
+
+        return response(null, 200);
     }
 
     /**
@@ -126,6 +103,6 @@ class TitleController extends Controller
             ->first()
             ->delete();
 
-        return request()->json(['message' => 'succesefull'], 200);
+        return response(null, 200);
     }
 }
