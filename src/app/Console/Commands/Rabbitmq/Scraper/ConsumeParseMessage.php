@@ -3,7 +3,14 @@
 namespace App\Console\Commands\Rabbitmq\Scraper;
 
 use App\Events\WS\Scraper\ParseEvent;
+use App\Events\WS\Scraper\RequestSent;
+use App\Events\WS\Scraper\ResponseReceived;
+use App\Http\Resources\ChapterResource;
+use App\Http\Resources\FullTitleResource;
+use App\Http\Resources\TitleResource;
+use App\Models\Title;
 use App\Models\User;
+use App\View\Components\Admin\AccordionItem;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +24,7 @@ class ConsumeParseMessage extends Command
      *
      * @var string
      */
-    protected $signature = 'rmq:scraper-consume-message';
+    protected $signature = 'rmq:scraper-consume-message {id} {job_id}';
 
     /**
      * The console command description.
@@ -47,13 +54,17 @@ class ConsumeParseMessage extends Command
 
             $isListening = false;
 
-            broadcast(new ParseEvent("message received {$msg->body}"));
+            $title = new FullTitleResource(Title::query()->where(['slug' => json_decode($msg->body)])->first());
+
+            // dd(new AccordionItem())
+
+            broadcast(new ResponseReceived("message received {$msg->body} {$this->argument('job_id')}", $this->argument('id'), $title));
 
             $channel->basic_cancel('');
         };
 
         // Подписка на очередь
-        $channel->basic_consume('request', '', false, true, false, false, $callback);
+        $channel->basic_consume('response', 'scraper', false, true, false, false, $callback);
 
         $time = 60;
 

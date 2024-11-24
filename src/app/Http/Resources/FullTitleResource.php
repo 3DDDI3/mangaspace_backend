@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TitleResource extends JsonResource
+class FullTitleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,19 +14,19 @@ class TitleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $isScraperRequest = preg_match("/MangaSpaceScraper/", $request->userAgent());
         return [
             'name' => $this->ru_name,
             'altName' => $this->eng_name,
             'slug' => $this->slug,
+            'chapters' => TitleChapterResource::collection($this->chapters),
             'country' => $this->country,
             'description' => $this->description,
             'otherNames' => $this->otherNames,
             'releaseYear' => $this->release_year,
-            'titleStatus' => !$isScraperRequest ? $this->titleStatus->status : $this->titleStatus->id,
-            'translateStatus' => !$isScraperRequest ? $this->translateStatus?->status : $this->translateStatus?->id,
+            'titleStatus' => $this->titleStatus?->status,
+            'translateStatus' => $this->translateStatus?->status,
             'type' => $this->category->category,
-            'releaseFormat' => !$isScraperRequest ? $this->releaseFormat?->format : $this->releaseFormat?->id,
+            'releaseFormat' => $this->releaseFormat?->fromat,
         ];
     }
 }

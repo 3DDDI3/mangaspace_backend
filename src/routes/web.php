@@ -15,8 +15,8 @@ use WhichBrowser\Parser;
 use function Symfony\Component\String\b;
 
 Route::get('/', function () {
-    $tile = Title::find(1)->persons;
-    return view('welcome', $tile);
+    // $tile = Title::find(1)->persons;
+    return view('welcome');
 });
 Route::get('test', function () {});
 

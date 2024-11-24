@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\v1_0\TitleChapterController;
 use App\Http\Controllers\Api\v1_0\TitleController;
 use App\Http\Controllers\Api\v1_0\TitleGenreController;
 use App\Http\Controllers\Api\v1_0\TitlePersonController;
+use App\View\Components\Admin\Accordion;
+use App\View\Components\Admin\AccordionItem;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')
@@ -42,4 +44,24 @@ Route::middleware('auth:sanctum')->apiResource('genres', GenreController::class)
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('persons', PersonController::class);
     Route::apiResource('persons.images', PersonImageController::class);
+});
+
+Route::get("/test", function () {
+    // return view('components.admin.accordion', ['id' => '123', 'slot' => view('components.admin.accordion-item', ["id" => "headingOne", "accordionId" => "accordionFlushExample", "header" => "Accordion Item #1", "bodyId" => "flush-collapseOne", "slot" => "asd"])]);
+    $accordionItem = new AccordionItem();
+    $accordion = new Accordion();
+    $html = $accordion->render()->with([
+        'id' => 'accordionFlushExample',
+        'slot' => $accordionItem->render()->with([
+            'id' => 'headingOne',
+            'accordionId' => 'accordionFlushExample',
+            'header' => 'Accordion Item #1',
+            'bodyId' => 'flush-collapseOne',
+            'slot' => 'Placeholder content for this
+            accordion, which is intended to demonstrate the
+            <code>.accordion-flush</code> class. This is the first
+            item\'s accordion body.'
+        ])
+    ]);
+    return response($html);
 });
