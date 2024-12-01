@@ -7,29 +7,17 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ParseEvent implements ShouldBroadcastNow
+class ChapterResponseReceived
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     *
-     * @var string
+     * Create a new event instance.
      */
-    public string $message;
-
-    /**
-     *
-     * @param \App\Models\User $user
-     * @param string $message
-     */
-    public function __construct(string $message)
-    {
-        $this->message = $message;
-    }
+    public function __construct(public string $message, public int $id, public $title) {}
 
     /**
      * Get the channels the event should broadcast on.
@@ -39,7 +27,7 @@ class ParseEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('admin.scraper.' . 1),
+            new PrivateChannel("admin.scraper.{$this->id}.chapter-response"),
         ];
     }
 }

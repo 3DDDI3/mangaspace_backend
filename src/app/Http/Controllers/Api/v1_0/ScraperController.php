@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Api\v1_0;
 use App\DTO\RequestDTO;
 use App\DTO\TitleDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TitleResource;
 use App\Jobs\Scraper\ParseJob;
+use App\Models\Chapter;
+use App\Models\Title;
 use App\Services\RequestStringService;
+use App\View\Components\Admin\Accordion;
+use App\View\Components\Admin\AccordionItem;
 use Illuminate\Http\Request;
 
 class ScraperController extends Controller
@@ -22,6 +27,10 @@ class ScraperController extends Controller
 
         return response()->json(['message' => 'ok'], 200);
     }
+    public function parseChapters(Request $request)
+    {
+        $requestDTO = new RequestDTO(titleDTO: new TitleDTO('https://' . $request->input('url')));
 
-    public function getCHapters(Request $request) {}
+        ParseJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
+    }
 }

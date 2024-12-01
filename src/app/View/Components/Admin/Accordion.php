@@ -11,7 +11,10 @@ class Accordion extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public ?string $id = null) {}
+    public function __construct(
+        public ?string $id = null,
+        public ?string $slot = null,
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

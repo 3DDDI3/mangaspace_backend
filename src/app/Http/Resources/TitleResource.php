@@ -15,6 +15,7 @@ class TitleResource extends JsonResource
     public function toArray(Request $request): array
     {
         $isScraperRequest = preg_match("/MangaSpaceScraper/", $request->userAgent());
+
         return [
             'name' => $this->ru_name,
             'altName' => $this->eng_name,
@@ -27,6 +28,7 @@ class TitleResource extends JsonResource
             'translateStatus' => !$isScraperRequest ? $this->translateStatus?->status : $this->translateStatus?->id,
             'type' => $this->category->category,
             'releaseFormat' => !$isScraperRequest ? $this->releaseFormat?->format : $this->releaseFormat?->id,
+            // 'chapters' => new ChapterResource($this->chapter)
         ];
     }
 }

@@ -13,15 +13,22 @@
 
     <input type="button" name="parse" value="Начать парсинг"> --}}
 
-    <x-admin::accordion id="accordionFlushExample">
-        <x-admin::accordion-item id="headingOne" accordion-id="accordionFlushExample" header=" Accordion Item #1"
-            body-id="flush-collapseOne">
-            Placeholder content for this
-            accordion, which is intended to demonstrate the
-            <code>.accordion-flush</code> class. This is the first
-            item's accordion body.
-        </x-admin::accordion-item>
-    </x-admin::accordion>
+    @php
+        $titles = \App\Models\Title::all();
+        $chapters = \App\Models\Chapter::all();
+    @endphp
+
+    @foreach ($titles as $title)
+        <x-admin::accordion id="accordionFlushExample">
+            <x-admin::accordion-item object-type="title" :object="$title" :isOnlyChapter=false
+                accordion-id="accordionFlushExample">
+                <x-admin::accordion id="accordionFlushExample1">
+                    <x-admin::accordion-item object-type="chapter" :object="$title->chapters" :isOnlyChapter=false
+                        accordion-id="accordionFlushExample1" />
+                </x-admin::accordion>
+            </x-admin::accordion-item>
+        </x-admin::accordion>
+    @endforeach
 
 </head>
 

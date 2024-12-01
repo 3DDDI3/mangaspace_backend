@@ -22,6 +22,11 @@ class Chapter extends Model
         'name',
     ];
 
+    public function title()
+    {
+        return $this->belongsTo(Title::class);
+    }
+
     public function images(): HasMany
     {
         return $this->hasMany(ChapterImage::class);

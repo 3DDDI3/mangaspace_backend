@@ -2,28 +2,23 @@
 
 namespace App\Console\Commands\Rabbitmq\Scraper;
 
-use App\Events\WS\Scraper\ParseEvent;
-use App\Events\WS\Scraper\RequestSent;
 use Illuminate\Console\Command;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Wire\AMQPTable;
 
-class PublishParseMessage extends Command
+class PublishChapterMessage extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'rmq:scraper-publish-message {id} {job_id} {message}';
+    protected $signature = 'rmq:publish-chapter-message';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Публикация сообщения в очередь парсера';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -44,7 +39,7 @@ class PublishParseMessage extends Command
             ['application_headers' => new AMQPTable(['id' => $this->argument('job_id')])]
         );
 
-        $channel->basic_publish($msg, 'scraper', 'request');
+        $channel->basic_publish($msg, 'scraper', 'chapter-request');
 
         broadcast(new RequestSent("message {$this->argument('message')} sended", $this->argument('id')));
     }
