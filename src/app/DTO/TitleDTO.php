@@ -8,14 +8,14 @@ namespace App\DTO;
 class TitleDTO
 {
     public ?string $url;
-    public ?ChapterDTO $chapters;
+    public ?array $chapters;
     /**
      * TitleDTO
      *
      * @param string $url
      * @param array $chapters
      */
-    public function __construct(string $url, ?ChapterDTO $chapters = [])
+    public function __construct(string $url, array $chapters = [])
     {
         $this->url = $url;
         $this->chapters = $chapters;

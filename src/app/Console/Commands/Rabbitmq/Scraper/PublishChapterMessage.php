@@ -2,7 +2,11 @@
 
 namespace App\Console\Commands\Rabbitmq\Scraper;
 
+use App\Events\WS\Scraper\ChapterRequestSent;
 use Illuminate\Console\Command;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Wire\AMQPTable;
 
 class PublishChapterMessage extends Command
 {
@@ -11,7 +15,7 @@ class PublishChapterMessage extends Command
      *
      * @var string
      */
-    protected $signature = 'rmq:publish-chapter-message';
+    protected $signature = 'rmq:publish-chapter-message {id} {job_id} {message}';
 
     /**
      * The console command description.
@@ -41,6 +45,6 @@ class PublishChapterMessage extends Command
 
         $channel->basic_publish($msg, 'scraper', 'chapter-request');
 
-        broadcast(new RequestSent("message {$this->argument('message')} sended", $this->argument('id')));
+        broadcast(new ChapterRequestSent("message {$this->argument('message')} sended", $this->argument('id')));
     }
 }

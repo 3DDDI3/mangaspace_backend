@@ -4,6 +4,7 @@ namespace App\Jobs\Scraper;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Artisan;
 
 class ParseChapterJob implements ShouldQueue
 {
@@ -21,6 +22,6 @@ class ParseChapterJob implements ShouldQueue
     {
         $message = addslashes($this->requestDTO);
         Artisan::call("rmq:publish-chapter-message {$this->id} {$this->job->uuid()} {$message}");
-        Artisan::call("rmq:consume-chapter-message {$this->id} {$this->job->uuid()}");
+        // Artisan::call("rmq:consume-chapter-message {$this->id} {$this->job->uuid()}");
     }
 }

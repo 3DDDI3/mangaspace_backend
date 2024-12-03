@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\v1_0;
 
 use App\DTO\RequestDTO;
+use App\DTO\ScraperDTO;
 use App\DTO\TitleDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TitleResource;
+use App\Jobs\Scraper\ParseChapterJob;
 use App\Jobs\Scraper\ParseJob;
 use App\Models\Chapter;
 use App\Models\Title;
@@ -24,12 +26,13 @@ class ScraperController extends Controller
         );
 
         ParseJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
+        // ParseChapterJob::dispatch(json_encode("MESSAGE"), $request->user()->id)->onQueue('scraper');
 
         return response()->json(['message' => 'ok'], 200);
     }
     public function parseChapters(Request $request)
     {
-        $requestDTO = new RequestDTO(titleDTO: new TitleDTO('https://' . $request->input('url')));
+        $requestDTO = new RequestDTO(titleDTO: new TitleDTO('https://' . $request->input('url')), scraperDTO: new ScraperDTO("chapters-parse", "remanga"));
 
         ParseJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
     }

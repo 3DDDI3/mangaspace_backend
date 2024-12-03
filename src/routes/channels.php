@@ -12,6 +12,11 @@ Broadcast::channel('admin.scraper.{id}.response', function () {
     return true;
 });
 
+Broadcast::channel('admin.scraper.{id}.chapter-request', function () {
+    // dd($user->id == $id);
+    return true;
+});
+
 Broadcast::channel('admin.scraper.1', function () {
     return true;
 });
