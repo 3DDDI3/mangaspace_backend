@@ -1,28 +1,23 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\WS\Scraper;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewEvent implements ShouldBroadcastNow
+class ChapterResponseReceived
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public string $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($message)
-    {
-        $this->message = $message;
-    }
+    public function __construct(public string $message, public int $id, public $title) {}
 
     /**
      * Get the channels the event should broadcast on.
@@ -32,7 +27,7 @@ class NewEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('test-channel'),
+            new PrivateChannel("admin.scraper.{$this->id}.chapter-response"),
         ];
     }
 }

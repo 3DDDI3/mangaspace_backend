@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-8">
+    {{-- <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Laravel</title>
@@ -11,9 +11,24 @@
     <input type="button" name="logout" value="Выйти">
     @csrf
 
-    <input type="button" name="parse" value="Начать парсинг">
+    <input type="button" name="parse" value="Начать парсинг"> --}}
 
-    @vite(['resources/js/jquery-3.7.1.js', 'resources/js/app.js'])
+    @php
+        $titles = \App\Models\Title::all();
+        $chapters = \App\Models\Chapter::all();
+    @endphp
+
+    @foreach ($titles as $title)
+        <x-admin::accordion id="accordionFlushExample">
+            <x-admin::accordion-item object-type="title" :object="$title" :isOnlyChapter=false
+                accordion-id="accordionFlushExample">
+                <x-admin::accordion id="accordionFlushExample1">
+                    <x-admin::accordion-item object-type="chapter" :object="$title->chapters" :isOnlyChapter=false
+                        accordion-id="accordionFlushExample1" />
+                </x-admin::accordion>
+            </x-admin::accordion-item>
+        </x-admin::accordion>
+    @endforeach
 
 </head>
 

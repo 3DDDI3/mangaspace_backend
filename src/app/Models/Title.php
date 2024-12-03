@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Title extends Model
 {
@@ -81,6 +82,11 @@ class Title extends Model
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);
+    }
+
+    public function chapter(): HasOne
+    {
+        return $this->hasOne(Chapter::class);
     }
 
     /**

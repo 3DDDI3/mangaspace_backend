@@ -72,9 +72,9 @@ class AuthController extends Controller
         return response();
     }
 
-    public function check()
+    public function check(Request $request)
     {
-        return response(['message' => 'ok'], 200);
+        return response(['user' => $request->user()], 200);
         // $response = Gate::inspect('view', request()->user());
         // if (!$response->allowed())
         //     abort(404);

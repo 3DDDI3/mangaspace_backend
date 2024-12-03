@@ -10,6 +10,12 @@ use App\Http\Controllers\Api\v1_0\TitleChapterController;
 use App\Http\Controllers\Api\v1_0\TitleController;
 use App\Http\Controllers\Api\v1_0\TitleGenreController;
 use App\Http\Controllers\Api\v1_0\TitlePersonController;
+use App\Http\Controllers\Api\v1_0\WebSocketController;
+use App\Http\Resources\TitleResource;
+use App\Models\Chapter;
+use App\Models\Title;
+use App\View\Components\Admin\Accordion;
+use App\View\Components\Admin\AccordionItem;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')
@@ -26,7 +32,16 @@ Route::prefix('scraper')
     ->middleware('auth:sanctum')
     ->group(function () {
         Route::post('parse', 'parse');
-        Route::post('get-chapters', 'getChapters');
+        Route::get('chapters', 'parseChapters');
+        Route::get('info', 'getInfo');
+    });
+
+Route::prefix('ws')
+    ->controller(WebSocketController::class)
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::get('chapters', 'getChapters');
+        Route::get('info', 'getInfo');
     });
 
 Route::middleware('auth:sanctum')->group(function () {

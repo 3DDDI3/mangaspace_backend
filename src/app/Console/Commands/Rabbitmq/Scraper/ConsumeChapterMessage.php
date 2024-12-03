@@ -2,31 +2,25 @@
 
 namespace App\Console\Commands\Rabbitmq\Scraper;
 
-use App\Events\WS\Scraper\ParseEvent;
-use App\Events\WS\Scraper\RequestSent;
-use App\Events\WS\Scraper\ResponseReceived;
-use App\Http\Resources\FullTitleResource;
-use App\Models\Title;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Exception\AMQPTimeoutException;
 
-class ConsumeParseMessage extends Command
+class ConsumeChapterMessage extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'rmq:scraper-consume-message {id} {job_id}';
+    protected $signature = 'rmq:consume-chapter-message';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Прослушивание очереди парсера';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -57,7 +51,7 @@ class ConsumeParseMessage extends Command
         };
 
         // Подписка на очередь
-        $channel->basic_consume('response', 'scraper', false, true, false, false, $callback);
+        $channel->basic_consume('chapter-response', 'scraper', false, true, false, false, $callback);
 
         $time = 60;
 
