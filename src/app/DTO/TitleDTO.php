@@ -2,22 +2,13 @@
 
 namespace App\DTO;
 
-/**
- * TitleDTO
- */
 class TitleDTO
 {
-    public ?string $url;
-    public ?array $chapters;
-    /**
-     * TitleDTO
-     *
-     * @param string $url
-     * @param array $chapters
-     */
-    public function __construct(string $url, array $chapters = [])
+    public string $url;
+    public array $chapterDTO;
+    public function __construct(string $url, array $chapterDTO = [])
     {
         $this->url = $url;
-        $this->chapters = $chapters;
+        $this->chapterDTO = $chapterDTO;
     }
 }

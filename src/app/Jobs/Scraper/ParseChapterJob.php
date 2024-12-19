@@ -22,6 +22,6 @@ class ParseChapterJob implements ShouldQueue
     {
         $message = addslashes($this->requestDTO);
         Artisan::call("rmq:publish-chapter-message {$this->id} {$this->job->uuid()} {$message}");
-        // Artisan::call("rmq:consume-chapter-message {$this->id} {$this->job->uuid()}");
+        Artisan::call("rmq:consume-chapter-message {$this->id} {$this->job->uuid()}");
     }
 }

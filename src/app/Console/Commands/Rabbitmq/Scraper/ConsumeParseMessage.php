@@ -51,7 +51,7 @@ class ConsumeParseMessage extends Command
 
             $title = new FullTitleResource(Title::query()->where(['slug' => json_decode($msg->body)])->first());
 
-            broadcast(new ResponseReceived("message received {$msg->body} {$this->argument('job_id')}", $this->argument('id'), $title));
+            broadcast(new ResponseReceived("message received {$msg->body}", $this->argument('id'), $title));
 
             $channel->basic_cancel('');
         };

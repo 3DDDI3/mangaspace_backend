@@ -2,6 +2,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+
+    <x-admin::item id="1" value="1" />
+
     {{-- <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -13,7 +16,7 @@
 
     <input type="button" name="parse" value="Начать парсинг"> --}}
 
-    @php
+    {{-- @php
         $titles = \App\Models\Title::all();
         $chapters = \App\Models\Chapter::all();
     @endphp
@@ -28,7 +31,7 @@
                 </x-admin::accordion>
             </x-admin::accordion-item>
         </x-admin::accordion>
-    @endforeach
+    @endforeach --}}
 
 </head>
 

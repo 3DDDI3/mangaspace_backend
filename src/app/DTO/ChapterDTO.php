@@ -2,19 +2,16 @@
 
 namespace App\DTO;
 
-/**
- * TitleDTO
- */
 class ChapterDTO
 {
     public ?string $name;
-    public ?string $url;
-    public ?string $number;
+    public string $url;
+    public string $number;
 
-    public function __construct(string $name, string $url, string $number)
+    public function __construct(string $url, string $number, ?string $name = null)
     {
-        $this->name = $name;
         $this->url = $url;
         $this->number = $number;
+        $this->name = $name;
     }
 }

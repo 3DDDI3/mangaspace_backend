@@ -43,8 +43,8 @@ class PublishChapterMessage extends Command
             ['application_headers' => new AMQPTable(['id' => $this->argument('job_id')])]
         );
 
-        $channel->basic_publish($msg, 'scraper', 'chapter-request');
+        $channel->basic_publish($msg, 'scraper', 'chapterRequest');
 
-        broadcast(new ChapterRequestSent("message {$this->argument('message')} sended", $this->argument('id')));
+        broadcast(new ChapterRequestSent("message {$this->argument('message')} sended with job=" . $this->argument('job_id'), $this->argument('id')));
     }
 }

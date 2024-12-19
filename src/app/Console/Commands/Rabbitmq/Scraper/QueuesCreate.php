@@ -35,18 +35,18 @@ class QueuesCreate extends Command
 
         $channel = $connection->channel();
 
-        $channel->exchange_declare('scraper', 'direct');
+        $channel->exchange_declare('scraper', 'direct', durable: true);
         $channel->exchange_declare('information', 'direct');
-        $channel->queue_declare('request', auto_delete: false);
-        $channel->queue_declare('response');
-        $channel->queue_declare('log');
-        $channel->queue_declare('error');
-        $channel->queue_declare('chapter-request');
-        $channel->queue_declare('chapter-response');
+        $channel->queue_declare('request', auto_delete: false, durable: true);
+        $channel->queue_declare('response', auto_delete: false, durable: true);
+        $channel->queue_declare('log', durable: true);
+        $channel->queue_declare('error', durable: true);
+        $channel->queue_declare('chapterRequest', durable: true, auto_delete: false);
+        $channel->queue_declare('chapterResponse', durable: true, auto_delete: false);
         $channel->queue_bind('request', 'scraper', 'request');
         $channel->queue_bind('response', 'scraper', 'response');
-        $channel->queue_bind('chapter-request', 'scraper', 'chapter-request');
-        $channel->queue_bind('chapter-response', 'scraper', 'chapter-response');
+        $channel->queue_bind('chapterRequest', 'scraper', 'chapterRequest');
+        $channel->queue_bind('chapterResponse', 'scraper', 'chapterResponse');
         $channel->queue_bind('error', 'information', 'error');
         $channel->queue_bind('log', 'information', 'log');
     }

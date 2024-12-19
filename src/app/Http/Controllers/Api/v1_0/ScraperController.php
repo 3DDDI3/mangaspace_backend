@@ -34,6 +34,6 @@ class ScraperController extends Controller
     {
         $requestDTO = new RequestDTO(titleDTO: new TitleDTO('https://' . $request->input('url')), scraperDTO: new ScraperDTO("chapters-parse", "remanga"));
 
-        ParseJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
+        ParseChapterJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
     }
 }

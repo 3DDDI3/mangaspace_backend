@@ -39,7 +39,7 @@ services:
     networks:
       - backend
       - shared
-
+   
   mysql:
     container_name: mysql
     image: mysql:8.0
@@ -135,6 +135,7 @@ services:
     volumes:
       - ./src:/var/www/laravel
     entrypoint: [ "php", "/var/www/laravel/artisan" ]
+    user: "1000:1000"
     networks:
       - backend
 
