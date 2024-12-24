@@ -41,12 +41,16 @@ class QueuesCreate extends Command
         $channel->queue_declare('response', auto_delete: false, durable: true);
         $channel->queue_declare('log', durable: true);
         $channel->queue_declare('error', durable: true);
-        $channel->queue_declare('chapterRequest', durable: true, auto_delete: false);
-        $channel->queue_declare('chapterResponse', durable: true, auto_delete: false);
+        $channel->queue_declare('getChapterRequest', durable: true, auto_delete: false);
+        $channel->queue_declare('getChapterResponse', durable: true, auto_delete: false);
+        $channel->queue_declare('parseChapterRequest', durable: true, auto_delete: false);
+        $channel->queue_declare('parseChapterResponse', durable: true, auto_delete: false);
         $channel->queue_bind('request', 'scraper', 'request');
         $channel->queue_bind('response', 'scraper', 'response');
-        $channel->queue_bind('chapterRequest', 'scraper', 'chapterRequest');
-        $channel->queue_bind('chapterResponse', 'scraper', 'chapterResponse');
+        $channel->queue_bind('getChapterRequest', 'scraper', 'getChapterRequest');
+        $channel->queue_bind('getChapterResponse', 'scraper', 'getChapterResponse');
+        $channel->queue_bind('parseChapterRequest', 'scraper', 'parseChapterRequest');
+        $channel->queue_bind('parseChapterResponse', 'scraper', 'parseChapterResponse');
         $channel->queue_bind('error', 'information', 'error');
         $channel->queue_bind('log', 'information', 'log');
     }

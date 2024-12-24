@@ -6,7 +6,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Artisan;
 
-class ParseChapterJob implements ShouldQueue
+class GetChapterJob implements ShouldQueue
 {
     use Queueable;
 
@@ -22,7 +22,7 @@ class ParseChapterJob implements ShouldQueue
     {
         $message = addslashes($this->requestDTO);
 
-        Artisan::call("rmq:publish-parse-chapter-message {$this->id} {$this->job->uuid()} {$message}");
-        Artisan::call("rmq:consume-parse-chapter-message {$this->id} {$this->job->uuid()}");
+        Artisan::call("rmq:publish-get-chapter-message {$this->id} {$this->job->uuid()} {$message}");
+        Artisan::call("rmq:consume-get-chapter-message {$this->id} {$this->job->uuid()}");
     }
 }

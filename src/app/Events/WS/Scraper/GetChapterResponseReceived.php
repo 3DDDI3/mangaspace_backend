@@ -11,14 +11,14 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChapterResponseReceived implements ShouldBroadcastNow
+class GetChapterResponseReceived implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $message, public int $id, public $title) {}
+    public function __construct(public string $message, public int $id, public bool $isLast, public string $content) {}
 
     /**
      * Get the channels the event should broadcast on.
@@ -28,7 +28,7 @@ class ChapterResponseReceived implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("admin.scraper.{$this->id}.chapter-response"),
+            new PrivateChannel("admin.{$this->id}.scraper.getChapter"),
         ];
     }
 }

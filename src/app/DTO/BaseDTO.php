@@ -4,14 +4,14 @@ namespace App\DTO;
 
 class BaseDTO
 {
-    public ?string $page;
+    public array $pages;
     public TitleDTO $titleDTO;
     public ScraperDTO $scraperDTO;
 
-    public function __construct(TitleDTO $titleDTO, ScraperDTO $scraperDTO, ?string $page = null)
+    public function __construct(TitleDTO $titleDTO, ScraperDTO $scraperDTO, array $pages = [])
     {
         $this->titleDTO = $titleDTO;
         $this->scraperDTO = $scraperDTO;
-        $this->page = $page;
+        $this->pages = $pages;
     }
 }

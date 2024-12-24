@@ -54,12 +54,40 @@ class ConsumeParseMessage extends Command
             broadcast(new ResponseReceived("message received {$msg->body}", $this->argument('id'), $title));
 
             $channel->basic_cancel('');
+
+            // $title = Title::query()->find(3);
+
+            // $accordionItem = new AccordionItem();
+            // $accordion = new Accordion();
+
+            // $chapters = Chapter::all();
+
+            // $html = $accordion->render()->with([
+            //     'id' => 'accordionFlushExample',
+            //     'slot' => $accordionItem->render()->with([
+            //         'objectType' => 'title',
+            //         'object' => $title,
+            //         'isOnlyChapter' => !empty($request->chapter) ? true : false,
+            //         'accordionId' => 'accordionFlushExample',
+            //         'slot' => $accordion->render()->with([
+            //             'id' => 'accordionFlushExample1',
+            //             'slot' => $accordionItem->render()->with([
+            //                 'objectType' => 'chapter',
+            //                 'object' => $chapters,
+            //                 'isOnlyChapter' => !empty($request->chapter) ? true : false,
+            //                 'accordionId' => 'accordionFlushExample1',
+            //                 'slot' => null
+            //             ]),
+            //         ])
+            //     ]),
+            // ]);
+
         };
 
         // Подписка на очередь
         $channel->basic_consume('response', 'scraper', false, true, false, false, $callback);
 
-        $time = 60;
+        $time = config('app.rmq_timeout');
 
         try {
             while ($isListening) {

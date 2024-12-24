@@ -31,8 +31,9 @@ Route::prefix('scraper')
     ->controller(ScraperController::class)
     ->middleware('auth:sanctum')
     ->group(function () {
-        Route::post('parse', 'parse');
-        Route::get('chapters', 'parseChapters');
+        Route::post('titles', 'parseTitles');
+        Route::get('chapters', 'getChapters');
+        Route::post('chapters', 'parseChapters');
         Route::get('info', 'getInfo');
     });
 

@@ -25,7 +25,7 @@ class ParseJob implements ShouldQueue
     public function handle(): void
     {
         $message = addslashes($this->requestDTO);
-        Artisan::call("rmq:scraper-publish-message {$this->id} {$this->job->uuid()} {$message}");
-        Artisan::call("rmq:scraper-consume-message {$this->id} {$this->job->uuid()}");
+        Artisan::call("rmq:publish-parse-title-message {$this->id} {$this->job->uuid()} {$message}");
+        // Artisan::call("rmq:scraper-consume-message {$this->id} {$this->job->uuid()}");
     }
 }

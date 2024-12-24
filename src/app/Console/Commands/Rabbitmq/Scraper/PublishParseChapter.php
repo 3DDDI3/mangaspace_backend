@@ -2,27 +2,28 @@
 
 namespace App\Console\Commands\Rabbitmq\Scraper;
 
-use App\Events\WS\Scraper\ChapterRequestSent;
+use App\Events\WS\Scraper\ParseChapterRequestSent;
+use App\Events\WS\Scraper\ParseChatperRequestSent;
 use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 
-class PublishChapterMessage extends Command
+class PublishParseChapter extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'rmq:publish-chapter-message {id} {job_id} {message}';
+    protected $signature = 'rmq:publish-parse-chapter-message {id} {job_id} {message}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Отправка сообщения в rmq для парсинга глав';
 
     /**
      * Execute the console command.
@@ -43,8 +44,8 @@ class PublishChapterMessage extends Command
             ['application_headers' => new AMQPTable(['id' => $this->argument('job_id')])]
         );
 
-        $channel->basic_publish($msg, 'scraper', 'chapterRequest');
+        $channel->basic_publish($msg, 'scraper', 'parseChapterRequest');
 
-        broadcast(new ChapterRequestSent("message {$this->argument('message')} sended with job=" . $this->argument('job_id'), $this->argument('id')));
+        broadcast(new ParseChapterRequestSent("message {$this->argument('message')} sended with job=" . $this->argument('job_id'), $this->argument('id')));
     }
 }
