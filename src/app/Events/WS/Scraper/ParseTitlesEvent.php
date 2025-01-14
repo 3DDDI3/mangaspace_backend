@@ -2,7 +2,7 @@
 
 namespace App\Events\WS\Scraper;
 
-use Illuminate\Broadcasting\Channel;
+use App\DTO\TitleDTO;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,14 +11,18 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RequestSent implements ShouldBroadcastNow
+class ParseTitlesEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $mesage, public int $id) {}
+    public function __construct(
+        public int $id,
+        public string|TitleDTO $content,
+        public ?object $obj = null
+    ) {}
 
     /**
      * Get the channels the event should broadcast on.
@@ -28,7 +32,7 @@ class RequestSent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("admin.scraper.{$this->id}.request"),
+            new PrivateChannel("admin.{$this->id}.scraper.parseTitles"),
         ];
     }
 }

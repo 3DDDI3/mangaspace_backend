@@ -8,6 +8,7 @@ use App\Http\Requests\TitleChapter\TitleChapterUpdateRequest;
 use App\Http\Resources\ChapterImageResource;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\TitleChapterResource;
+use App\Models\Chapter;
 use App\Models\Title;
 
 class TitleChapterController extends Controller
@@ -25,21 +26,26 @@ class TitleChapterController extends Controller
      */
     public function store(TitleChapterStoreRequest $request, string $title_slug)
     {
-        $chapters = $request->validated();
+        $chapter = $request->validated();
 
-        foreach ($chapters as $chapter) {
-            $title = Title::query()
-                ->where(['slug' => $title_slug])
-                ->first();
+        $title = Title::query()
+            ->where(['slug' => $title_slug])
+            ->first();
 
-            $title->chapters()
-                ->create([
-                    'path' => $chapter['url'],
-                    'number' => $chapter['number'],
-                    'volume' => $chapter['volume'],
-                    'name' => $chapter['name'],
-                ]);
-        }
+        Chapter::query()
+            ->whereHas('title', function ($query) use ($title_slug) {
+                $query->where(['slug' => $title_slug]);
+            })
+            ->where(['number' => $chapter['number']])
+            ->firstOrCreate([
+                'path' => $chapter['url'],
+                'number' => $chapter['number'],
+                'volume' => $chapter['volume'],
+                'title_id' => $title->id,
+                'name' => $chapter['name']
+            ]);
+
+        return response([], 201);
     }
 
     /**

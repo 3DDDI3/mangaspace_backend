@@ -2,4 +2,4 @@ FROM composer:2.4
 
 WORKDIR /var/www/laravel
 
-ENTRYPOINT [ "composer", "--ignore-platform-req=ext-sockets" ]
+ENTRYPOINT [ "composer", "--ignore-platform-reqs" ]

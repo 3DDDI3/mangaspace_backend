@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Scraper;
 
+use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -10,14 +11,21 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
 
-class ParseJob implements ShouldQueue
+class ParseTitleJob implements ShouldQueue
 {
-    use Queueable;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $timeout;
+
+    public $tries = 1;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(private string $requestDTO, private int $id) {}
+    public function __construct(private string $requestDTO, private int $id)
+    {
+        $this->timeout = config('app.rmq_timeout');
+    }
 
     /** 
      * Execute the job.
@@ -26,6 +34,6 @@ class ParseJob implements ShouldQueue
     {
         $message = addslashes($this->requestDTO);
         Artisan::call("rmq:publish-parse-title-message {$this->id} {$this->job->uuid()} {$message}");
-        // Artisan::call("rmq:scraper-consume-message {$this->id} {$this->job->uuid()}");
+        Artisan::call("rmq:consume-parse-title-message {$this->id} {$this->job->uuid()}");
     }
 }

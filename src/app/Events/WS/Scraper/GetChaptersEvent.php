@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GetChapterResponseReceived implements ShouldBroadcastNow
+class GetChaptersEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -28,7 +28,7 @@ class GetChapterResponseReceived implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("admin.{$this->id}.scraper.getChapter"),
+            new PrivateChannel("admin.{$this->id}.scraper.getChapters"),
         ];
     }
 }

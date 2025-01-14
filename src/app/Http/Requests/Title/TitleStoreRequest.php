@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Title;
 
 use App\Enums\AgeLimiter;
-use App\Enums\PersonType;
 use App\Enums\TitleStatus;
 use App\Enums\TranslateStatus;
 use Illuminate\Foundation\Http\FormRequest;
@@ -35,7 +34,10 @@ class TitleStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'unique:temp.titles,ru_name'],
             'altName' => ['nullable', 'string'],
-            'cover' => ['nullable', 'string'],
+            'cover' => [
+                'path' => ['required', 'url:http,https'],
+                'extension' => ['required', 'string']
+            ],
             'description' => ['nullable', 'string'],
             'type' => ['nullable', 'string'],
             'titleStatus' => ['nullable', 'integer', Rule::enum(TitleStatus::class)],

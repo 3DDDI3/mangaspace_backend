@@ -45,7 +45,5 @@ class PublishParseChapter extends Command
         );
 
         $channel->basic_publish($msg, 'scraper', 'parseChapterRequest');
-
-        broadcast(new ParseChapterRequestSent("message {$this->argument('message')} sended with job=" . $this->argument('job_id'), $this->argument('id')));
     }
 }

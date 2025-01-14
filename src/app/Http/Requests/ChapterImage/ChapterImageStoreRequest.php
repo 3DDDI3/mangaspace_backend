@@ -32,7 +32,10 @@ class ChapterImageStoreRequest extends FormRequest
             'translator.name' => ['nullable', 'string'],
             'translator.type' => ['required', Rule::enum(PersonType::class)],
             'translator.description' => ['nullable', 'string'],
-            'translator.image' => ['nullable', 'string'],
+            'translator.image' => [
+                'path' => ['required', 'url:http.https'],
+                'extension' => ['required', 'string'],
+            ],
             'transaltor.altName' => ['nullable', 'string'],
             'extensions' => ['nullable', 'string'],
         ];

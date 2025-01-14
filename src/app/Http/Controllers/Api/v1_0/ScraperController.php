@@ -7,9 +7,12 @@ use App\DTO\RequestDTO;
 use App\DTO\ScraperDTO;
 use App\DTO\TitleDTO;
 use App\Http\Controllers\Controller;
+use App\Jobs\Scraper\ErrorLogJob;
 use App\Jobs\Scraper\GetChapterJob;
+use App\Jobs\Scraper\InformationLogJob;
 use App\Jobs\Scraper\ParseChapterJob;
 use App\Jobs\Scraper\ParseJob;
+use App\Jobs\Scraper\ParseTitleJob;
 use App\Services\RequestStringService;
 use Illuminate\Http\Request;
 
@@ -24,18 +27,20 @@ class ScraperController extends Controller
     public function parseTitles(Request $request)
     {
         $requestDTO = new RequestDTO(
-            new TitleDTO(null, []),
+            new TitleDTO(),
             new ScraperDTO($request->params['action'], $request->params['engine']),
             (new RequestStringService())->parseString($request->params['pages'])
         );
 
-        ParseJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
+        ParseTitleJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
+        InformationLogJob::dispatch($request->user()->id)->onQueue('scraper');
+        ErrorLogJob::dispatch($request->user()->id)->onQueue('scraper');
 
         return response([], 200);
     }
 
     /**
-     * Получения списка глав для парсинга
+     * Получение списка глав для парсинга
      *
      * @param Request $request
      * @return void

@@ -14,7 +14,7 @@ class AccordionItem extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public ?array $id = null,
+        public ?string $id = null,
         public ?string $accordionId = null,
         public ?string $header = null,
         public ?string $bodyId = null,

@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api\v1_0;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChapterImage\ChapterImageStoreRequest;
-use App\Http\Resources\ChapterImageResource;
-use App\Http\Resources\ChapterResource;
 use App\Models\Chapter;
 use App\Models\ChapterImage;
+use App\Models\Person;
 use App\Models\Title;
 use Illuminate\Http\Request;
 
@@ -20,16 +19,23 @@ class ChapterImageController extends Controller
     {
         $chapter_images = $request->validated();
 
-        $chapter_id = Chapter::query()
-            ->where(['number' => $chapter_number])
-            ->value('id');
+        $person = Person::query()
+            ->firstOrCreate(['name' => $chapter_images['translator']['name']]);
 
-        if (ChapterImage::query()->where(['person_id' => $chapter_images['translator']['type'], 'chapter_id' => $chapter_id])->count() == 0)
+        $chapter_id = Chapter::query()
+            ->whereHas('title', function ($query) use ($title_slug) {
+                $query->where(['slug' => $title_slug]);
+            })
+            ->where(['number' => $chapter_number])
+            ->first()
+            ->id;
+
+        if (ChapterImage::query()->where(['person_id' => $person->id, 'chapter_id' => $chapter_id])->count() == 0)
             ChapterImage::query()
                 ->create([
                     'extensions' => $chapter_images['extensions'],
                     'chapter_id' => $chapter_id,
-                    'person_id' => $chapter_images['translator']['type'],
+                    'person_id' => $person->id,
                 ]);
 
         return response(null, 201);

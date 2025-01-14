@@ -4,12 +4,15 @@ namespace App\Broadcasting\Scraper;
 
 use App\Models\User;
 
-class ParseChapter
+class InformationLog
 {
     /**
      * Create a new channel instance.
      */
-    public function __construct() {}
+    public function __construct()
+    {
+        //
+    }
 
     /**
      * Authenticate the user's access to the channel.

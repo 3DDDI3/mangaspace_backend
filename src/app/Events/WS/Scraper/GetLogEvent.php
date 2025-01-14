@@ -11,14 +11,14 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ParseChapterRequestSent implements ShouldBroadcastNow
+class GetLogEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $mesage, public int $id) {}
+    public function __construct(public int $id, public string $message) {}
 
     /**
      * Get the channels the event should broadcast on.
@@ -28,7 +28,7 @@ class ParseChapterRequestSent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("admin.{$this->id}.scraper.chapter-parse-request"),
+            new PrivateChannel("admin.{$this->id}.scraper.logInformation"),
         ];
     }
 }

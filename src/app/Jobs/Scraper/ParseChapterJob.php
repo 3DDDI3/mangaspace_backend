@@ -10,10 +10,19 @@ class ParseChapterJob implements ShouldQueue
 {
     use Queueable;
 
+    public $timeout;
+
+    public $tries = 1;
+
+    public $failOnTimeout = true;
+
     /**
      * Create a new job instance.
      */
-    public function __construct(private string $requestDTO, private int $id) {}
+    public function __construct(private string $requestDTO, private int $id)
+    {
+        $this->timeout = config('app.rmq_timeout');
+    }
 
     /**
      * Execute the job.

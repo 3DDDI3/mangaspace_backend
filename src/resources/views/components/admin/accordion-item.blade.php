@@ -10,10 +10,11 @@
         <div id="flush-collapse{{ $object->id }}" class="accordion-collapse collapse"
             aria-labelledby="flush-collapse{{ $object->id }}" data-bs-parent="#{{ $accordionId }}" style="">
             <div class="accordion-body">
-                <p> Русское название: {{ $object->ru_name }}</p>
-                <p>Английское название: {{ $object->eng_name }}</p>
-                <p>Другие названия: {{ $object->other_names }}</p>
-                <p>Категория: {{ $object->category->category }}</p>
+                <img style="margin-bottom: 2rem" src="/media/{{ $object->covers()->first()->path }}" alt="">
+                <p><b>Русское название:</b> {{ $object->ru_name }}</p>
+                <p><b>Английское название:</b> {{ $object->eng_name }}</p>
+                <p><b>Другие названия:</b> {{ $object->other_names }}</p>
+                <p><b>Категория:</b> {{ $object->category->category }}</p>
                 {!! $slot !!}
 @endif
 
@@ -31,13 +32,23 @@
                 aria-labelledby="flush-collapse{{ $_obj->id }}" data-bs-parent="#{{ $accordionId }}"
                 style="">
                 <div class="accordion-body">
-                    <ul>
-                        @foreach ($_obj->images as $image)
-                            @foreach (\App\Services\ImageStringService::parseImages($image->extensions) as $subImage)
-                                <li>{{ $subImage }}</li>
+                    <div class="swiper">
+                        <div class="swiper-wrapper">
+                            @foreach ($_obj->images as $image)
+                                @foreach (\App\Services\ImageStringService::parseImages($image->extensions) as $subImage)
+                                    <div class="swiper-slide">
+                                        <img src="/media/{{ $_obj->path }}{{ $subImage }}" alt=""
+                                            srcset="">
+                                    </div>
+                                @endforeach
                             @endforeach
-                        @endforeach
-                    </ul>
+                        </div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+
+                        <!-- If we need scrollbar -->
+                        <div class="swiper-scrollbar"></div>
+                    </div>
                 </div>
             </div>
         </div>

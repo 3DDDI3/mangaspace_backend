@@ -44,7 +44,5 @@ class PublishGetChapter extends Command
         );
 
         $channel->basic_publish($msg, 'scraper', 'getChapterRequest');
-
-        // broadcast(new GetChapterRequestSent("message {$this->argument('message')} sended with job=" . $this->argument('job_id'), $this->argument('id')));
     }
 }

@@ -13,6 +13,7 @@ use App\Http\Requests\TitleShowRequest;
 use App\Http\Resources\TitleResource;
 use App\Models\Category;
 use App\Models\Title;
+use App\Models\TitleCover;
 use Illuminate\Support\Facades\DB;
 
 class TitleController extends Controller
@@ -42,7 +43,7 @@ class TitleController extends Controller
         $data = $request->validated();
 
         DB::transaction(function () use ($data) {
-            Title::query()
+            $title = Title::query()
                 ->create([
                     'category_id' => Category::query()->where(['category' => $data['type']])->first('id')->id,
                     'ru_name' => $data['name'],
@@ -55,6 +56,17 @@ class TitleController extends Controller
                     'release_year' => $data['releaseYear'],
                     'country' => $data['country'],
                 ]);
+
+            foreach ($data['cover'] as $cover) {
+                $title
+                    ->covers()
+                    ->firstOrNew([
+                        'title_id' => $title->id,
+                        'path' => $cover['path'] . "." . $cover['extension']
+                    ])
+                    ->save();
+            }
+
             return response(null, 201);
         });
     }

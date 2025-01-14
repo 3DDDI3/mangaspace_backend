@@ -20,16 +20,20 @@ class RequestStringService
 
         for ($i = 0; $i < count($substr); $i++) {
             if (preg_match("/(\d+)\.{2}(\d+)/", $substr[$i], $matches)) {
-                for ($j = $matches[1]; $j <= $matches[2]; $j++) {
+                for ($j = (int)$matches[1]; $j <= (int)$matches[2]; $j++) {
                     if ($j == $matches[2])
-                        $pages[] .= $j;
+                        $pages[] = $j;
                     else
-                        $pages[] .= $j . ",";
+                        $pages[] = $j;
                 }
             } else {
-                $pages[] = $substr[$i];
+                $pages[] = (int)$substr[$i];
             }
         }
+
+        natsort($pages);
+
+        $pages = array_values(array_unique($pages));
 
         return $pages;
     }

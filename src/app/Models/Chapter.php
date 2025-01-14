@@ -20,6 +20,7 @@ class Chapter extends Model
         'volume',
         'number',
         'name',
+        'title_id'
     ];
 
     public function title()

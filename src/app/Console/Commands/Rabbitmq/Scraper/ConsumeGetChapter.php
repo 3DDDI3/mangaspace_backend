@@ -2,10 +2,13 @@
 
 namespace App\Console\Commands\Rabbitmq\Scraper;
 
+use App\DTO\ChapterDTO;
 use App\DTO\ResponseDTO;
 use App\DTO\ScraperDTO;
 use App\DTO\TitleDTO;
 use App\Events\WS\Scraper\GetChapterResponseReceived;
+use App\Events\WS\Scraper\GetChapters;
+use App\Events\WS\Scraper\GetChaptersEvent;
 use App\View\Components\Admin\Item;
 use App\View\Components\Admin\ItemsList;
 use Illuminate\Console\Command;
@@ -45,29 +48,30 @@ class ConsumeGetChapter extends Command
         $isListening = true;
 
         $callback = function ($msg) use (&$isListening, $channel) {
-            $isListening = false;
-
             $response = json_decode($msg->body);
 
             $responseDTO = new ResponseDTO(
-                new TitleDTO($response->titleDTO->url, $response->titleDTO->chapterDTO),
+                new TitleDTO($response->titleDTO->url, $response->titleDTO->name, $response->titleDTO->chapterDTO),
                 new ScraperDTO($response->scraperDTO->action, $response->scraperDTO->engine)
             );
+
+            if ($responseDTO->titleDTO->chapterDTO[0]->isLast)
+                $isListening = false;
 
             $list = new ItemsList();
             $item = new Item();
 
             $html = $item->render()->with([
-                'id' =>  $responseDTO->titleDTO->chapterDTO[0]->number,
+                'id' => $responseDTO->titleDTO->chapterDTO[0]->number,
                 'value' => "Глава " . $responseDTO->titleDTO->chapterDTO[0]->number . $responseDTO->titleDTO->chapterDTO[0]->name,
                 'ariaLabel' => null,
                 'data' => [
-                    'url' => $responseDTO->titleDTO->chapterDTO[0]->name,
+                    'url' => $responseDTO->titleDTO->chapterDTO[0]->url,
                     'number' => $responseDTO->titleDTO->chapterDTO[0]->number
                 ],
             ]);
 
-            broadcast(new GetChapterResponseReceived(
+            broadcast(new GetChaptersEvent(
                 "message received {$this->argument('job_id')}",
                 $this->argument('id'),
                 $responseDTO->titleDTO->chapterDTO[0]->isLast,
@@ -77,7 +81,7 @@ class ConsumeGetChapter extends Command
             $channel->basic_cancel('');
         };
 
-        $channel->basic_consume('getChapterResponse', 'getChapterResponse', false, true, false, false, $callback);
+        $channel->basic_consume('getChapterResponse', 'scraper', false, true, false, false, $callback);
 
         $time = config('app.rmq_timeout');
 

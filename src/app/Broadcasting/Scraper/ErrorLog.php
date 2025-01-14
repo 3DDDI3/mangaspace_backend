@@ -4,7 +4,7 @@ namespace App\Broadcasting\Scraper;
 
 use App\Models\User;
 
-class ParseChapter
+class ErrorLog
 {
     /**
      * Create a new channel instance.

@@ -26,8 +26,8 @@ class ChapterImage extends Model
         return $this->belongsTo(Chapter::class);
     }
 
-    public function transaltor(): BelongsTo
+    public function translator(): BelongsTo
     {
-        return $this->belongsTo(Person::class);
+        return $this->belongsTo(Person::class, 'person_id', 'id');
     }
 }

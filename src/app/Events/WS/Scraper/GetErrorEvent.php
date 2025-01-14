@@ -7,18 +7,17 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GetChapterRequestSent implements ShouldBroadcastNow
+class GetErrorEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $mesage, public int $id) {}
+    public function __construct(public int $id, public string $message) {}
 
     /**
      * Get the channels the event should broadcast on.
@@ -28,7 +27,7 @@ class GetChapterRequestSent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("admin.scraper.{$this->id}.chapter-request"),
+            new PrivateChannel("admin.{$this->id}.scraper.logError"),
         ];
     }
 }

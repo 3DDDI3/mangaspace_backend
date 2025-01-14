@@ -37,21 +37,23 @@ class QueuesCreate extends Command
 
         $channel->exchange_declare('scraper', 'direct', durable: true);
         $channel->exchange_declare('information', 'direct');
-        $channel->queue_declare('request', auto_delete: false, durable: true);
-        $channel->queue_declare('response', auto_delete: false, durable: true);
-        $channel->queue_declare('log', durable: true);
-        $channel->queue_declare('error', durable: true);
+        $channel->queue_declare('parseTitleRequest', auto_delete: false, durable: true);
+        $channel->queue_declare('parseTitleResponse', auto_delete: false, durable: true);
+        $channel->queue_declare('informationLog', auto_delete: false, durable: true);
+        $channel->queue_declare('errorLog', auto_delete: false, durable: true);
         $channel->queue_declare('getChapterRequest', durable: true, auto_delete: false);
         $channel->queue_declare('getChapterResponse', durable: true, auto_delete: false);
         $channel->queue_declare('parseChapterRequest', durable: true, auto_delete: false);
         $channel->queue_declare('parseChapterResponse', durable: true, auto_delete: false);
-        $channel->queue_bind('request', 'scraper', 'request');
-        $channel->queue_bind('response', 'scraper', 'response');
+        $channel->queue_bind('parseTitleRequest', 'scraper', 'parseTitleRequest');
+        $channel->queue_bind('parseTitleResponse', 'scraper', 'parseTitleResponse');
         $channel->queue_bind('getChapterRequest', 'scraper', 'getChapterRequest');
         $channel->queue_bind('getChapterResponse', 'scraper', 'getChapterResponse');
         $channel->queue_bind('parseChapterRequest', 'scraper', 'parseChapterRequest');
         $channel->queue_bind('parseChapterResponse', 'scraper', 'parseChapterResponse');
-        $channel->queue_bind('error', 'information', 'error');
-        $channel->queue_bind('log', 'information', 'log');
+        $channel->queue_bind('informationLog', 'information', 'informationLog');
+        $channel->queue_bind('errorLog', 'information', 'errorLog');
+
+        echo "Queues successefully created." . PHP_EOL;
     }
 }

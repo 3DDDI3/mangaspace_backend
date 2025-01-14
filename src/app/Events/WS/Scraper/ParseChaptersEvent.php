@@ -6,21 +6,23 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ParseChatperResponseReceived
+class ParseChaptersEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(
+        public int $id,
+        public object $object,
+        public ?string $content = null,
+        public ?object $obj = null
+    ) {}
 
     /**
      * Get the channels the event should broadcast on.
@@ -30,7 +32,7 @@ class ParseChatperResponseReceived
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PrivateChannel("admin.{$this->id}.scraper.parseChapters"),
         ];
     }
 }

@@ -98,4 +98,9 @@ class Title extends Model
     {
         return $this->belongsToMany(Genre::class, TitleGenre::class);
     }
+
+    public function covers(): HasMany
+    {
+        return $this->hasMany(TitleCover::class);
+    }
 }
