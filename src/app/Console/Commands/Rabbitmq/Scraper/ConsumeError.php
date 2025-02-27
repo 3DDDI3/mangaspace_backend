@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Rabbitmq\Scraper;
 
 use App\DTO\LogDTO;
+use App\Events\WS\Scraper\GetErrorEvent;
 use App\Events\WS\Scraper\GetLogEvent;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -44,16 +45,17 @@ class ConsumeError extends Command
             $message = json_decode($msg->body);
             $logDTO = new LogDTO($message->message, $message->isLast);
 
+            if (isset($logDTO->message))
+                broadcast(new GetErrorEvent($this->argument('id'), $logDTO->message));
+
             if ($logDTO->isLast) {
                 $isListening = false;
-                Log::info('consumeLog completed');
+                Log::info('consumeError completed');
                 $channel->basic_cancel('');
             }
-
-            broadcast(new GetLogEvent($this->argument('id'), $logDTO->message));
         };
 
-        $channel->basic_consume('informationLog', 'information', false, true, false, false, $callback);
+        $channel->basic_consume('errorLog', 'information', false, true, false, false, $callback);
 
         $time = config('app.rmq_timeout');
 

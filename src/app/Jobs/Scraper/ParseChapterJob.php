@@ -5,6 +5,8 @@ namespace App\Jobs\Scraper;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ParseChapterJob implements ShouldQueue
 {
@@ -30,8 +32,11 @@ class ParseChapterJob implements ShouldQueue
     public function handle(): void
     {
         $message = addslashes($this->requestDTO);
-
         Artisan::call("rmq:publish-parse-chapter-message {$this->id} {$this->job->uuid()} {$message}");
         Artisan::call("rmq:consume-parse-chapter-message {$this->id} {$this->job->uuid()}");
+    }
+
+    public function failed(Throwable $exception){
+        Log::error("JOB ParseChapterJob failed")
     }
 }

@@ -12,4 +12,8 @@ class ReleaseFormat extends Model
     protected $connection = "temp";
 
     protected $table = "release_formats";
+
+    protected $fillable = [
+        'format',
+    ];
 }

@@ -21,7 +21,7 @@ class TitleChapterResource extends JsonResource
             'number' => $this->number,
             'created_at' => $this->created_at->format('h:i d.m.Y'),
             'updated_at' => $this->updated_at->format('h:i d.m.Y'),
-            'transaltor_branch' => ChapterImageResource::collection($this->images),
+            'translator_branch' => ChapterImageResource::collection($this->images),
         ];
     }
 }

@@ -40,6 +40,8 @@ class ConsumeParseChapter extends Command
      */
     public function handle()
     {
+        Log::info("ConsumeParseChapter finished" . PHP_EOL);
+
         $connection = new AMQPStreamConnection(
             config('rabbitmq.host'),
             config('rabbitmq.port'),
@@ -122,6 +124,7 @@ class ConsumeParseChapter extends Command
 
                 broadcast(new ParseChaptersEvent((int)$this->argument('id'), $responseDTO->titleDTO->chapterDTO[0], obj: $chapterImageResource));
             }
+
         };
 
         // Подписка на очередь

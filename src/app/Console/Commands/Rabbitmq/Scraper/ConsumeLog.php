@@ -39,10 +39,15 @@ class ConsumeLog extends Command
 
         $channel = $connection->channel();
         $isListening = true;
+        $msgDeliveryTag = null;
 
         $callback = function ($msg) use (&$isListening, $channel) {
             $message = json_decode($msg->body);
+
             $logDTO = new LogDTO($message->message, $message->isLast);
+
+            if (isset($logDTO->message))
+                broadcast(new GetLogEvent($this->argument('id'), $logDTO->message));
 
             if ($logDTO->isLast) {
                 $isListening = false;
@@ -50,7 +55,7 @@ class ConsumeLog extends Command
                 $channel->basic_cancel('');
             }
 
-            broadcast(new GetLogEvent($this->argument('id'), $logDTO->message));
+            $msgDeliveryTag = $msg->get('delivery_info')['delivery_tag'];
         };
 
         $channel->basic_consume('informationLog', 'information', false, true, false, false, $callback);
@@ -62,6 +67,7 @@ class ConsumeLog extends Command
                 $channel->wait(null, false, $time);
             }
         } catch (AMQPTimeoutException $e) {
+            $channel->basic_ack($msgDeliveryTag);
             Log::error("Job не успел завершиться за " . $time . " cек.");
         } finally {
             $channel->close();

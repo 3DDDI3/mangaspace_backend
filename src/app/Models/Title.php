@@ -69,6 +69,11 @@ class Title extends Model
         return $this->belongsTo(TranslateStatus::class);
     }
 
+    public function chapterPersons()
+    {
+        return $this->hasManyThrough(ChapterImage::class, Chapter::class);
+    }
+
     /**
      * Персоны
      *
@@ -82,11 +87,6 @@ class Title extends Model
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);
-    }
-
-    public function chapter(): HasOne
-    {
-        return $this->hasOne(Chapter::class);
     }
 
     /**

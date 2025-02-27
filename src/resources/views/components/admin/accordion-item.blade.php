@@ -10,7 +10,7 @@
         <div id="flush-collapse{{ $object->id }}" class="accordion-collapse collapse"
             aria-labelledby="flush-collapse{{ $object->id }}" data-bs-parent="#{{ $accordionId }}" style="">
             <div class="accordion-body">
-                <img style="margin-bottom: 2rem" src="/media/{{ $object->covers()->first()->path }}" alt="">
+                <img style="margin-bottom: 2rem" src="/media/{{ $object->covers()->first()?->path }}" alt="">
                 <p><b>Русское название:</b> {{ $object->ru_name }}</p>
                 <p><b>Английское название:</b> {{ $object->eng_name }}</p>
                 <p><b>Другие названия:</b> {{ $object->other_names }}</p>
@@ -37,7 +37,7 @@
                             @foreach ($_obj->images as $image)
                                 @foreach (\App\Services\ImageStringService::parseImages($image->extensions) as $subImage)
                                     <div class="swiper-slide">
-                                        <img src="/media/{{ $_obj->path }}{{ $subImage }}" alt=""
+                                        <img src="/media/{{ $_obj?->path }}{{ $subImage }}" alt=""
                                             srcset="">
                                     </div>
                                 @endforeach

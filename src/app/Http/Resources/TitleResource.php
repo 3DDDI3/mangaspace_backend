@@ -28,6 +28,7 @@ class TitleResource extends JsonResource
             'translateStatus' => !$isScraperRequest ? $this->translateStatus?->status : $this->translateStatus?->id,
             'type' => $this->category->category,
             'releaseFormat' => !$isScraperRequest ? $this->releaseFormat?->format : $this->releaseFormat?->id,
+            'covers' =>  TitleCoverResource::collection($this->covers),
             // 'chapters' => new ChapterResource($this->chapter)
         ];
     }

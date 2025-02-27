@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\v1_0\TitleChapterController;
 use App\Http\Controllers\Api\v1_0\TitleController;
 use App\Http\Controllers\Api\v1_0\TitleGenreController;
 use App\Http\Controllers\Api\v1_0\TitlePersonController;
+use App\Http\Controllers\Api\v1_0\UserController;
+use App\Http\Controllers\Api\v1_0\UserPermissionController;
 use App\Http\Controllers\Api\v1_0\WebSocketController;
 use App\Http\Resources\TitleResource;
 use App\Models\Chapter;
@@ -53,9 +55,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('titles.chapters.images', ChapterImageController::class)->except(['show', 'index']);
 });
 
-Route::middleware('auth:sanctum')->apiResource('genres', GenreController::class);
+Route::middleware('auth:sanctum')
+    ->apiResource('genres', GenreController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('persons', PersonController::class);
     Route::apiResource('persons.images', PersonImageController::class);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('users.permissions', UserPermissionController::class);
 });

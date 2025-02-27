@@ -47,6 +47,8 @@ class ConsumeGetChapter extends Command
 
         $isListening = true;
 
+        Log::info("ConsumeGetChapter started" . PHP_EOL);
+
         $callback = function ($msg) use (&$isListening, $channel) {
             $response = json_decode($msg->body);
 
@@ -55,15 +57,18 @@ class ConsumeGetChapter extends Command
                 new ScraperDTO($response->scraperDTO->action, $response->scraperDTO->engine)
             );
 
-            if ($responseDTO->titleDTO->chapterDTO[0]->isLast)
+            if ($responseDTO->titleDTO->chapterDTO[0]->isLast) {
                 $isListening = false;
+                Log::info("ConsumeGetChapter finished" . PHP_EOL);
+                $channel->basic_cancel('');
+            }
 
             $list = new ItemsList();
             $item = new Item();
 
             $html = $item->render()->with([
                 'id' => $responseDTO->titleDTO->chapterDTO[0]->number,
-                'value' => "Глава " . $responseDTO->titleDTO->chapterDTO[0]->number . $responseDTO->titleDTO->chapterDTO[0]->name,
+                'value' => "Глава " . $responseDTO->titleDTO->chapterDTO[0]->number . " " . $responseDTO->titleDTO->chapterDTO[0]->name,
                 'ariaLabel' => null,
                 'data' => [
                     'url' => $responseDTO->titleDTO->chapterDTO[0]->url,
@@ -77,8 +82,6 @@ class ConsumeGetChapter extends Command
                 $responseDTO->titleDTO->chapterDTO[0]->isLast,
                 $html->render()
             ));
-
-            $channel->basic_cancel('');
         };
 
         $channel->basic_consume('getChapterResponse', 'scraper', false, true, false, false, $callback);

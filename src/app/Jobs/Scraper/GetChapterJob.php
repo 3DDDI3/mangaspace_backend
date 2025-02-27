@@ -5,6 +5,8 @@ namespace App\Jobs\Scraper;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class GetChapterJob implements ShouldQueue
 {
@@ -12,7 +14,7 @@ class GetChapterJob implements ShouldQueue
 
     public $timeout;
 
-    public $tries = 0;
+    public $tries = 1;
 
     /**
      * Create a new job instance.

@@ -4,6 +4,7 @@ namespace App\Console\Commands\Rabbitmq\Scraper;
 
 use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Wire\AMQPTable;
 
 class QueuesCreate extends Command
 {
@@ -36,15 +37,20 @@ class QueuesCreate extends Command
         $channel = $connection->channel();
 
         $channel->exchange_declare('scraper', 'direct', durable: true);
-        $channel->exchange_declare('information', 'direct');
-        $channel->queue_declare('parseTitleRequest', auto_delete: false, durable: true);
-        $channel->queue_declare('parseTitleResponse', auto_delete: false, durable: true);
-        $channel->queue_declare('informationLog', auto_delete: false, durable: true);
-        $channel->queue_declare('errorLog', auto_delete: false, durable: true);
-        $channel->queue_declare('getChapterRequest', durable: true, auto_delete: false);
-        $channel->queue_declare('getChapterResponse', durable: true, auto_delete: false);
-        $channel->queue_declare('parseChapterRequest', durable: true, auto_delete: false);
-        $channel->queue_declare('parseChapterResponse', durable: true, auto_delete: false);
+        $channel->exchange_declare('information', 'direct', durable: true);
+
+        $args = new AMQPTable([
+            'x-message-ttl' => (int)config('app.rmq_timeout') * 1000,
+        ]);
+
+        $channel->queue_declare('parseTitleRequest', auto_delete: false, durable: true, arguments: $args);
+        $channel->queue_declare('parseTitleResponse', auto_delete: false, durable: true, arguments: $args);
+        $channel->queue_declare('informationLog', auto_delete: false, durable: true, arguments: $args);
+        $channel->queue_declare('errorLog', auto_delete: false, durable: true, arguments: $args);
+        $channel->queue_declare('getChapterRequest', durable: true, auto_delete: false, arguments: $args);
+        $channel->queue_declare('getChapterResponse', durable: true, auto_delete: false, arguments: $args);
+        $channel->queue_declare('parseChapterRequest', durable: true, auto_delete: false, arguments: $args);
+        $channel->queue_declare('parseChapterResponse', durable: true, auto_delete: false, arguments: $args);
         $channel->queue_bind('parseTitleRequest', 'scraper', 'parseTitleRequest');
         $channel->queue_bind('parseTitleResponse', 'scraper', 'parseTitleResponse');
         $channel->queue_bind('getChapterRequest', 'scraper', 'getChapterRequest');

@@ -12,6 +12,8 @@ class ErrorLogJob implements ShouldQueue
 
     public $timeout;
 
+    public $tries = 1;
+
     /**
      * Create a new job instance.
      */

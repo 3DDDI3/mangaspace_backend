@@ -10,15 +10,27 @@ use App\Http\Resources\ChapterResource;
 use App\Http\Resources\TitleChapterResource;
 use App\Models\Chapter;
 use App\Models\Title;
+use Illuminate\Http\Request;
 
 class TitleChapterController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(string $title_slug)
+    public function index(string $slug, Request $request)
     {
-        return TitleChapterResource::collection(Title::query()->where(['slug' => $title_slug])->first()->chapters);
+        if (!empty($request->offset))
+            $titles = Title::query()
+                ->where(['slug' => $slug])
+                ->first()
+                ->chapters()
+                ->paginate($request->offset);
+        else   $titles = Title::query()
+            ->where(['slug' => $slug])
+            ->first()
+            ->chapters;
+
+        return TitleChapterResource::collection($titles);
     }
 
     /**
@@ -53,7 +65,7 @@ class TitleChapterController extends Controller
      */
     public function show(string $title_slug, string $chapter_number)
     {
-        return new ChapterResource(Title::query()->where(['slug' => $title_slug])->first()->chapters()->where(['number' => $chapter_number])->first());
+        return new TitleChapterResource(Title::query()->where(['slug' => $title_slug])->first()->chapters()->where(['number' => $chapter_number])->first());
     }
 
     /**

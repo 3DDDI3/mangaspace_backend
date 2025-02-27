@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1_0;
 
+use App\Enums\PersonType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChapterImage\ChapterImageStoreRequest;
 use App\Models\Chapter;
@@ -20,7 +21,11 @@ class ChapterImageController extends Controller
         $chapter_images = $request->validated();
 
         $person = Person::query()
-            ->firstOrCreate(['name' => $chapter_images['translator']['name']]);
+            ->firstOrCreate([
+                'name' => $chapter_images['translator']['name'],
+                'slug' => $chapter_images['translator']['name'],
+                'person_type_id' => PersonType::Translator,
+            ]);
 
         $chapter_id = Chapter::query()
             ->whereHas('title', function ($query) use ($title_slug) {

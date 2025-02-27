@@ -48,7 +48,7 @@ class ChapterImageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'translator' => $this->person_id,
+            'translator' => new PersonResource($this->translator),
             'images' => $this->parseImages($this->extensions),
         ];
     }

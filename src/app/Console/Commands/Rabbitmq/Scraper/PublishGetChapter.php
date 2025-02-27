@@ -4,6 +4,7 @@ namespace App\Console\Commands\Rabbitmq\Scraper;
 
 use App\Events\WS\Scraper\GetChapterRequestSent;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
@@ -29,6 +30,8 @@ class PublishGetChapter extends Command
      */
     public function handle()
     {
+        Log::info("PublishGetChapter started" . PHP_EOL);
+
         $connection = new AMQPStreamConnection(
             config('rabbitmq.host'),
             config('rabbitmq.port'),
@@ -44,5 +47,7 @@ class PublishGetChapter extends Command
         );
 
         $channel->basic_publish($msg, 'scraper', 'getChapterRequest');
+
+        Log::info("PublishGetChapter finished" . PHP_EOL);
     }
 }

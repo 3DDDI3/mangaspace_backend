@@ -8,12 +8,10 @@ use App\Enums\TranslateStatus as EnumsTranslateStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Title\TitleStoreRequest;
 use App\Http\Requests\Title\TitleUpdateRequest;
-use App\Http\Requests\Title\UpdateTitleRequest;
 use App\Http\Requests\TitleShowRequest;
 use App\Http\Resources\TitleResource;
 use App\Models\Category;
 use App\Models\Title;
-use App\Models\TitleCover;
 use Illuminate\Support\Facades\DB;
 
 class TitleController extends Controller
@@ -32,7 +30,7 @@ class TitleController extends Controller
         if (!empty($where))
             return new TitleResource(Title::query()->where($where)->first());
 
-        return TitleResource::collection(Title::all());
+        return TitleResource::collection(Title::paginate(2));
     }
 
     /**
@@ -45,7 +43,9 @@ class TitleController extends Controller
         DB::transaction(function () use ($data) {
             $title = Title::query()
                 ->create([
-                    'category_id' => Category::query()->where(['category' => $data['type']])->first('id')->id,
+                    'category_id' => Category::query()->where(['category' => $data['type']])->first() == null
+                        ? Category::query()->create(['category' => $data['type']])->id
+                        : Category::query()->where(['category' => $data['type']])->first('id')->id,
                     'ru_name' => $data['name'],
                     'slug' => empty($data['altName']) ? Str::slug($data['name']) : Str::slug($data['altName']),
                     'eng_name' => $data['altName'],

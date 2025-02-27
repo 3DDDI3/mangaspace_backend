@@ -15,6 +15,8 @@ class InformationLogJob implements ShouldQueue
 {
     use  Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 1;
+
     public $timeout;
 
     /**

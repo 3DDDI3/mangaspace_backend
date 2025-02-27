@@ -53,6 +53,8 @@ class ScraperController extends Controller
         );
 
         GetChapterJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
+        InformationLogJob::dispatch($request->user()->id)->onQueue('scraper');
+        ErrorLogJob::dispatch($request->user()->id)->onQueue('scraper');
     }
 
     /**
@@ -73,5 +75,7 @@ class ScraperController extends Controller
         );
 
         ParseChapterJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
+        InformationLogJob::dispatch($request->user()->id)->onQueue('scraper');
+        ErrorLogJob::dispatch($request->user()->id)->onQueue('scraper');
     }
 }

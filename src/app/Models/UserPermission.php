@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserPermission extends Model
 {
@@ -11,7 +12,13 @@ class UserPermission extends Model
 
     protected $table = "user_permissions";
 
-    protected $fillable=[
-
+    protected $fillable = [
+        'user_id',
+        'permission_id',
     ];
+
+    public function permission(): BelongsTo
+    {
+        return $this->belongsTo(Permission::class);
+    }
 }
