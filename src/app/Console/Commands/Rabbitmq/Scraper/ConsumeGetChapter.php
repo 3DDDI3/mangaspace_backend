@@ -59,16 +59,17 @@ class ConsumeGetChapter extends Command
 
             if ($responseDTO->titleDTO->chapterDTO[0]->isLast) {
                 $isListening = false;
-                Log::info("ConsumeGetChapter finished" . PHP_EOL);
                 $channel->basic_cancel('');
             }
 
             $list = new ItemsList();
             $item = new Item();
 
+            $name = !empty($responseDTO->titleDTO->chapterDTO[0]->name) ? ": {$responseDTO->titleDTO->chapterDTO[0]->name}" : " ";
+
             $html = $item->render()->with([
                 'id' => $responseDTO->titleDTO->chapterDTO[0]->number,
-                'value' => "Глава " . $responseDTO->titleDTO->chapterDTO[0]->number . " " . $responseDTO->titleDTO->chapterDTO[0]->name,
+                'value' => "Том " . $responseDTO->titleDTO->chapterDTO[0]->volume . ".Глава " . $responseDTO->titleDTO->chapterDTO[0]->number . $name . " (переводчик " . $responseDTO->titleDTO->chapterDTO[0]->translator . ")",
                 'ariaLabel' => null,
                 'data' => [
                     'url' => $responseDTO->titleDTO->chapterDTO[0]->url,

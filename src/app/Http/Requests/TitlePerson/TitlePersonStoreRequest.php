@@ -28,7 +28,7 @@ class TitlePersonStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.name' => ['required', 'array'],
+            // '*.name' => ['required', 'array'],
             '*.name' => [
                 'required',
                 'string',
@@ -38,6 +38,11 @@ class TitlePersonStoreRequest extends FormRequest
             '*.description' => ['nullable', 'string'],
             '*.url' => ['nullable', 'string'],
             '*.altName' => ['nullable', 'string'],
+            '*.images' => ['nullable', 'array'],
+            '*.images' => [
+                'path' => ['nullable', 'string'],
+                'extension' =>  ['nullable', 'string'],
+            ],
         ];
     }
 }

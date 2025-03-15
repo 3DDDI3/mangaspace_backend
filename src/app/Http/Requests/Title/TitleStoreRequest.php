@@ -34,10 +34,10 @@ class TitleStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'unique:temp.titles,ru_name'],
             'altName' => ['nullable', 'string'],
-            'cover' => [
-                'path' => ['required', 'url:http,https'],
-                'extension' => ['required', 'string']
-            ],
+            // 'cover' => [
+            //     'path' => ['required', 'url:http,https'],
+            //     'extension' => ['required', 'string']
+            // ],
             'description' => ['nullable', 'string'],
             'type' => ['nullable', 'string'],
             'titleStatus' => ['nullable', 'integer', Rule::enum(TitleStatus::class)],

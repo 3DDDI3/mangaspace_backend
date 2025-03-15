@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class FullTitleChapterResource extends JsonResource
 {
-    private function getImages(string $extensions, object $chapter)
+    private function getImages(string $extensions, object $chapter, object $chapterImage)
     {
         $final_array = [];
         $arr = explode('|', $extensions);
@@ -18,19 +18,19 @@ class FullTitleChapterResource extends JsonResource
                 foreach ($elems as $sub_item) {
                     switch ($i) {
                         case 0:
-                            $final_array[] = "{$chapter->path}{$sub_item}.jpeg";
+                            $final_array[] = "{$chapter->path}{$chapterImage->translator->slug}/{$sub_item}.jpeg";
                             break;
 
                         case 1:
-                            $final_array[] = "{$chapter->path}{$sub_item}.jpg";
+                            $final_array[] = "{$chapter->path}{$chapterImage->translator->slug}/{$sub_item}.jpg";
                             break;
 
                         case 2:
-                            $final_array[] = "{$chapter->path}{$sub_item}.webp";
+                            $final_array[] = "{$chapter->path}{$chapterImage->translator->slug}/{$sub_item}.webp";
                             break;
 
                         case 3:
-                            $final_array[] = "{$chapter->path}{$sub_item}.png";
+                            $final_array[] = "{$chapter->path}/{$chapterImage->translator->slug}/{$sub_item}.png";
                             break;
                     }
                 }
@@ -52,7 +52,8 @@ class FullTitleChapterResource extends JsonResource
             'translator' => new PersonResource(Person::query()->find($this->person_id)),
             'number' => $this->chapter->number,
             'volume' => $this->chapter->volume,
-            'images' => $this->getImages($this->extensions, $this->chapter)
+            'name' => $this->chapter->name,
+            'images' => $this->getImages($this->extensions, $this->chapter, $this)
         ];
     }
 }

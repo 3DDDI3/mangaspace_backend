@@ -20,6 +20,7 @@ class ParseTitlesEvent implements ShouldBroadcastNow
      */
     public function __construct(
         public int $id,
+        public int $obj_id,
         public string|TitleDTO $content,
         public ?object $obj = null
     ) {}

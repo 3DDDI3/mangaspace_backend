@@ -8,8 +8,10 @@ use App\Http\Controllers\Api\v1_0\PersonImageController;
 use App\Http\Controllers\Api\v1_0\ScraperController;
 use App\Http\Controllers\Api\v1_0\TitleChapterController;
 use App\Http\Controllers\Api\v1_0\TitleController;
+use App\Http\Controllers\Api\v1_0\TitleCoverController;
 use App\Http\Controllers\Api\v1_0\TitleGenreController;
 use App\Http\Controllers\Api\v1_0\TitlePersonController;
+use App\Http\Controllers\Api\v1_0\TitlePersonPhotoController;
 use App\Http\Controllers\Api\v1_0\UserController;
 use App\Http\Controllers\Api\v1_0\UserPermissionController;
 use App\Http\Controllers\Api\v1_0\WebSocketController;
@@ -51,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('titles', TitleController::class);
     Route::apiResource('titles.persons', TitlePersonController::class)->except(['index', 'show']);
     Route::apiResource('titles.genres', TitleGenreController::class)->except(['index', 'show']);
+    Route::apiResource('titles.covers', TitleCoverController::class);
     Route::apiResource('titles.chapters', TitleChapterController::class);
     Route::apiResource('titles.chapters.images', ChapterImageController::class)->except(['show', 'index']);
 });

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\v1_0;
 
+use Illuminate\Support\Str;
 use App\Enums\PersonType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChapterImage\ChapterImageStoreRequest;
 use App\Models\Chapter;
 use App\Models\ChapterImage;
 use App\Models\Person;
-use App\Models\Title;
 use Illuminate\Http\Request;
 
 class ChapterImageController extends Controller
@@ -23,7 +23,7 @@ class ChapterImageController extends Controller
         $person = Person::query()
             ->firstOrCreate([
                 'name' => $chapter_images['translator']['name'],
-                'slug' => $chapter_images['translator']['name'],
+                'slug' => empty($chapter_images['translator']['altName']) ? Str::slug($chapter_images['translator']['name']) : $chapter_images['translator']['altName'],
                 'person_type_id' => PersonType::Translator,
             ]);
 

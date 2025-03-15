@@ -54,8 +54,6 @@ class ConsumeLog extends Command
                 Log::info('consumeLog completed');
                 $channel->basic_cancel('');
             }
-
-            $msgDeliveryTag = $msg->get('delivery_info')['delivery_tag'];
         };
 
         $channel->basic_consume('informationLog', 'information', false, true, false, false, $callback);

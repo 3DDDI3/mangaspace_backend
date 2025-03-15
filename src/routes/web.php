@@ -20,11 +20,11 @@ Route::get('/', function () {
     // $tile = Title::find(1)->persons;
     // dd(new ResponseDTO(new TitleDTO(), new ScraperDTO("", "")));
     // return view('welcome');
-    $rf = ReleaseFormat::query()->find(1);
-    $model = $rf->replicate();
-    $model->setConnection('mysql')->save();
-    // ReleaseFormat::on('mysql');
-    dd(ReleaseFormat::all());
+    // $rf = ReleaseFormat::query()->find(1);
+    // $model = $rf->replicate();
+    // $model->setConnection('mysql')->save();
+    // // ReleaseFormat::on('mysql');
+    // dd(ReleaseFormat::all());
 });
 Route::get('/test', function () {
     // $p = Title::query()->first()->chapterPersons;
@@ -33,70 +33,70 @@ Route::get('/test', function () {
     echo session('test');
 });
 
-// Route::get('test', function () {
-//     $json = '{"pages":null,"titleDTO":{"url":null,"name":"Всеведущий читатель","chapterDTO":[{"url":null,"name":"Всеведущий читатель","number":"235","isFirst":true,"isLast":true}]},"scraperDTO":{"action":"parseChapters","engine":"remanga"}}';
+Route::get('test', function () {
+    //     $json = '{"pages":null,"titleDTO":{"url":null,"name":"Всеведущий читатель","chapterDTO":[{"url":null,"name":"Всеведущий читатель","number":"235","isFirst":true,"isLast":true}]},"scraperDTO":{"action":"parseChapters","engine":"remanga"}}';
 
-//     $response = json_decode($json);
+    //     $response = json_decode($json);
 
-//     $responseDTO = new ResponseDTO(
-//         new TitleDTO($response->titleDTO->url, $response->titleDTO->name, $response->titleDTO->chapterDTO),
-//         new ScraperDTO($response->scraperDTO->action, $response->scraperDTO->engine)
-//     );
+    //     $responseDTO = new ResponseDTO(
+    //         new TitleDTO($response->titleDTO->url, $response->titleDTO->name, $response->titleDTO->chapterDTO),
+    //         new ScraperDTO($response->scraperDTO->action, $response->scraperDTO->engine)
+    //     );
 
-//     $accordionItem = new AccordionItem();
-//     $accordion = new Accordion();
+    //     $accordionItem = new AccordionItem();
+    //     $accordion = new Accordion();
 
-//     $chapter = Chapter::query()
-//         ->where(['number' => $responseDTO->titleDTO->chapterDTO[0]->number])
-//         ->get();
+    //     $chapter = Chapter::query()
+    //         ->where(['number' => $responseDTO->titleDTO->chapterDTO[0]->number])
+    //         ->get();
 
-//     // $html = $accordionItem->render()->with([
-//     //     'objectType' => 'chapter',
-//     //     'object' => $chapter,
-//     //     'isOnlyChapter' => true,
-//     //     'accordionId' => 'accordionFlushExample1',
-//     //     'slot' => null,
-//     // ]);
+    //     // $html = $accordionItem->render()->with([
+    //     //     'objectType' => 'chapter',
+    //     //     'object' => $chapter,
+    //     //     'isOnlyChapter' => true,
+    //     //     'accordionId' => 'accordionFlushExample1',
+    //     //     'slot' => null,
+    //     // ]);
 
 
-//     $accordionItem = new AccordionItem();
-//     $accordion = new Accordion();
+    $accordionItem = new AccordionItem();
+    $accordion = new Accordion();
 
-//     $title = new FullTitleResource(Title::query()->where(['id' => 2])->first());
+    $title = new FullTitleResource(Title::query()->where(['id' => 19])->first());
 
-//     $chapter = Chapter::query()
-//         ->where(['number' => 234])
-//         ->get();
+    $chapter = Chapter::query()
+        ->where(['number' => 67])
+        ->get();
 
-//     // $chapterImage = ChapterImage::query()
-//     //     ->where([
-//     //         'chapter_id' => $chapter->id,
-//     //         'person_id' => Person::query()->where(['name' => 'Никайто'])->first()->id
-//     //     ])
-//     //     ->first();
+    // $chapterImage = ChapterImage::query()
+    //     ->where([
+    //         'chapter_id' => $chapter->id,
+    //         'person_id' => Person::query()->where(['name' => 'Никайто'])->first()->id
+    //     ])
+    //     ->first();
 
-//     $html = $accordion->render()->with([
-//         'id' => 'accordionFlushExample',
-//         'slot' => $accordionItem->render()->with([
-//             'objectType' => 'title',
-//             'object' => $title,
-//             'isOnlyChapter' => false,
-//             'accordionId' => 'accordionFlushExample',
-//             'slot' => $accordion->render()->with([
-//                 'id' => 'accordionFlushExample1',
-//                 'slot' => $accordionItem->render()->with([
-//                     'objectType' => 'chapter',
-//                     'object' => $chapter,
-//                     'isOnlyChapter' => false,
-//                     'accordionId' => 'accordionFlushExample1',
-//                     'slot' => null
-//                 ]),
-//             ])
-//         ]),
-//     ]);
+    $html = $accordion->render()->with([
+        'id' => 'accordionFlushExample',
+        'slot' => $accordionItem->render()->with([
+            'objectType' => 'title',
+            'object' => $title,
+            'isOnlyChapter' => false,
+            'accordionId' => 'accordionFlushExample',
+            'slot' => $accordion->render()->with([
+                'id' => 'accordionFlushExample1',
+                'slot' => $accordionItem->render()->with([
+                    'objectType' => 'chapter',
+                    'object' => $chapter,
+                    'isOnlyChapter' => false,
+                    'accordionId' => 'accordionFlushExample1',
+                    'slot' => null
+                ]),
+            ])
+        ]),
+    ]);
 
-//     return response($html);
-// });
+    return response($html);
+});
 
 Route::get('check', function (Request $request) {
     $string = "1..5,10,15,11..14";

@@ -9,6 +9,7 @@ use App\Http\Requests\Person\StorePersonRequest;
 use App\Http\Requests\TitlePerson\TitlePersonStoreRequest;
 use App\Http\Resources\PersonResource;
 use App\Models\Person;
+use App\Models\PersonPhoto;
 use App\Models\Title;
 use Illuminate\Support\Facades\DB;
 
@@ -28,14 +29,14 @@ class TitlePersonController extends Controller
         DB::transaction(function () use ($persons, $title_slug) {
             foreach ($persons as $person) {
                 $person_id = Person::query()
-                    ->where(['slug' => $person])
+                    ->where(['name' => $person['name']])
                     ->value('id');
 
                 if (empty($person_id))
                     $person_id = Person::query()
                         ->create([
                             'name' => $person['name'],
-                            'slug' => Str::slug($person['name']),
+                            'slug' => empty($person['altName']) ? Str::slug($person['name']) : $person['altName'],
                             'alt_name' => $person['altName'],
                             'description' => $person['description'],
                             'person_type_id' => $person['type'],
@@ -47,7 +48,16 @@ class TitlePersonController extends Controller
                     ->first();
 
                 $title->persons()
-                    ->attach($title->id, ['person_id' => $person_id, 'updated_at' => now()]);
+                    ->syncWithoutDetaching([$person_id => ['updated_at' => now()]]);
+
+                foreach ($person['images'] as $image) {
+                    if (empty($image['path']) || empty($image['extension']))
+                        continue;
+
+                    $person = Person::query()->where(['name' => $person['name']])->first();
+                    if (PersonPhoto::query()->where(['person_id' => $person->id, 'path' => "{$image['path']}.{$image['extension']}"])->count() == 0)
+                        PersonPhoto::query()->create(['path' => "{$image['path']}.{$image['extension']}", 'person_id' => $person->id]);
+                }
             }
         });
 

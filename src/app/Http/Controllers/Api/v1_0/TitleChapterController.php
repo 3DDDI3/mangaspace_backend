@@ -25,10 +25,11 @@ class TitleChapterController extends Controller
                 ->first()
                 ->chapters()
                 ->paginate($request->offset);
-        else   $titles = Title::query()
-            ->where(['slug' => $slug])
-            ->first()
-            ->chapters;
+        else
+            $titles = Title::query()
+                ->where(['slug' => $slug])
+                ->first()
+                ->chapters;
 
         return TitleChapterResource::collection($titles);
     }
@@ -50,7 +51,7 @@ class TitleChapterController extends Controller
             })
             ->where(['number' => $chapter['number']])
             ->firstOrCreate([
-                'path' => $chapter['url'],
+                'path' => preg_replace('#\\\\+#', '/', $chapter['url']),
                 'number' => $chapter['number'],
                 'volume' => $chapter['volume'],
                 'title_id' => $title->id,

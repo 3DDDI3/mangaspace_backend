@@ -40,8 +40,6 @@ class ConsumeParseChapter extends Command
      */
     public function handle()
     {
-        Log::info("ConsumeParseChapter finished" . PHP_EOL);
-
         $connection = new AMQPStreamConnection(
             config('rabbitmq.host'),
             config('rabbitmq.port'),
@@ -61,8 +59,10 @@ class ConsumeParseChapter extends Command
             );
 
             $headers = $msg->get_properties();
-            if ($headers['application_headers']['job_id'] == $this->argument('job_id') && $responseDTO->titleDTO->chapterDTO[0]->isLast)
+            if ($headers['application_headers']['job_id'] == $this->argument('job_id') && $responseDTO->titleDTO->chapterDTO[0]->isLast) {
                 $isListening = false;
+                $channel->basic_cancel('');
+            }
 
             $title = new FullTitleResource(Title::query()->where(['ru_name' => $responseDTO->titleDTO->name])->first());
 
@@ -94,7 +94,7 @@ class ConsumeParseChapter extends Command
                 broadcast(new ParseChaptersEvent((int)$this->argument('id'), $responseDTO->titleDTO->chapterDTO[0], $html));
 
                 $chapter = Chapter::query()
-                    ->where(['number' => $responseDTO->titleDTO->chapterDTO[0]->number])
+                    ->where(['number' => $responseDTO->titleDTO->chapterDTO[0]->number, 'title_id' => $title->id])
                     ->first();
 
                 $chapterImage = ChapterImage::query()
@@ -122,9 +122,10 @@ class ConsumeParseChapter extends Command
 
                 $chapterImageResource = new FullTitleChapterResource($chapterImage);
 
+                Log::error(json_encode($chapterImageResource));
+
                 broadcast(new ParseChaptersEvent((int)$this->argument('id'), $responseDTO->titleDTO->chapterDTO[0], obj: $chapterImageResource));
             }
-
         };
 
         // Подписка на очередь

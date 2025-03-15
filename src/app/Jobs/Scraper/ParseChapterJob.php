@@ -16,8 +16,6 @@ class ParseChapterJob implements ShouldQueue
 
     public $tries = 1;
 
-    public $failOnTimeout = true;
-
     /**
      * Create a new job instance.
      */
@@ -34,9 +32,5 @@ class ParseChapterJob implements ShouldQueue
         $message = addslashes($this->requestDTO);
         Artisan::call("rmq:publish-parse-chapter-message {$this->id} {$this->job->uuid()} {$message}");
         Artisan::call("rmq:consume-parse-chapter-message {$this->id} {$this->job->uuid()}");
-    }
-
-    public function failed(Throwable $exception){
-        Log::error("JOB ParseChapterJob failed")
     }
 }

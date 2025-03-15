@@ -21,7 +21,7 @@ class Chapter extends Model
         'number',
         'name',
         'title_id'
-    ];
+    ];                            
 
     public function title()
     {

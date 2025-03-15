@@ -20,8 +20,9 @@ return new class extends Migration
             $table->string('alt_name', 255)->nullable();
             $table->text('description')->nullable();
             $table->foreignIdFor(PersonType::class)
+                ->nullable()
                 ->constrained()
-                ->cascadeOnDelete()
+                ->nullOnDelete()
                 ->cascadeOnUpdate();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();

@@ -38,6 +38,7 @@ class TitleController extends Controller
      */
     public function store(TitleStoreRequest $request)
     {
+
         $data = $request->validated();
 
         DB::transaction(function () use ($data) {
@@ -56,16 +57,6 @@ class TitleController extends Controller
                     'release_year' => $data['releaseYear'],
                     'country' => $data['country'],
                 ]);
-
-            foreach ($data['cover'] as $cover) {
-                $title
-                    ->covers()
-                    ->firstOrNew([
-                        'title_id' => $title->id,
-                        'path' => $cover['path'] . "." . $cover['extension']
-                    ])
-                    ->save();
-            }
 
             return response(null, 201);
         });

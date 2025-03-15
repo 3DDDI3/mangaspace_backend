@@ -53,7 +53,7 @@ class WebSocketController extends Controller
                 ]);
             }
 
-            return response(implode("", $html));
+            return response(isset($html) ? implode("", $html) : null);
         }
     }
 }
