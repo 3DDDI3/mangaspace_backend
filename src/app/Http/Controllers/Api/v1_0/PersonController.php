@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\v1_0;
 
 use App\Enums\PersonType;
+use App\Filters\PersonFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Person\PersonStoreRequest;
 use App\Http\Requests\Person\PersonUpdateRequest;
+use App\Http\Requests\Person\PersonsGetRequest;
 use App\Http\Resources\PersonResource;
 use App\Models\Person;
 use Illuminate\Support\Str;
@@ -16,9 +18,10 @@ class PersonController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PersonsGetRequest $request, PersonFilter $filter)
     {
-        return PersonResource::collection(Person::all());
+        $persons = Person::filter($filter)->get();
+        return PersonResource::collection($persons);
     }
 
     /**
@@ -43,7 +46,7 @@ class PersonController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $person_slug)
+    public function show(PersonFilter $filter, string $person_slug)
     {
         return new PersonResource(Person::query()->where(['slug' => $person_slug])->first());
     }

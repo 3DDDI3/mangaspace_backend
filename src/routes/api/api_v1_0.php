@@ -49,22 +49,26 @@ Route::prefix('ws')
         Route::get('info', 'getInfo');
     });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('titles', TitleController::class);
-    Route::apiResource('titles.persons', TitlePersonController::class)->except(['index', 'show']);
-    Route::apiResource('titles.genres', TitleGenreController::class)->except(['index', 'show']);
-    Route::apiResource('titles.covers', TitleCoverController::class);
-    Route::apiResource('titles.chapters', TitleChapterController::class);
-    Route::apiResource('titles.chapters.images', ChapterImageController::class)->except(['show', 'index']);
-});
+Route::middleware('auth:sanctum')
+    ->group(function () {
+        Route::apiResource('titles', TitleController::class);
+        Route::apiResource('titles.persons', TitlePersonController::class)->except(['index', 'show']);
+        Route::apiResource('titles.genres', TitleGenreController::class)->except(['index', 'show']);
+        Route::apiResource('titles.covers', TitleCoverController::class);
+        Route::apiResource('titles.chapters', TitleChapterController::class);
+        Route::apiResource('titles.chapters.images', ChapterImageController::class)->except(['show', 'index']);
+    });
 
 Route::middleware('auth:sanctum')
-    ->apiResource('genres', GenreController::class);
+    ->group(function () {
+        Route::apiResource('genres', GenreController::class);
+    });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('persons', PersonController::class);
-    Route::apiResource('persons.images', PersonImageController::class);
-});
+Route::middleware('auth:sanctum')
+    ->group(function () {
+        Route::apiResource('persons', PersonController::class);
+        Route::apiResource('persons.images', PersonImageController::class);
+    });
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
