@@ -40,7 +40,7 @@ class QueuesCreate extends Command
         $channel->exchange_declare('information', 'direct', durable: true);
 
         $args = new AMQPTable([
-            'x-message-ttl' => (int)config('app.rmq_timeout') * 1000,
+            'x-message-ttl' => (int)config('rabbitmq.rmq_timeout') * 1000 * 60,
         ]);
 
         $channel->queue_declare('parseTitleRequest', auto_delete: false, durable: true, arguments: $args);

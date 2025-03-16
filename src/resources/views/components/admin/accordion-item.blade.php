@@ -1,11 +1,17 @@
 @if ($objectType == 'title' && !$isOnlyChapter)
     <div class="accordion-item">
-        <h2 class="accordion-header" id="flush-heading{{ $object->id }}">
+        <h2 class="accordion-header title-accordion-header" id="flush-heading{{ $object->id }}">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#flush-collapse{{ $object->id }}" aria-expanded="false"
                 aria-controls="flush-collapse{{ $object->id }}">
                 {{ $object->ru_name }}
             </button>
+            <div class="btn-group d-flex column-gap-2" role="group" aria-label="Basic example">
+                <a class="action-btn image-edit-btn btn icon btn-primary" href="/admin/titles/{{ $object->slug }}"
+                    target="_blank">
+                    <i class="bi bi-pencil"></i>
+                </a>
+            </div>
         </h2>
         <div id="flush-collapse{{ $object->id }}" class="accordion-collapse collapse"
             aria-labelledby="flush-collapse{{ $object->id }}" data-bs-parent="#{{ $accordionId }}">
@@ -33,7 +39,7 @@
 @if ($objectType == 'chapter')
     @foreach ($object as $_obj)
         <div class="accordion-item position-relative">
-            <h2 class="accordion-header chapter-accordion-body" id="flush-heading{{ $_obj->id + 1 }}">
+            <h2 class="accordion-header chapter-accordion-header" id="flush-heading{{ $_obj->id + 1 }}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#flush-collapse{{ $_obj->id + 1 }}" aria-expanded="false"
                     aria-controls="flush-collapse{{ $_obj->id + 1 }}">

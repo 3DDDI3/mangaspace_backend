@@ -70,8 +70,12 @@ class ConsumeParseTitle extends Command
 
             $title = new TitleResource(Title::query()->where(['ru_name' => $responseDTO->titleDTO->name])->first());
 
-            if ($responseDTO->titleDTO->chapterDTO[0]->isFirst)
+            $responseDTO->titleDTO->url = $title->slug;
+
+            if ($responseDTO->titleDTO->chapterDTO[0]->isFirst) {
                 broadcast(new ParseTitlesEvent((int)$this->argument('id'), $title->id, $responseDTO->titleDTO, $title));
+                $responseDTO->titleDTO->chapterDTO[0]->isFirst = false;
+            }
 
             $chapter = Chapter::query()
                 ->where(['number' => $responseDTO->titleDTO->chapterDTO[0]->number])

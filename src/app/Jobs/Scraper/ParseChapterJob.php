@@ -21,7 +21,7 @@ class ParseChapterJob implements ShouldQueue
      */
     public function __construct(private string $requestDTO, private int $id)
     {
-        $this->timeout = config('app.rmq_timeout');
+        $this->timeout = (int)config('rabbitmq.rmq_timeout') * 60;
     }
 
     /**
