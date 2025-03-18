@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\v1_0\TitleCoverController;
 use App\Http\Controllers\Api\v1_0\TitleGenreController;
 use App\Http\Controllers\Api\v1_0\TitlePersonController;
 use App\Http\Controllers\Api\v1_0\TitlePersonPhotoController;
+use App\Http\Controllers\Api\v1_0\TitleStatusController;
 use App\Http\Controllers\Api\v1_0\UserController;
 use App\Http\Controllers\Api\v1_0\UserPermissionController;
 use App\Http\Controllers\Api\v1_0\WebSocketController;
@@ -52,7 +53,7 @@ Route::prefix('ws')
 Route::middleware('auth:sanctum')
     ->group(function () {
         Route::apiResource('titles', TitleController::class);
-        Route::apiResource('titles.persons', TitlePersonController::class)->except(['index', 'show']);
+        Route::apiResource('titles.persons', TitlePersonController::class)->except(['show']);
         Route::apiResource('titles.genres', TitleGenreController::class)->except(['index', 'show']);
         Route::apiResource('titles.covers', TitleCoverController::class);
         Route::apiResource('titles.chapters', TitleChapterController::class);
@@ -70,7 +71,13 @@ Route::middleware('auth:sanctum')
         Route::apiResource('persons.images', PersonImageController::class);
     });
 
+Route::middleware('auth:sanctum')
+    ->group(function () {
+        Route::apiResource('users', UserController::class);
+        Route::apiResource('users.permissions', UserPermissionController::class);
+    });
+
+
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('users.permissions', UserPermissionController::class);
+    Route::apiResource('title-statuses', TitleStatusController::class);
 });

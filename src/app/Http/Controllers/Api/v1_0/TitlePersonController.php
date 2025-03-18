@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1_0;
 
+use App\Filters\PersonFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Person\PersonUpdateRequest;
 use Illuminate\Support\Str;
@@ -15,6 +16,18 @@ use Illuminate\Support\Facades\DB;
 
 class TitlePersonController extends Controller
 {
+    public function index(PersonFilter $filter, string $title_slug)
+    {
+        $persons =  Title::query()
+            ->where(['slug' => $title_slug])
+            ->first()
+            ->persons()
+            ->filter($filter)
+            ->get();
+
+        return PersonResource::collection($persons);
+    }
+
     /**
      * Создание персоны
      *
