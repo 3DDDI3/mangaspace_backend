@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1_0;
 
+use App\Filters\TitleChapterFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TitleChapter\TitleChapterStoreRequest;
 use App\Http\Requests\TitleChapter\TitleChapterUpdateRequest;
-use App\Http\Resources\ChapterImageResource;
-use App\Http\Resources\ChapterResource;
 use App\Http\Resources\TitleChapterResource;
 use App\Models\Chapter;
 use App\Models\Title;
@@ -17,8 +16,14 @@ class TitleChapterController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(string $slug, Request $request)
+    public function index(TitleChapterFilter $filter, string $slug, Request $request)
     {
+        $orderBy = ['id', 'number'];
+        $title = Chapter::query();
+        foreach ($orderBy as $item) {
+            $title->orderBy($item, 'desc');
+        }
+
         if (!empty($request->offset))
             $titles = Title::query()
                 ->where(['slug' => $slug])
@@ -30,6 +35,11 @@ class TitleChapterController extends Controller
                 ->where(['slug' => $slug])
                 ->first()
                 ->chapters;
+
+        dd($titles = Title::query()
+            ->where(['slug' => $slug])
+            ->first()
+            ->chapters()->filter($filter)->get());
 
         return TitleChapterResource::collection($titles);
     }

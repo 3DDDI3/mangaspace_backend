@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Api\v1_0;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TitleStatusResource;
-use App\Models\TitleStatus;
+use App\Http\Resources\TitleCategoryResource;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class TitleStatusController extends Controller
+class TitleCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $titleStatuses = TitleStatus::query()
-            ->orderBy('status')
+        $categories = Category::query()
+            ->orderBy('category')
             ->get();
 
-        return TitleStatusResource::collection($titleStatuses);
+        return TitleCategoryResource::collection($categories);
     }
 
     /**

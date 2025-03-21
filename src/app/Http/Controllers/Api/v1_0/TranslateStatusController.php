@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Api\v1_0;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TitleStatusResource;
-use App\Models\TitleStatus;
+use App\Http\Resources\TranslateStatusResource;
+use App\Models\TranslateStatus;
 use Illuminate\Http\Request;
 
-class TitleStatusController extends Controller
+class TranslateStatusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $titleStatuses = TitleStatus::query()
+        $translateStatuses = TranslateStatus::query()
             ->orderBy('status')
             ->get();
 
-        return TitleStatusResource::collection($titleStatuses);
+        return TranslateStatusResource::collection($translateStatuses);
     }
 
     /**

@@ -15,4 +15,4 @@ class PersonFilter extends Filter
     {
         return $this->builder->where('person_type_id', $type);
     }
-}
+} 

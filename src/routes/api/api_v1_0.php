@@ -6,21 +6,17 @@ use App\Http\Controllers\Api\v1_0\GenreController;
 use App\Http\Controllers\Api\v1_0\PersonController;
 use App\Http\Controllers\Api\v1_0\PersonImageController;
 use App\Http\Controllers\Api\v1_0\ScraperController;
+use App\Http\Controllers\Api\v1_0\TitleCategoryController;
 use App\Http\Controllers\Api\v1_0\TitleChapterController;
 use App\Http\Controllers\Api\v1_0\TitleController;
 use App\Http\Controllers\Api\v1_0\TitleCoverController;
 use App\Http\Controllers\Api\v1_0\TitleGenreController;
 use App\Http\Controllers\Api\v1_0\TitlePersonController;
-use App\Http\Controllers\Api\v1_0\TitlePersonPhotoController;
 use App\Http\Controllers\Api\v1_0\TitleStatusController;
+use App\Http\Controllers\Api\v1_0\TranslateStatusController;
 use App\Http\Controllers\Api\v1_0\UserController;
 use App\Http\Controllers\Api\v1_0\UserPermissionController;
 use App\Http\Controllers\Api\v1_0\WebSocketController;
-use App\Http\Resources\TitleResource;
-use App\Models\Chapter;
-use App\Models\Title;
-use App\View\Components\Admin\Accordion;
-use App\View\Components\Admin\AccordionItem;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')
@@ -71,6 +67,7 @@ Route::middleware('auth:sanctum')
         Route::apiResource('persons.images', PersonImageController::class);
     });
 
+
 Route::middleware('auth:sanctum')
     ->group(function () {
         Route::apiResource('users', UserController::class);
@@ -80,4 +77,6 @@ Route::middleware('auth:sanctum')
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('title-statuses', TitleStatusController::class);
+    Route::apiResource('title-categories', TitleCategoryController::class);
+    Route::apiResource('title-translate-statuses', TranslateStatusController::class);
 });

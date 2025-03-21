@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TitleCoverResource extends JsonResource
+class TitleCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,7 @@ class TitleCoverResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'path' => $this->path,
+            'category' => $this->category,
         ];
     }
 }
