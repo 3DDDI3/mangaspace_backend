@@ -6,6 +6,7 @@ use App\Filters\TitleChapterFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TitleChapter\TitleChapterStoreRequest;
 use App\Http\Requests\TitleChapter\TitleChapterUpdateRequest;
+use App\Http\Resources\ChapterResource;
 use App\Http\Resources\TitleChapterResource;
 use App\Models\Chapter;
 use App\Models\Title;
@@ -18,30 +19,18 @@ class TitleChapterController extends Controller
      */
     public function index(TitleChapterFilter $filter, string $slug, Request $request)
     {
-        $orderBy = ['id', 'number'];
-        $title = Chapter::query();
-        foreach ($orderBy as $item) {
-            $title->orderBy($item, 'desc');
-        }
+        $chapters = Chapter::query();
 
-        if (!empty($request->offset))
-            $titles = Title::query()
-                ->where(['slug' => $slug])
-                ->first()
-                ->chapters()
-                ->paginate($request->offset);
-        else
-            $titles = Title::query()
-                ->where(['slug' => $slug])
-                ->first()
-                ->chapters;
+        $offset = empty($request->offset) ? 10 : $request->offset;
 
-        dd($titles = Title::query()
+        $chapters = Title::query()
             ->where(['slug' => $slug])
             ->first()
-            ->chapters()->filter($filter)->get());
+            ->chapters()
+            ->filter($filter)
+            ->paginate($offset);
 
-        return TitleChapterResource::collection($titles);
+        return TitleChapterResource::collection($chapters);
     }
 
     /**
@@ -84,20 +73,25 @@ class TitleChapterController extends Controller
      */
     public function update(TitleChapterUpdateRequest $request, string $title_slug, string $chapter_number)
     {
-        $chapter = $request->validated();
+        $_chapter = $request->validated();
 
-        Title::query()
+        $chapter = Title::query()
             ->where(['slug' => $title_slug])
             ->first()
+            ?->chapters()
             ->where(['number' => $chapter_number])
-            ->first()
-            ->fill([
-                'path' => $chapter['url'],
-                'volume' => $chapter['volume'],
-                'number' => $chapter['number'],
-                'name' => $chapter['name'],
-            ])
-            ->save();
+            ->first();
+
+        if (empty($chapter))
+            return response(["error" => "Глава не найдена"], 404);
+
+        $chapter->fill([
+            'volume' => $_chapter['volume'] ?? $chapter->volume,
+            'number' => $_chapter['number'] ?? $chapter->number,
+            'name' => $_chapter['name'] ?? $chapter->name
+        ])->save();
+
+        return new ChapterResource($chapter);
     }
 
     /**

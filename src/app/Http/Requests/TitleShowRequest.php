@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TitleStatus;
+use App\Enums\TranslateStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TitleShowRequest extends FormRequest
 {
@@ -26,6 +29,9 @@ class TitleShowRequest extends FormRequest
             'ru_name' => ['nullable', 'exists:temp.titles,ru_name'],
             'eng_name' => ['nullable', 'exists:temp.titles,eng_name'],
             'slug' => ['nullable', 'string'],
+            'translateStatus' => ['nullable', Rule::enum(TranslateStatus::class)],
+            'titleStatus' => ['nullable', Rule::enum(TitleStatus::class)],
+            'category' => ['nullable', 'integer', Rule::exists('temp.categories', 'id')],
         ];
     }
 }

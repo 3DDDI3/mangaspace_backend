@@ -29,12 +29,7 @@ class TitleChapterUpdateRequest extends FormRequest
         return [
             'name' => ['nullable', 'string'],
             'volume' => ['nullable', 'integer'],
-            'number' => [
-                'required',
-                'string',
-                // 'unique:temp.chapters,number'
-            ],
-            'url' => ['required', 'string'],
+            'number' => ['nullable', 'string'],
         ];
     }
 }

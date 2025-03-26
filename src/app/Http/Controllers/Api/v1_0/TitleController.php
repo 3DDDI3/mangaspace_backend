@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1_0;
 use Illuminate\Support\Str;
 use App\Enums\TitleStatus as EnumsTitleStatus;
 use App\Enums\TranslateStatus as EnumsTranslateStatus;
+use App\Filters\TitleFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Title\TitleStoreRequest;
 use App\Http\Requests\Title\TitleUpdateRequest;
@@ -19,18 +20,14 @@ class TitleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(TitleShowRequest $request)
+    public function index(TitleShowRequest $request, TitleFilter $filter)
     {
-        $where = [];
-        foreach ($request->validated() as $key => $value) {
-            if (empty($value)) continue;
-            $where[$key] = $value;
-        }
+        $offset = !empty($request->offset) ? $request->offset : 10;
+        $titles = Title::query()
+            ->filter($filter)
+            ->paginate($offset);
 
-        if (!empty($where))
-            return new TitleResource(Title::query()->where($where)->first());
-
-        return TitleResource::collection(Title::paginate(2));
+        return TitleResource::collection($titles);
     }
 
     /**
@@ -101,10 +98,12 @@ class TitleController extends Controller
      */
     public function destroy(string $slug)
     {
-        Title::query()
+        return response(['1'], 200);
+        $title = Title::query()
             ->where(['slug' => $slug])
-            ->first()
-            ->delete();
+            ->first();
+
+        Title::destroy($title->id);
 
         return response(null, 200);
     }

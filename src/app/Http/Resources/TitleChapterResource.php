@@ -15,6 +15,7 @@ class TitleChapterResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'volume' => $this->volume,
             'name' => $this->name,
             'path' => $this->path,

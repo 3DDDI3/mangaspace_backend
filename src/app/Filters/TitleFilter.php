@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 /**
  * Class ProductFilter
  */
-class TitleChapterFilter extends Filter
+class TitleFilter extends Filter
 {
     protected function orderByAsc(string $order): Builder
     {
@@ -29,12 +29,17 @@ class TitleChapterFilter extends Filter
         return $this->builder;
     }
 
+    protected function slug(string $slug)
+    {
+        return $this->builder->where(['slug' => $slug]);
+    }
+
     protected function search(string $search): Builder
     {
-        return $this->builder->where('volume', 'like', "%{$search}")
-            ->orWhere('number', 'like', "%{$search}%")
-            ->orWhere('created_at', 'like', "%{$search}%")
-            ->orWhere('updated_at', 'like', "%{$search}%")
-            ->orWhere('name', 'like', "%{$search}%");
+        return $this->builder->where('ru_name', 'like', "%{$search}")
+            ->orWhere('created_at', 'like', "%{$search}%");
+        // ->orWhere('created_at', 'like', "%{$search}%")
+        // ->orWhere('updated_at', 'like', "%{$search}%")
+        // ->orWhere('name', 'like', "%{$search}%");
     }
 }
