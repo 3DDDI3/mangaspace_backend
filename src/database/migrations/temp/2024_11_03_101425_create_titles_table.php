@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('ru_name', 255)->nullable();
             $table->string('eng_name', 255)->nullable();
             $table->string('slug', 255);
+            $table->string('path', 255)->nullable();
             $table->text('other_names');
             $table->foreignIdFor(Category::class)
                 ->constrained()

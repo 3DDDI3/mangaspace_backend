@@ -12,6 +12,7 @@ use App\View\Components\Admin\Accordion;
 use App\View\Components\Admin\AccordionItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 use function PHPSTORM_META\type;
 use function Symfony\Component\String\b;
@@ -25,6 +26,8 @@ Route::get('/', function () {
     // $model->setConnection('mysql')->save();
     // // ReleaseFormat::on('mysql');
     // dd(ReleaseFormat::all());
+    Storage::disk('shared')->put('asdas.txt', '123123');
+    dd(Storage::disk('shared')->files());
 });
 Route::get('/test', function () {
     // $p = Title::query()->first()->chapterPersons;

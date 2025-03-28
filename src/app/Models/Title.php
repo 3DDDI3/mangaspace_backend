@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Title extends Model
 {
-    use HasFactory, HasFilter   ;
+    use HasFactory, HasFilter;
 
     protected $connection = "temp";
 
@@ -28,6 +28,7 @@ class Title extends Model
         'translate_status_id',
         'release_year',
         'slug',
+        'path',
     ];
 
     /**

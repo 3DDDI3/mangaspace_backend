@@ -46,6 +46,7 @@ class TitleController extends Controller
                         : Category::query()->where(['category' => $data['type']])->first('id')->id,
                     'ru_name' => $data['name'],
                     'slug' => empty($data['altName']) ? Str::slug($data['name']) : Str::slug($data['altName']),
+                    'path' => preg_replace('#\\\\+#', '/', $data['path']),
                     'eng_name' => $data['altName'],
                     'other_names'  => $data['otherNames'],
                     'description' => $data['description'],

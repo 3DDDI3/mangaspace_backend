@@ -12,6 +12,7 @@ services:
     volumes:
       - ./configs/nginx.conf/:/etc/nginx/conf.d/default.conf:ro
       - ./src:/var/www/laravel
+      - ../storage:/var/www/laravel/storage/app/public
     networks:
       - backend
 
@@ -36,6 +37,7 @@ services:
       dockerfile: php.Dockerfile
     volumes:
       - ./src:/var/www/laravel
+      - ../storage:/var/www/laravel/storage/app/public
     networks:
       - backend
       - shared
