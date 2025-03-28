@@ -26,14 +26,17 @@ Route::get('/', function () {
     // $model->setConnection('mysql')->save();
     // // ReleaseFormat::on('mysql');
     // dd(ReleaseFormat::all());
-    Storage::disk('shared')->put('asdas.txt', '123123');
-    dd(Storage::disk('shared')->files());
+
+    foreach (Storage::disk('shared')->allDirectories(Title::query()->first()->path) as $directory) {
+        Storage::disk('shared')->deleteDirectory($directory);
+    }
 });
-Route::get('/test', function () {
+Route::get('/test1', function () {
     // $p = Title::query()->first()->chapterPersons;
     // dd($p->unique('person_id'));
-    session(['test' => 'Hello, Redis!']);
-    echo session('test');
+    // dd("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path);
+    // dd(Storage::disk('shared')->exists("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path));
+    Storage::disk('shared')->delete("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path);
 });
 
 Route::get('test', function () {

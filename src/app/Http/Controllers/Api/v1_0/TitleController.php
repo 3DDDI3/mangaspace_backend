@@ -99,7 +99,6 @@ class TitleController extends Controller
      */
     public function destroy(string $slug)
     {
-        return response(['1'], 200);
         $title = Title::query()
             ->where(['slug' => $slug])
             ->first();

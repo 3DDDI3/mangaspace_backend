@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Observers\TitleObserver;
 use App\Traits\HasFilter;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
+#[ObservedBy(TitleObserver::class)]
 class Title extends Model
 {
     use HasFactory, HasFilter;
@@ -86,6 +88,11 @@ class Title extends Model
         return $this->belongsToMany(Person::class, TitlePerson::class);
     }
 
+    /**
+     * Главы
+     *
+     * @return HasMany
+     */
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);
