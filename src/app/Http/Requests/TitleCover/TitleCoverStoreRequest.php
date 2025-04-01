@@ -28,8 +28,11 @@ class TitleCoverStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.path' => ['required', 'string'],
-            '*.extension' => ['required', 'string']
+            '*.path' => ['nullable', 'string'],
+            '*.extension' => ['nullable', 'string'],
+            'name' => ['nullable', 'string'],
+            'type' => ['nullable'],
+            'file' => ['nullable', 'file'],
         ];
     }
 }

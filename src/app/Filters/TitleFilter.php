@@ -34,6 +34,16 @@ class TitleFilter extends Filter
         return $this->builder->where(['slug' => $slug]);
     }
 
+    protected function ruName(string $runame)
+    {
+        return $this->builder->where(['ru_name' => $runame]);
+    }
+
+    protected function engName(string $eng_name)
+    {
+        return $this->builder->where(['eng_name' => $eng_name]);
+    }
+
     protected function search(string $search): Builder
     {
         return $this->builder->where('ru_name', 'like', "%{$search}")

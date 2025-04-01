@@ -13,7 +13,7 @@ class TitleObserver
      */
     public function created(Title $title): void
     {
-        //
+        $title->fill(['rating' => $title->id])->save();
     }
 
     /**
@@ -29,9 +29,9 @@ class TitleObserver
         foreach ($title->covers as $cover) {
             Storage::disk('shared')->delete($cover->path);
         }
-        
 
-        Storage::disk('shared')->deleteDirectory($title->path);
+        if (!empty($title->path))
+            Storage::disk('shared')->deleteDirectory($title->path);
     }
 
     /**

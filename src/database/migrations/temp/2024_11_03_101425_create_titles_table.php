@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('eng_name', 255)->nullable();
             $table->string('slug', 255);
             $table->string('path', 255)->nullable();
-            $table->text('other_names');
+            $table->text('other_names')->nullable();
             $table->foreignIdFor(Category::class)
                 ->constrained()
                 ->cascadeOnDelete()
@@ -42,6 +42,8 @@ return new class extends Migration
                 ->cascadeOnUpdate();
             $table->year('release_year')->nullable();
             $table->string('country', 255)->nullable();
+            $table->boolean('is_hide')->default(0)->nullable();
+            $table->bigInteger('rating')->unsigned()->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
         });

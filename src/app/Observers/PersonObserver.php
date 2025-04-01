@@ -12,7 +12,7 @@ class PersonObserver
      */
     public function created(Person $person): void
     {
-        //
+        $person->fill(['rating' => $person->id])->save();
     }
 
     /**

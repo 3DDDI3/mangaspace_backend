@@ -11,6 +11,7 @@ use App\Http\Resources\TitleChapterResource;
 use App\Models\Chapter;
 use App\Models\Title;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TitleChapterController extends Controller
 {
@@ -23,8 +24,13 @@ class TitleChapterController extends Controller
 
         $offset = empty($request->offset) ? 10 : $request->offset;
 
-        $chapters = Title::query()
-            ->where(['slug' => $slug])
+        $titles = Title::query()
+            ->where(['slug' => $slug]);
+
+        if ($titles->count() == 0)
+            return response([], 204);
+
+        $chapters = $titles
             ->first()
             ->chapters()
             ->filter($filter)
@@ -97,5 +103,17 @@ class TitleChapterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $title_slug, string $chapter_number) {}
+    public function destroy(string $title_slug, string $chapter_number)
+    {
+        $title = Title::query()
+            ->where(['slug' => $title_slug])
+            ->first();
+
+        $chapter = $title
+            ->chapters()
+            ->where(['number' => $chapter_number])
+            ->first();
+
+        Chapter::destroy($chapter->id);
+    }
 }

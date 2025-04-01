@@ -24,12 +24,15 @@ Route::get('/', function () {
     // $rf = ReleaseFormat::query()->find(1);
     // $model = $rf->replicate();
     // $model->setConnection('mysql')->save();
+
     // // ReleaseFormat::on('mysql');
     // dd(ReleaseFormat::all());
 
-    foreach (Storage::disk('shared')->allDirectories(Title::query()->first()->path) as $directory) {
-        Storage::disk('shared')->deleteDirectory($directory);
-    }
+    // foreach (Storage::disk('shared')->allDirectories(Chapter::query()->first()->path) as $directory) {
+    //     Storage::disk('shared')->deleteDirectory($directory);
+    // }
+
+    // Storage::disk('shared')->deleteDirectory(Chapter::query()->first()->path);
 });
 Route::get('/test1', function () {
     // $p = Title::query()->first()->chapterPersons;

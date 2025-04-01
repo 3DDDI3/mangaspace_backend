@@ -26,8 +26,8 @@ class TitleShowRequest extends FormRequest
     {
         return [
             'id' => ['nullable', 'integer'],
-            'ru_name' => ['nullable', 'exists:temp.titles,ru_name'],
-            'eng_name' => ['nullable', 'exists:temp.titles,eng_name'],
+            'ru_name' => ['nullable', 'string'],
+            'eng_name' => ['nullable', 'string'],
             'slug' => ['nullable', 'string'],
             'translateStatus' => ['nullable', Rule::enum(TranslateStatus::class)],
             'titleStatus' => ['nullable', Rule::enum(TitleStatus::class)],

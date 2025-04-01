@@ -31,6 +31,7 @@ class Title extends Model
         'release_year',
         'slug',
         'path',
+        'rating',
     ];
 
     /**
