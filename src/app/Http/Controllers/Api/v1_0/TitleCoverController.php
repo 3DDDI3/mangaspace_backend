@@ -18,12 +18,8 @@ class TitleCoverController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $slug)
+    public function store(TitleCoverStoreRequest $request, $slug)
     {
-        Storage::disk('shared')->putFile('titles/Podnyatie urovnya v odinochku/', $request->file('title'));
-
-        return response(null, 200);
-
         $data = $request->validated();
 
         $title = Title::query()
