@@ -19,6 +19,8 @@ return new class extends Migration
                 ->constrained('persons')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
+            $table->boolean('is_hide')->default(0)->nullable();
+            $table->bigInteger('rating')->unsigned()->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
         });

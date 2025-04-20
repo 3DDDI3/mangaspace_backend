@@ -27,6 +27,9 @@ class TitleController extends Controller
             ->filter($filter)
             ->paginate($offset);
 
+        if ($titles->count() == 0)
+            return response([], 204);
+
         return TitleResource::collection($titles);
     }
 
@@ -35,11 +38,10 @@ class TitleController extends Controller
      */
     public function store(TitleStoreRequest $request)
     {
-
         $data = $request->validated();
 
         DB::transaction(function () use ($data) {
-            $title = Title::query()
+            Title::query()
                 ->create([
                     'category_id' => Category::query()->where(['category' => $data['type']])->first() == null
                         ? Category::query()->create(['category' => $data['type']])->id
@@ -75,23 +77,22 @@ class TitleController extends Controller
     {
         $data = $request->validated();
 
-        $title = Title::query()->where(['slug', $slug])->first();
+        $title = Title::query()->where(['slug' => $slug])->first();
 
-        $title->query()
-            ->fill([
-                'category_id' => Category::query()->where(['category' => $data['type']])->first('id')->id,
-                'ru_name' => $data['name'],
-                'slug' => empty($data['altName']) ? Str::slug($data['name']) : Str::slug($data['altName']),
-                'eng_name' => $data['altName'],
-                'other_names'  => $data['otherNames'],
-                'description' => $data['description'],
-                'title_status_id' => EnumsTitleStatus::from($data['titleStatus']),
-                'translate_status_id' => EnumsTranslateStatus::from($data['translateStatus']),
-                'release_year' => $data['releaseYear'],
-                'country' => $data['country'],
-            ])->save();
+        $title->fill([
+            'category_id' => Category::query()->where(['id' => $data['type']])->first('id')->id,
+            'ru_name' => $data['name'],
+            'slug' => empty($data['altName']) ? Str::slug($data['name']) : Str::slug($data['altName']),
+            'eng_name' => $data['altName'],
+            'other_names'  => $data['otherNames'],
+            'description' => $data['description'],
+            'title_status_id' => EnumsTitleStatus::from($data['titleStatus'])->value,
+            'translate_status_id' => EnumsTranslateStatus::from($data['translateStatus'])->value,
+            'release_year' => $data['releaseYear'],
+            'country' => $data['country'] ?? null,
+        ])->save();
 
-        return response(null, 200);
+        return  new TitleResource($title);
     }
 
     /**
@@ -99,7 +100,6 @@ class TitleController extends Controller
      */
     public function destroy(string $slug)
     {
-        return response(['1'], 200);
         $title = Title::query()
             ->where(['slug' => $slug])
             ->first();

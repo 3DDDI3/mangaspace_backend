@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TitleCover\TitleCoverStoreRequest;
 use App\Models\Title;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TitleCoverController extends Controller
 {
