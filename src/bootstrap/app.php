@@ -22,7 +22,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->statefulApi();
         $middleware->validateCsrfTokens(except: [
-            'v1.0/titles/*/covers'
+            'v1.0/titles/*/covers',
+            'v1.0/titles/*',
         ]);
     })
     ->withBroadcasting(

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')
     ->controller(AuthController::class)
     ->group(function () {
-        Route::post('signin', 'signin');
+        Route::post('signup', 'signup');
         Route::post('login', 'login');
         Route::post('logout', 'logout')->middleware('auth:sanctum');
         Route::get('check', 'check')->middleware('auth:sanctum');

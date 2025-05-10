@@ -63,13 +63,15 @@ class TitlePersonController extends Controller
                 $title->persons()
                     ->syncWithoutDetaching([$person_id => ['updated_at' => now()]]);
 
-                foreach ($person['images'] as $image) {
-                    if (empty($image['path']) || empty($image['extension']))
-                        continue;
+                if (!empty($person['images'])) {
+                    foreach ($person['images'] as $image) {
+                        if (empty($image['path']) || empty($image['extension']))
+                            continue;
 
-                    $person = Person::query()->where(['name' => $person['name']])->first();
-                    if (PersonPhoto::query()->where(['person_id' => $person->id, 'path' => "{$image['path']}.{$image['extension']}"])->count() == 0)
-                        PersonPhoto::query()->create(['path' => "{$image['path']}.{$image['extension']}", 'person_id' => $person->id]);
+                        $person = Person::query()->where(['name' => $person['name']])->first();
+                        if (PersonPhoto::query()->where(['person_id' => $person->id, 'path' => "{$image['path']}.{$image['extension']}"])->count() == 0)
+                            PersonPhoto::query()->create(['path' => "{$image['path']}.{$image['extension']}", 'person_id' => $person->id]);
+                    }
                 }
             }
         });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1_0;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\UserCreateRequest;
 use App\Models\User;
 use App\Services\UserDeviceInformation;
 use Illuminate\Http\Request;
@@ -25,9 +26,12 @@ class AuthController extends Controller
      * @param Request $request
      * @return void
      */
-    public function signin(Request $request)
+    public function signup(UserCreateRequest $request)
     {
-        $user = User::create($request->only(['name', 'password']));
+        $data = $request->validated();
+        return response($data, 200);
+
+        // $user = User::create($request->only(['name', 'password', 'email']));
     }
 
     /**
@@ -46,6 +50,9 @@ class AuthController extends Controller
         $user = User::query()
             ->where(['name' => $request->name])
             ->first();
+
+        if (!$user)
+            return response()->json(['message' => 'Неверное имя и/или пароль'], 401);
 
         if (!Hash::check($request->password, $user->password))
             return response()->json(['message' => 'Неверное имя и/или пароль'], 401);

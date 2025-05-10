@@ -20,6 +20,8 @@ class TitleCoverController extends Controller
      */
     public function store(TitleCoverStoreRequest $request, $slug)
     {
+        return response([1], 200);
+
         $data = $request->validated();
 
         $title = Title::query()

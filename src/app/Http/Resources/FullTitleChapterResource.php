@@ -18,19 +18,19 @@ class FullTitleChapterResource extends JsonResource
                 foreach ($elems as $sub_item) {
                     switch ($i) {
                         case 0:
-                            $final_array[] = "{$chapter->path}{$chapterImage->translator->slug}/{$sub_item}.jpeg";
+                            $final_array[] = "titles/{$chapter->title->path}/{$chapter->path}/{$chapterImage->translator->slug}/{$sub_item}.jpeg";
                             break;
 
                         case 1:
-                            $final_array[] = "{$chapter->path}{$chapterImage->translator->slug}/{$sub_item}.jpg";
+                            $final_array[] = "titles/{$chapter->title->path}/{$chapter->path}/{$chapterImage->translator->slug}/{$sub_item}.jpg";
                             break;
 
                         case 2:
-                            $final_array[] = "{$chapter->path}{$chapterImage->translator->slug}/{$sub_item}.webp";
+                            $final_array[] = "titles/{$chapter->title->path}/{$chapter->path}/{$chapterImage->translator->slug}/{$sub_item}.webp";
                             break;
 
                         case 3:
-                            $final_array[] = "{$chapter->path}/{$chapterImage->translator->slug}/{$sub_item}.png";
+                            $final_array[] = "titles/{$chapter->title->path}/{$chapter->path}/{$chapterImage->translator->slug}/{$sub_item}.png";
                             break;
                     }
                 }
@@ -47,7 +47,6 @@ class FullTitleChapterResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // dd($this->chapter);
         return [
             'translator' => new PersonResource(Person::query()->find($this->person_id)),
             'number' => $this->chapter->number,

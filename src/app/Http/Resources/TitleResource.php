@@ -20,6 +20,7 @@ class TitleResource extends JsonResource
             'name' => $this->ru_name,
             'altName' => $this->eng_name,
             'slug' => $this->slug,
+            'path' => $this->path,
             'country' => $this->country,
             'description' => $this->description,
             'otherNames' => $this->otherNames,

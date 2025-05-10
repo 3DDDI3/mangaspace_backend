@@ -122,8 +122,6 @@ class ConsumeParseChapter extends Command
 
                 $chapterImageResource = new FullTitleChapterResource($chapterImage);
 
-                Log::error(json_encode($chapterImageResource));
-
                 broadcast(new ParseChaptersEvent((int)$this->argument('id'), $responseDTO->titleDTO->chapterDTO[0], obj: $chapterImageResource));
             }
         };

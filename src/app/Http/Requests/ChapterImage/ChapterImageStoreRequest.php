@@ -30,7 +30,7 @@ class ChapterImageStoreRequest extends FormRequest
     {
         return [
             'translator.name' => ['nullable', 'string'],
-            'translator.type' => ['required', Rule::enum(PersonType::class)],
+            'translator.type' => ['nullable', Rule::enum(PersonType::class)],
             'translator.description' => ['nullable', 'string'],
             'translator.altName' => ['nullable', 'string'],
             'translator.images' => [
@@ -39,6 +39,10 @@ class ChapterImageStoreRequest extends FormRequest
             ],
 
             'extensions' => ['nullable', 'string'],
+            'id' => ['nullable', 'string'],
+            'name' => ['nullable', 'string'],
+            'type' => ['nullable', Rule::in(['image/webp', 'image/png', 'image/jpeg', 'image/jpg'])],
+            'file' => ['nullable', 'file'],
         ];
     }
 }

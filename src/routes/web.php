@@ -3,8 +3,11 @@
 use App\DTO\ResponseDTO;
 use App\DTO\ScraperDTO;
 use App\DTO\TitleDTO;
+use App\Http\Resources\FullTitleChapterResource;
 use App\Http\Resources\FullTitleResource;
 use App\Models\Chapter;
+use App\Models\ChapterImage;
+use App\Models\Person;
 use App\Models\ReleaseFormat;
 use App\Models\Title;
 use App\Models\UserPermission;
@@ -35,11 +38,15 @@ Route::get('/', function () {
     // Storage::disk('shared')->deleteDirectory(Chapter::query()->first()->path);
 });
 Route::get('/test1', function () {
+    $chapterImage = ChapterImage::query()->first();
+    $chapterImageResource = new FullTitleChapterResource($chapterImage);
+
+    return $chapterImageResource;
     // $p = Title::query()->first()->chapterPersons;
     // dd($p->unique('person_id'));
     // dd("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path);
     // dd(Storage::disk('shared')->exists("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path));
-    Storage::disk('shared')->delete("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path);
+    // Storage::disk('shared')->delete("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path);
 });
 
 Route::get('test', function () {

@@ -53,7 +53,7 @@ class ConsumeGetChapter extends Command
             $response = json_decode($msg->body);
 
             $responseDTO = new ResponseDTO(
-                new TitleDTO($response->titleDTO->url, $response->titleDTO->name, $response->titleDTO->chapterDTO),
+                new TitleDTO($response->titleDTO?->url, $response->titleDTO?->name, $response->titleDTO?->chapterDTO),
                 new ScraperDTO($response->scraperDTO->action, $response->scraperDTO->engine)
             );
 

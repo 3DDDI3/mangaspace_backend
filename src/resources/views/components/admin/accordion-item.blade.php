@@ -20,7 +20,7 @@
                     <div class="swiper-wrapper">
                         @foreach ($object->covers as $cover)
                             <div class="swiper-slide">
-                                <img src="/media/{{ $cover->path }}" alt="">
+                                <img src="/media/titles/{{ $object->path }}/covers/{{ $cover->path }}" alt="">
                             </div>
                         @endforeach
                     </div>
@@ -61,10 +61,8 @@
                             @foreach ($_obj->images as $image)
                                 @foreach (\App\Services\ImageStringService::parseImages($image->extensions) as $subImage)
                                     <div class="swiper-slide">
-                                        <img loading="lazy"
-                                            src="/media/{{ $_obj?->path }}/{{ $image->translator->slug }}/{{ $subImage }}"
+                                        <img src="/media/titles/{{ $_obj?->path }}/{{ $image->translator->slug }}/{{ $subImage }}"
                                             alt="" srcset="">
-                                        <div class="swiper-lazy-preloader"></div>
                                     </div>
                                 @endforeach
                             @endforeach
