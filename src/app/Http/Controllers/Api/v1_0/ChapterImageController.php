@@ -21,11 +21,13 @@ class ChapterImageController extends Controller
     {
         $chapter_images = $request->validated();
 
-        $chapter_image = ChapterImage::query()->find($request->id);
+        if (!empty($chapter_images['id'])) {
+            $chapter_image = ChapterImage::query()->find($request->id);
 
-        $request->file()['file']->storeAs("media/titles/{$chapter_image->chapter->title->path}/{$chapter_image->chapter->path}/{$chapter_image->translator->slug}", $request->name);
+            $request->file()['file']->storeAs("media/titles/{$chapter_image->chapter->title->path}/{$chapter_image->chapter->path}/{$chapter_image->translator->slug}", $request->name);
 
-        return response(["media/titles/{$chapter_image->chapter->title->path}/{$chapter_image->chapter->path}/{$chapter_image->translator->slug}"]);
+            return response(["media/titles/{$chapter_image->chapter->title->path}/{$chapter_image->chapter->path}/{$chapter_image->translator->slug}"]);
+        }
 
         $person = Person::query()
             ->firstOrCreate([

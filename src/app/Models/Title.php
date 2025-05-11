@@ -11,10 +11,44 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @OA\Schema(
+ *     title="Title",
+ *     description="Title model",
+ *     @OA\Xml(
+ *         name="Title"
+ *     )
+ * )
+ */
 #[ObservedBy(TitleObserver::class)]
 class Title extends Model
 {
     use HasFactory, HasFilter;
+
+    /**
+     * @OA\Property(
+     *     title="category_id",
+     *     description="id category",
+     *     format="bigint",
+     *     example=1
+     * )
+     *
+     * @var category_id
+     */
+    private $category_id;
+
+    /**
+     * @OA\Property(
+     *     title="category_id",
+     *     description="id category",
+     *     format="bigint",
+     *     example=1
+     * )
+     *
+     * @var ru_name
+     */
+    private $ru_name;
+
 
     protected $connection = "temp";
 

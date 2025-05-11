@@ -7,6 +7,14 @@ use App\Enums\TranslateStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @OA\Schema(
+ *      title="Store Project request",
+ *      description="Store Project request body data",
+ *      type="object",
+ *      required={"name"}
+ * )
+ */
 class TitleShowRequest extends FormRequest
 {
     /**
@@ -16,6 +24,17 @@ class TitleShowRequest extends FormRequest
     {
         return true;
     }
+
+    /**
+     * @OA\Property(
+     *      title="name",
+     *      description="Name of the new project",
+     *      example="A nice project"
+     * )
+     *
+     * @var string
+     */
+    public $name;
 
     /**
      * Get the validation rules that apply to the request.

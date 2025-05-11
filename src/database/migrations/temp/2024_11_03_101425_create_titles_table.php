@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('ru_name', 255)->nullable();
             $table->string('eng_name', 255)->nullable();
-            $table->string('slug', 255);
+            $table->string('slug', 255)->nullable();
             $table->string('path', 255)->nullable();
             $table->text('other_names')->nullable();
             $table->foreignIdFor(Category::class)

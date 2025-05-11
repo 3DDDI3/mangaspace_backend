@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1_0;
+namespace App\Http\Controllers\Api\v2_0;
 
 use Illuminate\Support\Str;
 use App\Enums\TitleStatus as EnumsTitleStatus;

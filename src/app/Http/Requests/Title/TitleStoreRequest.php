@@ -39,6 +39,7 @@ class TitleStoreRequest extends FormRequest
             //     'extension' => ['required', 'string']
             // ],
             'path' => ['nullable', 'string'],
+            'slug' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
             'type' => ['nullable', 'string'],
             'titleStatus' => ['nullable', 'integer', Rule::enum(TitleStatus::class)],

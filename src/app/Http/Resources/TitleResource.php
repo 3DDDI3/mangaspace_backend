@@ -5,8 +5,27 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema(
+ *     title="TitleResource",
+ *     description="Title",
+ *     @OA\Xml(
+ *         name="TitleResource"
+ *     )
+ * )
+ */
 class TitleResource extends JsonResource
 {
+    /**
+     * @OA\Property(
+     *     title="Data",
+     *     description="Data wrapper"
+     * )
+     *
+     * @var \App\Models\Title[]
+     */
+    private $data;
+
     /**
      * Transform the resource into an array.
      *
