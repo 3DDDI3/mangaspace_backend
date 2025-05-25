@@ -1,12 +1,12 @@
 @if ($objectType == 'title' && !$isOnlyChapter)
     <div class="accordion-item">
         <h2 class="accordion-header title-accordion-header" id="flush-heading{{ $object->id }}">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            <button class="accordion-button collapsed column-gap-2" type="button" data-bs-toggle="collapse"
                 data-bs-target="#flush-collapse{{ $object->id }}" aria-expanded="false"
                 aria-controls="flush-collapse{{ $object->id }}">
                 {{ $object->ru_name }}
             </button>
-            <div class="btn-group d-flex column-gap-2" role="group" aria-label="Basic example">
+            <div class="btn-group d-flex column-gap-2 d-none" role="group" aria-label="Basic example">
                 <a class="action-btn image-edit-btn btn icon btn-primary" href="/admin/titles/{{ $object->slug }}"
                     target="_blank">
                     <i class="bi bi-pencil"></i>
@@ -15,7 +15,7 @@
         </h2>
         <div id="flush-collapse{{ $object->id }}" class="accordion-collapse collapse"
             aria-labelledby="flush-collapse{{ $object->id }}" data-bs-parent="#{{ $accordionId }}">
-            <div class="accordion-body">
+            <div class="accordion-body px-0">
                 <div class="swiper cover-swiper mx-0 mb-4" data-swiper-id="t{{ $object->id }}">
                     <div class="swiper-wrapper">
                         @foreach ($object->covers as $cover)
@@ -45,7 +45,7 @@
                     aria-controls="flush-collapse{{ $_obj->id + 1 }}">
                     Том {{ $_obj->volume }}. Глава {{ $_obj->number }}
                 </button>
-                <div class="btn-group d-flex column-gap-2" role="group" aria-label="Basic example">
+                <div class="btn-group d-flex column-gap-2 d-none d-sm-flex" role="group" aria-label="Basic example">
                     <a class="action-btn image-edit-btn btn icon btn-primary"
                         href="/admin/titles/{{ $_obj->title->slug }}/chapters/{{ $_obj->number }}" target="_blank">
                         <i class="bi bi-pencil"></i>
@@ -61,7 +61,7 @@
                             @foreach ($_obj->images as $image)
                                 @foreach (\App\Services\ImageStringService::parseImages($image->extensions) as $subImage)
                                     <div class="swiper-slide">
-                                        <img src="/media/titles/{{ $_obj?->path }}/{{ $image->translator->slug }}/{{ $subImage }}"
+                                        <img src="/media/titles/{{ $_obj->title->path }}/{{ $_obj?->path }}/{{ $image->translator->slug }}/{{ $subImage }}"
                                             alt="" srcset="">
                                     </div>
                                 @endforeach

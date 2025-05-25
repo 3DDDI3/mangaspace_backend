@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 /**
  * @OA\Info(
  *      version="1.0",
- *      title="Laravel OpenApi Demo Documentation",
- *      description="L5 Swagger OpenApi description",
+ *      title="MangaSpace Documentation",
+ *      description="Документаиця к API MangaSpace",
  *      @OA\Contact(
  *          email="admin@admin.com"
  *      ),

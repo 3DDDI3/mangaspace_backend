@@ -6,11 +6,12 @@ use Illuminate\Support\Str;
 use App\Enums\PersonType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChapterImage\ChapterImageStoreRequest;
+use App\Http\Requests\ChapterImage\ChapterImageUpdateRequest;
 use App\Models\Chapter;
 use App\Models\ChapterImage;
 use App\Models\Person;
+use App\Services\ImageStringService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ChapterImageController extends Controller
 {
@@ -22,11 +23,17 @@ class ChapterImageController extends Controller
         $chapter_images = $request->validated();
 
         if (!empty($chapter_images['id'])) {
-            $chapter_image = ChapterImage::query()->find($request->id);
+            /**
+             * Загрузка изображения
+             */
+            $chapterImage = ChapterImage::query()->find($request->id);
+            preg_match("/\..+$/", $request->name, $extension);
+            $name = $request->number . $extension[0];
+            $request->file()['file']->storeAs("media/titles/{$chapterImage->chapter->title->path}/{$chapterImage->chapter->path}/{$chapterImage->translator->slug}", $name);
+            $chapterImage->extensions = ImageStringService::refreshImages(ChapterImage::query()->first()->extensions, $name);
+            $chapterImage->save();
 
-            $request->file()['file']->storeAs("media/titles/{$chapter_image->chapter->title->path}/{$chapter_image->chapter->path}/{$chapter_image->translator->slug}", $request->name);
-
-            return response(["media/titles/{$chapter_image->chapter->title->path}/{$chapter_image->chapter->path}/{$chapter_image->translator->slug}"]);
+            return response(["/media/titles/{$chapterImage->chapter->title->path}/{$chapterImage->chapter->path}/{$chapterImage->translator->slug}/{$name}"]);
         }
 
         $person = Person::query()
@@ -58,16 +65,35 @@ class ChapterImageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ChapterImageUpdateRequest $request, string $title_slug, string $chapter_number, string $translator_id)
     {
-        //
+        $data = $request->validated();
+
+        $fields = ["person" => "person_id", "extensions" => "extensions"];
+
+        $chapter = Chapter::query()->where(['number' => $chapter_number])->first();
+
+        if (!$chapter)
+            return response(["message" => "Не удалось найти главу"], 404);
+
+        $chapterImage = $chapter->images()->where(['person_id' => $translator_id])->first();
+
+        if (!$chapterImage)
+            return response(["message" => "Не удалось найти главу"], 404);
+
+        foreach ($data as $key => $value) {
+            $field = $fields[$key];
+            $chapterImage->$field = $value;
+        }
+
+        $chapterImage->save();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $title_slug, string $chapter_number, string $translator_id)
     {
-        //
+        ImageStringService::deleteImage($translator_id);
     }
 }

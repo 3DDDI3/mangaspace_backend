@@ -88,6 +88,7 @@ return [
                     base_path('app') . '/Http/Controllers/Api/v1_0',
                     base_path('app') . '/Http/Requests',
                     base_path('app') . '/Http/Resources',
+                    base_path('app') . '/Models',
                 ],
 
                 /*
@@ -259,7 +260,7 @@ return [
                 |--------------------------------------------------------------------------
                 */
 
-                'api' => 'api/v1/documentation',
+                'api' => 'docs/v1.0',
 
                 /*
                 |--------------------------------------------------------------------------
@@ -326,6 +327,7 @@ return [
                     base_path('app') . '/Http/Controllers/Api/v1_0',
                     base_path('app') . '/Http/Requests',
                     base_path('app') . '/Http/Resources',
+                    base_path('app') . '/Models',
                 ],
 
                 /*
@@ -523,6 +525,7 @@ return [
                     base_path('app') . '/Http/Controllers/Api/v2_0',
                     base_path('app') . '/Http/Requests',
                     base_path('app') . '/Http/Resources',
+                    base_path('app') . '/Models',
                 ],
 
                 /*

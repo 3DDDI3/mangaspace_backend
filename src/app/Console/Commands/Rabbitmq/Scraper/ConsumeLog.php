@@ -67,6 +67,8 @@ class ConsumeLog extends Command
         } catch (AMQPTimeoutException $e) {
             $channel->basic_ack($msgDeliveryTag);
             Log::error("Job не успел завершиться за " . $time . " cек.");
+            $channel->close();
+            $connection->close();
         } finally {
             $channel->close();
             $connection->close();

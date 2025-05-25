@@ -11,7 +11,12 @@ class ChapterImageUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge($this->json()->all());
     }
 
     /**
@@ -22,7 +27,8 @@ class ChapterImageUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'person' => ['nullable', 'string'],
+            'extensions' => ['nullable', "string"],
         ];
     }
 }

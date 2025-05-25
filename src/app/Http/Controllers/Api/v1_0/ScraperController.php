@@ -32,6 +32,9 @@ class ScraperController extends Controller
             (new RequestStringService())->parseString($request->params['pages'])
         );
 
+        if (!$requestDTO)
+            return response([], 400);
+
         ParseTitleJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
         InformationLogJob::dispatch($request->user()->id)->onQueue('scraper');
         ErrorLogJob::dispatch($request->user()->id)->onQueue('scraper');
@@ -52,9 +55,14 @@ class ScraperController extends Controller
             scraperDTO: new ScraperDTO($request->action, $request->engine)
         );
 
+        if (!$request)
+            return response([], 400);
+
         GetChapterJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
         InformationLogJob::dispatch($request->user()->id)->onQueue('scraper');
         ErrorLogJob::dispatch($request->user()->id)->onQueue('scraper');
+
+        return response([], 200);
     }
 
     /**
@@ -74,8 +82,13 @@ class ScraperController extends Controller
             new ScraperDTO($request->params['action'], $request->params['engine'])
         );
 
+        if (!$requestDTO)
+            return response([], 400);
+
         ParseChapterJob::dispatch(json_encode($requestDTO), $request->user()->id)->onQueue('scraper');
         InformationLogJob::dispatch($request->user()->id)->onQueue('scraper');
         ErrorLogJob::dispatch($request->user()->id)->onQueue('scraper');
+
+        return response([], 200);
     }
 }

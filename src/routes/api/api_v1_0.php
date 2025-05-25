@@ -67,7 +67,6 @@ Route::middleware('auth:sanctum')
         Route::apiResource('persons.images', PersonImageController::class);
     });
 
-
 Route::middleware('auth:sanctum')
     ->group(function () {
         Route::apiResource('users', UserController::class);

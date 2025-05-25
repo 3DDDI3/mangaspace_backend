@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Laravel OpenApi Demo Documentation",
-        "description": "L5 Swagger OpenApi description",
+        "title": "MangaSpace Documentation",
+        "description": "Документаиця к API MangaSpace",
         "contact": {
             "email": "admin@admin.com"
         },
@@ -13,14 +13,14 @@
         "version": "1.0"
     },
     "paths": {
-        "/titles": {
+        "/v1.0/titles": {
             "get": {
                 "tags": [
-                    "Projects"
+                    "Titles"
                 ],
-                "summary": "Get list of projects",
-                "description": "Returns list of projects",
-                "operationId": "getProjectsList",
+                "summary": "Список тайтлов",
+                "description": "Получение списка тайтлов",
+                "operationId": "getTitlesList",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -38,8 +38,168 @@
                     "403": {
                         "description": "Forbidden"
                     },
-                    "204": {
-                        "description": "No content"
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Titles"
+                ],
+                "summary": "Добавление нового тайтла",
+                "description": "Возвращает пустой массив",
+                "operationId": "storeTitle",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TitleStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/v1.0/titles/{slug}": {
+            "get": {
+                "tags": [
+                    "Titles"
+                ],
+                "summary": "Получение тайтла",
+                "description": "Возвращает пустой массив",
+                "operationId": "getTitle",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TitleResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Titles"
+                ],
+                "summary": "Изменение информации о тайтле",
+                "description": "Возвращает пустой массив",
+                "operationId": "putTitle",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TitleUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Titles"
+                ],
+                "summary": "Добавление нового тайтла",
+                "description": "Возвращает пустой массив",
+                "operationId": "deleteTitle",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Ссылка на тайтл",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Titles"
+                ],
+                "summary": "Изменение информации о тайтле",
+                "description": "Возвращает пустой массив",
+                "operationId": "patchTitle",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TitleUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             }
@@ -47,6 +207,200 @@
     },
     "components": {
         "schemas": {
+            "TitleStoreRequest": {
+                "title": "Store Title request",
+                "description": "Store Title request body data",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "Русское назавние тайтла",
+                        "type": "string",
+                        "example": "Поднятие уровня в одиночку"
+                    },
+                    "altName": {
+                        "title": "altName",
+                        "description": "Английское назавние тайтла",
+                        "type": "string",
+                        "example": "Solo Leveling"
+                    },
+                    "path": {
+                        "title": "path",
+                        "description": "Путь",
+                        "type": "string",
+                        "example": "Podnyatie urovnya v odinochku"
+                    },
+                    "slug": {
+                        "title": "slug",
+                        "description": "Ссылка",
+                        "type": "string",
+                        "example": "solo-leveling"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "Описание",
+                        "type": "string",
+                        "example": "10 лет назад раскрылись врата в другой мир, где людям дозволено убивать монстров. Так появились охотники, преследующие и уничтожающие тварей. Но не каждому из них суждено повысить свой уровень и стать сильнее. Сон Джин Ву был охотником низшего E-ранга, у которого не было ни единого шанса продвинуться по ранговой лестнице, пока однажды он случайно не очутился в подземелье D-ранга. Чуть не погибнув от рук сильнейших чудовищ, Джин Ву открывает секрет повышения уровня, известный только ему одному. Теперь даже самый слабый может стать сильнейшим."
+                    },
+                    "type": {
+                        "title": "type",
+                        "description": "Тип",
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "titleStatus": {
+                        "title": "titleStatus",
+                        "description": "Статус тайтла",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "transalteStatus": {
+                        "title": "transalteStatus",
+                        "description": "Статус перевода",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "releaseFormat": {
+                        "title": "releaseFormat",
+                        "description": "Формат релиза",
+                        "type": "string",
+                        "example": ""
+                    },
+                    "releaseYear": {
+                        "title": "releaseYear",
+                        "description": "Год релиза",
+                        "type": "string",
+                        "example": "2019"
+                    },
+                    "ageLimiter": {
+                        "title": "ageLimiter",
+                        "description": "Возрастное ограничение",
+                        "type": "string",
+                        "example": "16+"
+                    },
+                    "otherNames": {
+                        "title": "otherNames",
+                        "description": "Альтернативные названия",
+                        "type": "string",
+                        "example": "I Alone Level-Up,I Level Up Alone,I alone level up,Na Honjaman Level Up,Na Honjaman Rebereop,Only I Level Up,Ore Dake Level Up na Ken,Соло Левелинг,Я один повышаю свой уровень,俺だけレベルアップな件,我独自升级,나 혼자만 레벨업"
+                    },
+                    "contacts": {
+                        "description": "Контакты",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": ""
+                        },
+                        "example": ""
+                    },
+                    "country": {
+                        "title": "country",
+                        "description": "Страна",
+                        "type": "string",
+                        "example": ""
+                    }
+                },
+                "type": "object"
+            },
+            "TitleUpdateRequest": {
+                "title": "Update Title request",
+                "description": "Update Title request body data",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "Русское назавние тайтла",
+                        "type": "string",
+                        "example": "Поднятие уровня в одиночку"
+                    },
+                    "altName": {
+                        "title": "altName",
+                        "description": "Английское назавние тайтла",
+                        "type": "string",
+                        "example": "Solo Leveling"
+                    },
+                    "path": {
+                        "title": "path",
+                        "description": "Путь",
+                        "type": "string",
+                        "example": "Podnyatie urovnya v odinochku"
+                    },
+                    "slug": {
+                        "title": "slug",
+                        "description": "Ссылка",
+                        "type": "string",
+                        "example": "solo-leveling"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "Описание",
+                        "type": "string",
+                        "example": "10 лет назад раскрылись врата в другой мир, где людям дозволено убивать монстров. Так появились охотники, преследующие и уничтожающие тварей. Но не каждому из них суждено повысить свой уровень и стать сильнее. Сон Джин Ву был охотником низшего E-ранга, у которого не было ни единого шанса продвинуться по ранговой лестнице, пока однажды он случайно не очутился в подземелье D-ранга. Чуть не погибнув от рук сильнейших чудовищ, Джин Ву открывает секрет повышения уровня, известный только ему одному. Теперь даже самый слабый может стать сильнейшим."
+                    },
+                    "type": {
+                        "title": "type",
+                        "description": "Тип",
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "titleStatus": {
+                        "title": "titleStatus",
+                        "description": "Статус тайтла",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "transalteStatus": {
+                        "title": "transalteStatus",
+                        "description": "Статус перевода",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "releaseFormat": {
+                        "title": "releaseFormat",
+                        "description": "Формат релиза",
+                        "type": "string",
+                        "example": ""
+                    },
+                    "releaseYear": {
+                        "title": "releaseYear",
+                        "description": "Год релиза",
+                        "type": "string",
+                        "example": "2019"
+                    },
+                    "ageLimiter": {
+                        "title": "ageLimiter",
+                        "description": "Возрастное ограничение",
+                        "type": "string",
+                        "example": "16+"
+                    },
+                    "otherNames": {
+                        "title": "otherNames",
+                        "description": "Альтернативные названия",
+                        "type": "string",
+                        "example": "I Alone Level-Up,I Level Up Alone,I alone level up,Na Honjaman Level Up,Na Honjaman Rebereop,Only I Level Up,Ore Dake Level Up na Ken,Соло Левелинг,Я один повышаю свой уровень,俺だけレベルアップな件,我独自升级,나 혼자만 레벨업"
+                    },
+                    "contacts": {
+                        "description": "Контакты",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": ""
+                        },
+                        "example": ""
+                    },
+                    "country": {
+                        "title": "country",
+                        "description": "Страна",
+                        "type": "string",
+                        "example": ""
+                    }
+                },
+                "type": "object"
+            },
             "TitleShowRequest": {
                 "title": "Store Project request",
                 "description": "Store Project request body data",
@@ -71,20 +425,138 @@
                         "title": "Data",
                         "description": "Data wrapper",
                         "type": "array",
-                        "items": {}
+                        "items": {
+                            "$ref": "#/components/schemas/Title"
+                        }
                     }
                 },
                 "type": "object",
                 "xml": {
                     "name": "TitleResource"
                 }
+            },
+            "Category": {
+                "title": "Category",
+                "description": "Category model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "ID категории",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "categoey": {
+                        "title": "categoey",
+                        "description": "Название категории",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Category"
+                }
+            },
+            "Title": {
+                "title": "Title",
+                "description": "Title model",
+                "properties": {
+                    "category_id": {
+                        "title": "category_id",
+                        "description": "ID категории",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "ru_name": {
+                        "title": "ru_name",
+                        "description": "Русское название",
+                        "type": "string",
+                        "example": "Поднятие уровня в одиночку"
+                    },
+                    "eng_name": {
+                        "title": "eng_name",
+                        "description": "Английское название",
+                        "type": "string",
+                        "example": "Solo Leveling"
+                    },
+                    "slug": {
+                        "title": "slug",
+                        "description": "Ссылка",
+                        "type": "string",
+                        "example": "solo-leveling"
+                    },
+                    "path": {
+                        "title": "path",
+                        "description": "Путь до папки",
+                        "type": "string",
+                        "example": "titles/Podnyatie urovnya v odinochku"
+                    },
+                    "other_names": {
+                        "title": "other_names",
+                        "description": "Альтернативные названия",
+                        "type": "string",
+                        "example": "I Alone Level-Up,I Level Up Alone,I alone level up,Na Honjaman Level Up,Na Honjaman Rebereop,Only I Level Up,Ore Dake Level Up na Ken,Соло Левелинг,Я один повышаю свой уровень,俺だけレベルアップな件,我独自升级,나 혼자만 레벨업"
+                    },
+                    "release_format": {
+                        "title": "release_format",
+                        "description": "Формат релиза",
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "Описание",
+                        "type": "string",
+                        "example": ""
+                    },
+                    "title_status": {
+                        "title": "title_status",
+                        "description": "Статус тайтла",
+                        "type": "integer",
+                        "example": "10 лет назад раскрылись врата в другой мир, где людям дозволено убивать монстров. Так появились охотники, преследующие и уничтожающие тварей. Но не каждому из них суждено повысить свой уровень и стать сильнее. Сон Джин Ву был охотником низшего E-ранга, у которого не было ни единого шанса продвинуться по ранговой лестнице, пока однажды он случайно не очутился в подземелье D-ранга. Чуть не погибнув от рук сильнейших чудовищ, Джин Ву открывает секрет повышения уровня, известный только ему одному. Теперь даже самый слабый может стать сильнейшим."
+                    },
+                    "translate_status": {
+                        "title": "translate_status",
+                        "description": "Статус перевода",
+                        "type": "integer",
+                        "example": "3"
+                    },
+                    "release_year": {
+                        "title": "release_year",
+                        "description": "Год релиза",
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "country": {
+                        "title": "country",
+                        "description": "Страна",
+                        "type": "integer",
+                        "example": "2018"
+                    },
+                    "is_hide": {
+                        "title": "is_hide",
+                        "description": "Флаг скрытия",
+                        "type": "boolean",
+                        "example": "0"
+                    },
+                    "rating": {
+                        "title": "rating",
+                        "description": "Ранжирование в выдаче",
+                        "type": "boolean",
+                        "example": "5"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Title"
+                }
             }
         }
     },
     "tags": [
         {
-            "name": "Projects",
-            "description": "Projects"
+            "name": "Titles",
+            "description": "Titles"
         }
     ]
 }

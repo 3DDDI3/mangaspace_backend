@@ -19,14 +19,13 @@ class TitleController extends Controller
 {
     /**
      * Display a listing of the resource.
-     */
-    /**
+     * 
      * @OA\Get(
-     *      path="/titles",
-     *      operationId="getProjectsList",
-     *      tags={"Projects"},
-     *      summary="Get list of projects",
-     *      description="Returns list of projects",
+     *      path="/v1.0/titles",
+     *      operationId="getTitlesList",
+     *      tags={"Titles"},
+     *      summary="Список тайтлов",
+     *      description="Получение списка тайтлов",
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
@@ -41,10 +40,11 @@ class TitleController extends Controller
      *          description="Forbidden"
      *      ),
      *      @OA\Response(
-     *          response=204,
-     *          description="No content"
+     *          response=422,
+     *          description="Unprocessable Content"
      *      )
-     *     )
+     * )
+     * 
      */
     public function index(TitleShowRequest $request, TitleFilter $filter)
     {
@@ -61,6 +61,34 @@ class TitleController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * @OA\Post(
+     *      path="/v1.0/titles",
+     *      operationId="storeTitle",
+     *      tags={"Titles"},
+     *      summary="Добавление нового тайтла",
+     *      description="Возвращает пустой массив",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/TitleStoreRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Content"
+     *      )
+     * )
      */
     public function store(TitleStoreRequest $request)
     {
@@ -90,6 +118,31 @@ class TitleController extends Controller
 
     /**
      * Display the specified resource.
+     * 
+     * @OA\Get(
+     *      path="/v1.0/titles/{slug}",
+     *      operationId="getTitle",
+     *      tags={"Titles"},
+     *      summary="Получение тайтла",
+     *      description="Возвращает пустой массив",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/TitleResource")
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Content"
+     *      )
+     * )
      */
     public function show(string $slug)
     {
@@ -98,6 +151,62 @@ class TitleController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
+     * @OA\Put(
+     *      path="/v1.0/titles/{slug}",
+     *      operationId="putTitle",
+     *      tags={"Titles"},
+     *      summary="Изменение информации о тайтле",
+     *      description="Возвращает пустой массив",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/TitleUpdateRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Content"
+     *      )
+     * )
+     * 
+     * @OA\Patch(
+     *      path="/v1.0/titles/{slug}",
+     *      operationId="patchTitle",
+     *      tags={"Titles"},
+     *      summary="Изменение информации о тайтле",
+     *      description="Возвращает пустой массив",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/TitleUpdateRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Content"
+     *      )
+     * )
      */
     public function update(TitleUpdateRequest $request, string $slug)
     {
@@ -123,6 +232,37 @@ class TitleController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * 
+     * @OA\Delete(
+     *      path="/v1.0/titles/{slug}",
+     *      operationId="deleteTitle",
+     *      tags={"Titles"},
+     *      summary="Добавление нового тайтла",
+     *      description="Возвращает пустой массив",
+     *      @OA\Parameter(
+     *          name="slug",
+     *          in="path",
+     *          required=true,
+     *          description="Ссылка на тайтл",
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Content"
+     *      )
+     * )
      */
     public function destroy(string $slug)
     {

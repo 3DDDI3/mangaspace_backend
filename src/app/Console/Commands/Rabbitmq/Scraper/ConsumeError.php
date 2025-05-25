@@ -65,6 +65,8 @@ class ConsumeError extends Command
             }
         } catch (AMQPTimeoutException $e) {
             Log::error("Job не успел завершиться за " . $time . " cек.");
+            $channel->close();
+            $connection->close();
         } finally {
             $channel->close();
             $connection->close();
