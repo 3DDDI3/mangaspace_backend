@@ -53,7 +53,11 @@ Route::middleware('auth:sanctum')
         Route::apiResource('titles.genres', TitleGenreController::class)->except(['index', 'show']);
         Route::apiResource('titles.covers', TitleCoverController::class);
         Route::apiResource('titles.chapters', TitleChapterController::class);
-        Route::apiResource('titles.chapters.images', ChapterImageController::class)->except(['show', 'index']);
+        Route::prefix('titles/{title}/chapters/{chapter}/images')->group(function () {
+            Route::post('/', [ChapterImageController::class, 'store']);
+            Route::match(['put', 'patch'], '/', [ChapterImageController::class, 'update']);
+            Route::delete('/', [ChapterImageController::class, 'destroy']);
+        });
     });
 
 Route::middleware('auth:sanctum')

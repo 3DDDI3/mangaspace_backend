@@ -2,6 +2,10 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Collection;
+
+use function PHPSTORM_META\type;
+
 class ImageStringService
 {
     /**
@@ -113,8 +117,26 @@ class ImageStringService
         return $extensions;
     }
 
-    public static function deleteImage($iamges, $image)
+    public static function deleteImage($images, $image)
     {
-        dd($image);
+        $imageExt = collect();
+        $imageExt->put('extension', "." . explode(".", $image)[1]);
+        $image = explode(".", $image)[0];
+        $imageExt->put('images', explode("|", $images));
+
+        for ($i = 0; $i < count($imageExt['images']); $i++) {
+            $images = collect(explode(",", $imageExt['images'][$i]));
+            if ($images->search($image) !== false) {
+                $images->shift($image);
+                $imageExt = $imageExt->map(function ($item) use ($images, $i) {
+                    $item[$i] = $images->implode(",");
+                    return $item;
+                });
+            }
+        }
+
+        $imageExt['images'] = implode("|", $imageExt['images']);
+
+        return $imageExt;
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Requests\ChapterImage;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ChapterImageUpdateRequest extends FormRequest
+class ChapterImageDeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,8 @@ class ChapterImageUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'person' => ['nullable', 'integer', Rule::exists('temp.persons', 'id')],
+            'person' => ['required', 'string', Rule::exists('temp.persons', 'id')],
+            'image' => ['required', 'string'],
         ];
     }
 }

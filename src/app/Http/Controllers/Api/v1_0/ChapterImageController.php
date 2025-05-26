@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1_0;
 use Illuminate\Support\Str;
 use App\Enums\PersonType;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChapterImage\ChapterImageDeleteRequest;
 use App\Http\Requests\ChapterImage\ChapterImageStoreRequest;
 use App\Http\Requests\ChapterImage\ChapterImageUpdateRequest;
 use App\Models\Chapter;
@@ -12,6 +13,7 @@ use App\Models\ChapterImage;
 use App\Models\Person;
 use App\Services\ImageStringService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ChapterImageController extends Controller
 {
@@ -65,7 +67,7 @@ class ChapterImageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ChapterImageUpdateRequest $request, string $title_slug, string $chapter_number, string $translator_id)
+    public function update(ChapterImageUpdateRequest $request, string $title_slug, string $chapter_number)
     {
         $data = $request->validated();
 
@@ -76,7 +78,7 @@ class ChapterImageController extends Controller
         if (!$chapter)
             return response(["message" => "Не удалось найти главу"], 404);
 
-        $chapterImage = $chapter->images()->where(['person_id' => $translator_id])->first();
+        $chapterImage = $chapter->images()->where(['person_id' => $data['person']])->first();
 
         if (!$chapterImage)
             return response(["message" => "Не удалось найти главу"], 404);
@@ -87,13 +89,35 @@ class ChapterImageController extends Controller
         }
 
         $chapterImage->save();
+
+        return response(null, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $title_slug, string $chapter_number, string $translator_id)
+    public function destroy(ChapterImageDeleteRequest $request, string $titleSlug, string $chapterNumber)
     {
-        ImageStringService::deleteImage($translator_id);
+        $data = $request->validated();
+
+        $chapter = Chapter::query()
+            ->where(['number' => $chapterNumber])
+            ->first();
+
+        $chapterImage = $chapter->images()
+            ->where(['person_id' => $data['person']])
+            ->first();
+
+        $imageCollection = ImageStringService::deleteImage($chapterImage->extensions, $data['image']);
+
+        if (!$imageCollection->has('extension'))
+            return response(['message' => "Не удалось найти изображение"], 400);
+
+        Storage::delete("media/titles/{$chapter->title->path}/{$chapter->path}/{$chapterImage->translator->alt_name}/{$data['image']}{$imageCollection['extension']}");
+
+        $chapterImage->extensions = $imageCollection['images'];
+        $chapterImage->save();
+
+        return response(null, 204);
     }
 }
