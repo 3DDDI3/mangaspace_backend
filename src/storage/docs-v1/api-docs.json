@@ -203,6 +203,68 @@
                     }
                 }
             }
+        },
+        "/v1.0/titles/{title}/covers": {
+            "post": {
+                "tags": [
+                    "TitleCovers"
+                ],
+                "summary": "Список обложек",
+                "description": "Получение списка обложек тайтла",
+                "operationId": "storeTitleCover",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TitleResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/v1.0/titles/{title}/covers/{cover}": {
+            "get": {
+                "tags": [
+                    "TitleCovers"
+                ],
+                "summary": "Список обложек",
+                "description": "Получение списка обложек тайтла",
+                "operationId": "showTitleCover",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TitleResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -557,6 +619,10 @@
         {
             "name": "Titles",
             "description": "Titles"
+        },
+        {
+            "name": "TitleCovers",
+            "description": "TitleCovers"
         }
     ]
 }

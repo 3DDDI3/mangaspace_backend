@@ -17,6 +17,32 @@ class TitleCoverController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * @OA\Post(
+     *      path="/v1.0/titles/{title}/covers",
+     *      operationId="storeTitleCover",
+     *      tags={"TitleCovers"},
+     *      summary="Список обложек",
+     *      description="Получение списка обложек тайтла",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/TitleResource")
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Content"
+     *      )
+     * )
+     * 
      */
     public function store(TitleCoverStoreRequest $request, $slug)
     {
@@ -40,6 +66,32 @@ class TitleCoverController extends Controller
 
     /**
      * Display the specified resource.
+     * 
+     * @OA\Get(
+     *      path="/v1.0/titles/{title}/covers/{cover}",
+     *      operationId="showTitleCover",
+     *      tags={"TitleCovers"},
+     *      summary="Список обложек",
+     *      description="Получение списка обложек тайтла",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/TitleResource")
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Content"
+     *      )
+     * )
+     * 
      */
     public function show(string $id)
     {
