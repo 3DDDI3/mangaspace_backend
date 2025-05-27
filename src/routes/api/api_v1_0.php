@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum')
         Route::apiResource('titles', TitleController::class);
         Route::apiResource('titles.persons', TitlePersonController::class)->except(['show']);
         Route::apiResource('titles.genres', TitleGenreController::class)->except(['index', 'show']);
-        Route::apiResource('titles.covers', TitleCoverController::class);
+        Route::apiResource('titles.covers', TitleCoverController::class)->except(['update']);
         Route::apiResource('titles.chapters', TitleChapterController::class);
         Route::prefix('titles/{title}/chapters/{chapter}/images')->group(function () {
             Route::post('/', [ChapterImageController::class, 'store']);

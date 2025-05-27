@@ -32,7 +32,7 @@ class TitleCoverStoreRequest extends FormRequest
             '*.extension' => ['nullable', 'string'],
             'name' => ['nullable', 'string'],
             'type' => ['nullable'],
-            'file' => ['nullable', 'file'],
+            'file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp']
         ];
     }
 }

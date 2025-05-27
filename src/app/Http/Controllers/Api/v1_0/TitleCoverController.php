@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1_0;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TitleCover\TitleCoverStoreRequest;
 use App\Models\Title;
+use App\Models\TitleCover;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,6 +48,18 @@ class TitleCoverController extends Controller
     public function store(TitleCoverStoreRequest $request, $slug)
     {
         $data = $request->validated();
+        $title = Title::query()->where(['slug' => $slug])->first();
+
+        /**
+         * @todo добавить в валидацию поле id, для замены существующего изображения
+         */
+
+        // dd($title->covers()->create);
+
+        if (!empty($data['file'])) {
+            // $request->file()['file']->storeAs("media/titles/{$}/{$chapterImage->chapter->path}/{$chapterImage->translator->slug}", $name);
+            return response(null);
+        }
 
         $title = Title::query()
             ->where(['slug' => $slug])
@@ -109,8 +122,12 @@ class TitleCoverController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $titleSlug, string $id)
     {
-        //
+        TitleCover::query()
+            ->find($id)
+            ->delete();
+
+        return response(null, 200);
     }
-}
+};

@@ -42,7 +42,7 @@ class TitleResource extends JsonResource
             'path' => $this->path,
             'country' => $this->country,
             'description' => $this->description,
-            'otherNames' => $this->otherNames,
+            'otherNames' => $this->other_names,
             'releaseYear' => $this->release_year,
             'titleStatus' => !$isScraperRequest ? $this->titleStatus->status : $this->titleStatus->id,
             'translateStatus' => !$isScraperRequest ? $this->translateStatus?->status : $this->translateStatus?->id,
