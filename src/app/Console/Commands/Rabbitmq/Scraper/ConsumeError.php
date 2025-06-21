@@ -41,7 +41,7 @@ class ConsumeError extends Command
         $channel = $connection->channel();
         $isListening = true;
 
-        $callback = function ($msg) use (&$isListening, $channel) {
+        $callback = function ($msg) use (&$isListening, $channel, $connection) {
             $message = json_decode($msg->body);
             $logDTO = new LogDTO($message->message, $message->isLast);
 
@@ -52,6 +52,8 @@ class ConsumeError extends Command
                 $isListening = false;
                 Log::info('consumeError completed');
                 $channel->basic_cancel('');
+                $channel->close();
+                $connection->close();
             }
         };
 

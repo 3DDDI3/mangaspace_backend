@@ -44,7 +44,7 @@ class ImageStringService
             }
         }
 
-        $final_array = $final_array->sort()->values();
+        $final_array = $final_array->sortBy(fn($item) => $item, SORT_NATURAL)->values();
 
         return $final_array;
     }
@@ -126,12 +126,17 @@ class ImageStringService
 
         for ($i = 0; $i < count($imageExt['images']); $i++) {
             $images = collect(explode(",", $imageExt['images'][$i]));
-            if ($images->search($image) !== false) {
-                $images->shift($image);
-                $imageExt = $imageExt->map(function ($item) use ($images, $i) {
-                    $item[$i] = $images->implode(",");
-                    return $item;
-                });
+            $key = $images->search($image);
+            if ($key !== false) {
+                if ($images->count() > 1) {
+                    $images->shift($image);
+                    $imageExt = $imageExt->map(function ($item) use ($images, $i) {
+                        $item[$i] = $images->implode(",");
+                        return $item;
+                    });
+                } else {
+                    $imageExt['images'] = array_replace($imageExt['images'], [$i => ""]);
+                }
             }
         }
 

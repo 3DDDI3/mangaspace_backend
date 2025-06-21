@@ -51,7 +51,7 @@ class ConsumeParseTitle extends Command
         $isListening = true;
 
         // Callback функция обработки сообщений
-        $callback = function ($msg) use (&$isListening, $channel) {
+        $callback = function ($msg) use (&$isListening, $channel, $connection) {
 
             $response = json_decode($msg->body);
 
@@ -66,6 +66,8 @@ class ConsumeParseTitle extends Command
                 $isListening = false;
                 Log::info('parseTitle completed');
                 $channel->basic_cancel('');
+                $channel->close();
+                $connection->close();
             }
 
             $title = new TitleResource(Title::query()->where(['ru_name' => $responseDTO->titleDTO->name])->first());

@@ -81,34 +81,6 @@ services:
       - backend
       - shared
 
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3.10-management-alpine
-    hostname: rabbit
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
-    # ports:
-      # - "5672:5672"
-      # - "15672:15672"
-    extra_hosts:
-      - host.docker.internal:127.0.0.1
-    volumes:
-      - ./data/rabbitmq:/var/lib/rabbitmq
-    networks:
-      - backend
-
-  # scraper:
-  #   container_name: scraper
-  #   image: scraper:1.0.6
-  #   volumes:
-  #     - ../storage:/app/storage
-  #   networks:
-  #     - backend
-  #   extra_hosts:
-  #     - "api.mangaspace.ru:host-gateway" 
-
   supervisor:
     build:
       context: dockerfiles

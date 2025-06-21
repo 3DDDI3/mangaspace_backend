@@ -50,7 +50,7 @@ class ConsumeParseChapter extends Command
 
         $isListening = true;
 
-        $callback = function ($msg) use (&$isListening, $channel) {
+        $callback = function ($msg) use (&$isListening, $channel, $connection) {
             $response = json_decode($msg->body);
 
             $responseDTO = new ResponseDTO(
@@ -61,7 +61,10 @@ class ConsumeParseChapter extends Command
             $headers = $msg->get_properties();
             if ($headers['application_headers']['job_id'] == $this->argument('job_id') && $responseDTO->titleDTO->chapterDTO[0]->isLast) {
                 $isListening = false;
+                Log::info('parseChapters completed');
                 $channel->basic_cancel('');
+                $channel->close();
+                $connection->close();
             }
 
             $title = new FullTitleResource(Title::query()->where(['ru_name' => $responseDTO->titleDTO->name])->first());
@@ -104,7 +107,7 @@ class ConsumeParseChapter extends Command
                     ])->first();
 
                 $chapterImageResource = new FullTitleChapterResource($chapterImage);
-
+                $responseDTO->titleDTO->chapterDTO[0]->url = "{$chapter->title->slug}/chapters/{$chapter->number}?translator={$chapterImage->translator->alt_name}";
                 $responseDTO->titleDTO->chapterDTO[0]->isFirst = false;
 
                 broadcast(new ParseChaptersEvent((int)$this->argument('id'), $responseDTO->titleDTO->chapterDTO[0], obj: $chapterImageResource));
@@ -121,6 +124,7 @@ class ConsumeParseChapter extends Command
                     ])->first();
 
                 $chapterImageResource = new FullTitleChapterResource($chapterImage);
+                $responseDTO->titleDTO->chapterDTO[0]->url = "{$chapter->title->slug}/chapters/{$chapter->number}?translator={$chapterImage->translator->alt_name}";
 
                 broadcast(new ParseChaptersEvent((int)$this->argument('id'), $responseDTO->titleDTO->chapterDTO[0], obj: $chapterImageResource));
             }

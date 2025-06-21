@@ -11,6 +11,7 @@ use App\Models\Person;
 use App\Models\ReleaseFormat;
 use App\Models\Title;
 use App\Models\UserPermission;
+use App\Services\ImageStringService;
 use App\View\Components\Admin\Accordion;
 use App\View\Components\Admin\AccordionItem;
 use Illuminate\Http\Request;
@@ -38,15 +39,14 @@ Route::get('/', function () {
     // Storage::disk('shared')->deleteDirectory(Chapter::query()->first()->path);
 });
 Route::get('/test1', function () {
-    $chapterImage = ChapterImage::query()->first();
-    $chapterImageResource = new FullTitleChapterResource($chapterImage);
 
-    return $chapterImageResource;
-    // $p = Title::query()->first()->chapterPersons;
-    // dd($p->unique('person_id'));
-    // dd("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path);
-    // dd(Storage::disk('shared')->exists("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path));
-    // Storage::disk('shared')->delete("persons/" . Title::query()->first()->persons()->find(8)->photos()->first()->path);
+    $chapter = Chapter::query()
+        ->find(14);
+
+    $chapterImage = $chapter->images()
+        ->first();
+
+    $imageCollection = ImageStringService::deleteImage($chapterImage->extensions, '1.jpg');
 });
 
 Route::get('test', function () {

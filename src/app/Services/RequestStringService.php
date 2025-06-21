@@ -33,7 +33,7 @@ class RequestStringService
 
         natsort($pages);
 
-        $pages = array_values(array_unique($pages));
+        $pages = array_values(array_unique($pages)); 
 
         return $pages;
     }

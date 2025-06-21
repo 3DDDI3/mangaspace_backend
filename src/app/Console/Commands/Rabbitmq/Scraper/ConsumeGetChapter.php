@@ -49,7 +49,7 @@ class ConsumeGetChapter extends Command
 
         Log::info("ConsumeGetChapter started" . PHP_EOL);
 
-        $callback = function ($msg) use (&$isListening, $channel) {
+        $callback = function ($msg) use (&$isListening, $channel, $connection) {
             $response = json_decode($msg->body);
 
             $responseDTO = new ResponseDTO(
@@ -59,7 +59,10 @@ class ConsumeGetChapter extends Command
 
             if ($responseDTO->titleDTO->chapterDTO[0]->isLast) {
                 $isListening = false;
+                Log::info('ConsumeGetChapter completed');
                 $channel->basic_cancel('');
+                $channel->close();
+                $connection->close();
             }
 
             $list = new ItemsList();
